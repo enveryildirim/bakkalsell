@@ -7,7 +7,7 @@ public class UserService {
 
     protected IRepository<User> userRepository;
     public UserService(IRepository<User> userRepository){
-        userRepository=userRepository;
+        this.userRepository=userRepository;
     }
 
     public int UpdateProfile(User user){

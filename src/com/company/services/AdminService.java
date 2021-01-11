@@ -10,7 +10,7 @@ public class AdminService extends UserService{
         super(userRepository);
     }
     public int CreateUser(User user){
-        userRepository.Create(user);
+        this.userRepository.Create(user);
         return 0;
     }
 
