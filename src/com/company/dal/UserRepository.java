@@ -6,29 +6,29 @@ import java.util.List;
 public class UserRepository implements IRepository<User>{
 
     @Override
-    public int Create(User user) {
+    public int create(User user) {
         DB.users.add(user);
         System.out.println("User oluşturuldu = "+user.getProfile().getName());
         return 0;
     }
 
     @Override
-    public int Update(User user) {
+    public int update(User user) {
         return 0;
     }
 
     @Override
-    public int Delete(User user) {
+    public int delete(User user) {
         return 0;
     }
 
     @Override
-    public List<User> GetAll() {
+    public List<User> getAll() {
         return null;
     }
 
     @Override
-    public User GetById(int id) {
+    public User getById(int id) {
         return null;
     }
 }

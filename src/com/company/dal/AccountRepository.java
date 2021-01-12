@@ -5,12 +5,12 @@ import com.company.models.user.User;
 
 public class AccountRepository<T extends User>{
 
-    public User Login(Account account){
+    public User login(Account account){
         System.out.printf("Login işlemi yapıldı");
         return null;
     };
 
-    public int Logout(Account account){
+    public int logout(Account account){
         System.out.printf("Logout işlemi yapıldı");
         return 0;
     }

@@ -1,6 +1,6 @@
 package com.company.models.user;
 
-public class User {
+public abstract class User {
 
     public User(int id, Profile profile, Account account) {
         this.id = id;

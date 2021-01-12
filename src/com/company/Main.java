@@ -25,9 +25,9 @@ public class Main {
         profile.setEmail("user@mail.com");
         profile.setName("name");
         profile.setSurname("surname");
-        User user = new User(0,profile,account);
+        User user = new Admin(0,profile,account);
 
-        adminService.CreateUser(user);
+        adminService.createUser(user);
 
 
         account.setUsername("admin");
@@ -37,7 +37,7 @@ public class Main {
         profile.setSurname("surname");
         Admin admin = new Admin(1,profile,account);
 
-        adminService.CreateUser(admin);
+        adminService.createUser(admin);
         
     }
 }

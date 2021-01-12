@@ -10,15 +10,15 @@ public class UserService {
         this.userRepository=userRepository;
     }
 
-    public int UpdateProfile(User user){
+    public int updateProfile(User user){
         return 0;
     }
 
-    public int ChangePassword(User user){
+    public int changePassword(User user){
         return 0;
     }
 
-    public int GetUser(int id){
+    public int getUser(int id){
         return 0;
     }
 
