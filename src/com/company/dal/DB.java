@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 /**
- * Geçici sınıf
+ * Geçici veri tutan sınıf
  * */
 public class DB {
     public static List<User> users = new ArrayList<>();

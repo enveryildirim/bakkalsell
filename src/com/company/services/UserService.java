@@ -3,23 +3,40 @@ package com.company.services;
 import com.company.dal.IRepository;
 import com.company.models.user.User;
 
+/**
+ * Kasiyer ve Admin kullanıcısının yapacağı işlemerin yapıldığı sınıf
+ */
 public class UserService {
 
     protected IRepository<User> userRepository;
+
     public UserService(IRepository<User> userRepository){
         this.userRepository=userRepository;
     }
 
-    public int updateProfile(User user){
-        return 0;
+    /**
+     * Kullanıcı profil bilgilerini güncelleme
+     * @param user
+     */
+    public void updateProfile(User user){
+
     }
 
-    public int changePassword(User user){
-        return 0;
+    /**
+     * Kullanıcı şifre değiştirme
+     * @param user
+     */
+    public void changePassword(User user){
+
     }
 
-    public int getUser(int id){
-        return 0;
+    /**
+     * Kullanıcı İd ye göre Kullanıcı bilgilerini döndürür
+     * @param id
+     * @return
+     */
+    public User getUser(int id){
+        return null;
     }
 
 

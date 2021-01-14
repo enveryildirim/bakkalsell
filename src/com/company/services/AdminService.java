@@ -3,27 +3,58 @@ package com.company.services;
 import com.company.dal.IRepository;
 import com.company.models.user.User;
 
+import java.util.List;
+
+/**
+ * Admin yapabilceği işleri yapıldığı sınıf
+ */
 public class AdminService extends UserService{
 
     public AdminService(IRepository<User> userRepository){
         super(userRepository);
     }
-    public int createUser(User user){
+
+    /**
+     *Kullanıcı Oluşturma
+     * @param user
+     * @return
+     */
+    public void createUser(User user){
         this.userRepository.create(user);
-        return 0;
+
     }
 
-    public int updateUser(User user){
-        return 0;
+    /**
+     * Kullanıcı Profil ve Account  bilgilerinin güncelleme
+     * @param user
+     */
+    public void updateUser(User user){
+
     }
-    public int deleteUser(User user){
-        return 0;
+
+    /**
+     * Kullanıcı Silme işlemi
+     * @param user
+     */
+    public void deleteUser(User user){
+
     }
-    public int getAllUser(){
-        return 0;
+
+    /**
+     * Tüm kullanıcıların listelenmesi
+     * @return
+     */
+    public List<User> getAllUser(){
+        return null;
     }
-    public int getUserById(int id){
-        return 0;
+
+    /**
+     * İd ile Kullanıcı bilgileri getirir
+     * @param id
+     * @return
+     */
+    public User getUserById(int id){
+        return null;
     }
 
 

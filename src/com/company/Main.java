@@ -16,7 +16,7 @@ public class Main {
 
         //UserRepository userRepository= new UserRepository();
         //userRepository.Create(new User(1));
-
+/*
         AdminService adminService = new AdminService(new UserRepository());
         Account account=new Account();
         account.setUsername("username");
@@ -37,7 +37,7 @@ public class Main {
         profile.setSurname("surname");
         Admin admin = new Admin(1,profile,account);
 
-        adminService.createUser(admin);
+        adminService.createUser(admin);*/
         
     }
 }

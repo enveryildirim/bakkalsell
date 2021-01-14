@@ -2,6 +2,8 @@ package com.company.models.user;
 
 public class Profile {
     private String name;
+    private String surname;
+    private String email;
 
     public String getName() {
         return name;
@@ -27,6 +29,5 @@ public class Profile {
         this.email = email;
     }
 
-    private String surname;
-    private String email;
+
 }

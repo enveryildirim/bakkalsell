@@ -1,6 +1,8 @@
 package com.company.models.user;
 
 public class Account {
+    private String username;
+    private String password;
 
     public String getUsername() {
         return username;
@@ -18,7 +20,6 @@ public class Account {
         this.password = password;
     }
 
-    private String username;
-    private String password;
+
 
 }
