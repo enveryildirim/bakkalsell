@@ -24,8 +24,11 @@ public class HomePage extends PageBase{
             return PageName.PRODUCT_SALE;
 
         System.out.println("İşleminizi Seçiniz");
+
         System.out.println("1-Satış");
         System.out.println("2-Ürün Listele");
+        System.out.println("3-Yeni Kullanıcı Ekle");
+
         Scanner in = new Scanner(System.in);
         String islem =in.nextLine();
 
@@ -36,6 +39,8 @@ public class HomePage extends PageBase{
         if(islem.equals("1"))
             return PageName.PRODUCT_SALE;
 
+        if(islem.equals("3"))
+            return PageName.USER_CREATE;
 
         return PageName.HOME;
 

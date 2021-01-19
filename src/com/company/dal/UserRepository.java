@@ -31,7 +31,9 @@ public class UserRepository implements IRepository<User>{
     @Override
     public boolean update(User user) {
         User u = this.getById(user.getId());
-
+        u.setNameSurname(user.getNameSurname());
+        u.setUsername(user.getUsername());
+        u.setPassword(user.getPassword());
        return true;
     }
 

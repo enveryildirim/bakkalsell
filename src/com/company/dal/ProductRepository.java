@@ -1,6 +1,7 @@
 package com.company.dal;
 
 import com.company.models.Product;
+import com.company.models.User;
 
 import java.util.List;
 
@@ -13,6 +14,10 @@ public class ProductRepository implements IRepository<Product>{
     //todo Güncelleme revixe yapılacak yapılacak
     @Override
     public boolean update(Product product) {
+        Product p = this.getById(product.getId());
+        p.setName(product.getName());
+        p.setPrice(product.getPrice());
+        p.setQuantity(product.getQuantity());
         return false;
     }
 

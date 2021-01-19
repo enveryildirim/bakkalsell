@@ -78,6 +78,7 @@ public class Main {
         pages.put(PageName.LOGIN,new LoginPage(userService,productService));
         pages.put(PageName.HOME,new HomePage(userService,productService));
         pages.put(PageName.PRODUCT_SALE,new ProductSalePage(userService,productService));
+        pages.put(PageName.USER_CREATE,new UserCreatePage(userService,productService));
 
         /**
          * Varsayılan kullanıcıların bilgilerinin oluşturulması

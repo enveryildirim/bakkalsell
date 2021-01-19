@@ -37,6 +37,7 @@ public class UserService {
      */
 
     public boolean updateUser(User user){
+        this.userRepository.update(user);
         return false;
     }
 

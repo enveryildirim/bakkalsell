@@ -22,8 +22,10 @@ public class ProductSalePage extends PageBase{
 
         productService.getAll().forEach(p-> System.out.printf("Kod:{%d} Ad:{%s} Fiyat:{%f} Kalan:{%d} \n", p.getId(),p.getName(),p.getPrice(),p.getQuantity()));
         while(true){
-            System.out.println("Ürünlerin Kodlarını Giriniz veya tamam yazın");
+            System.out.println("Ürünlerin Kodlarını Giriniz ve tamam yazın veya iptal yazıp çıkın");
             String productCode =in.nextLine();
+            if (productCode.equals("iptal"))
+                return PageName.LOGIN;
             if(productCode.equals("tamam")){
                 break;
             }
