@@ -4,11 +4,12 @@ import com.company.dal.IRepository;
 import com.company.dal.ProductRepository;
 import com.company.models.CartItem;
 import com.company.models.Product;
+import com.company.models.User;
 
 import java.util.List;
 
 public class ProductService {
-    private IRepository productRepository;
+    private IRepository<Product> productRepository;
 
     public ProductService(IRepository productRepository)
     {
@@ -16,6 +17,9 @@ public class ProductService {
     }
 
     public void createProduct(Product product){
+        int size=productRepository.getAll().size();
+        int newID=productRepository.getAll().get(size-1).getId()+1;
+        product.setId(newID);
         productRepository.create(product);
     }
     public void updateProduct(Product product){

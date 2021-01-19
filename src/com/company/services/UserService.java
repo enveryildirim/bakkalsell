@@ -27,7 +27,16 @@ public class UserService {
     public boolean logout(){
         return true;
     }
+
     public boolean createUser(User user){
+
+        userRepository.create(user);
+        return false;
+    }
+    public boolean createUser(String nameSurname,String username,String password){
+        int size=userRepository.getAll().size();
+        int newID=userRepository.getAll().get(size-1).getId()+1;
+        User user = new User(newID,nameSurname,username,password,0);
         userRepository.create(user);
         return false;
     }
