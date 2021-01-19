@@ -1,7 +1,8 @@
 package com.company.services;
 
+import com.company.dal.DB;
 import com.company.dal.IRepository;
-import com.company.models.user.User;
+import com.company.models.User;
 
 /**
  * Kasiyer ve Admin kullanıcısının yapacağı işlemerin yapıldığı sınıf
@@ -14,13 +15,35 @@ public class UserService {
         this.userRepository=userRepository;
     }
 
+    public boolean login(String username,String password){
+       User user = this.userRepository.getAll().stream()
+                .filter(u->u.getUsername().equals(username) && u.getPassword().equals(password))
+               .findFirst()
+               .orElse(null);
+        DB.currentLoginedUser=user;
+        return user==null?false:true;
+    }
+
+    public boolean logout(){
+        return true;
+    }
+    public boolean createUser(User user){
+        userRepository.create(user);
+        return false;
+    }
     /**
-     * Kullanıcı profil bilgilerini güncelleme
+     * Kullanıcı  bilgilerini güncelleme
      * @param user
      */
-    public void updateProfile(User user){
 
+    public boolean updateUser(User user){
+        return false;
     }
+
+    public boolean deleteUser(User user){
+        return false;
+    }
+
 
     /**
      * Kullanıcı şifre değiştirme

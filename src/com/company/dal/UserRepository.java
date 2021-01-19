@@ -1,5 +1,5 @@
 package com.company.dal;
-import com.company.models.user.User;
+import com.company.models.User;
 
 import java.util.List;
 
@@ -11,30 +11,38 @@ public class UserRepository implements IRepository<User>{
     /**
      * Kullanıcı oluşturma
      * @param user
+     * @return
      */
     @Override
-    public void create(User user) {
-        DB.users.add(user);
-        System.out.println("User oluşturuldu = "+user.getProfile().getName());
+    public boolean create(User user) {
+
+        System.out.println("User oluşturuldu = "+user.getNameSurname());
+
+        return DB.users.add(user);
 
     }
 
     /**
      * Kullanıcı güncelleme
      * @param user
+     * @return
      */
+    //todo Güncelleme revixe yapılacak yapılacak
     @Override
-    public void update(User user) {
+    public boolean update(User user) {
+        User u = this.getById(user.getId());
 
+       return true;
     }
 
     /**
      * Kullanıcı Silme
      * @param user
+     * @return
      */
     @Override
-    public void delete(User user) {
-
+    public boolean delete(User user) {
+       return DB.users.remove(user);
     }
 
     /**
@@ -43,7 +51,7 @@ public class UserRepository implements IRepository<User>{
      */
     @Override
     public List<User> getAll() {
-        return null;
+        return DB.users;
     }
 
     /**
@@ -53,6 +61,9 @@ public class UserRepository implements IRepository<User>{
      */
     @Override
     public User getById(int id) {
-        return null;
+        return DB.users.stream()
+                .filter(p-> p.getId() == id)
+                .findFirst()
+                .orElse(null);
     }
 }
