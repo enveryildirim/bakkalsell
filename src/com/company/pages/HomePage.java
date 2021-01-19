@@ -41,9 +41,5 @@ public class HomePage extends PageBase{
 
     }
 
-    void renderUser(){
-        System.out.println("İşleminizi Seçiniz");
-        System.out.println("1-Satış");
-        System.out.println("2-Ürün Listele");
-    }
+
 }

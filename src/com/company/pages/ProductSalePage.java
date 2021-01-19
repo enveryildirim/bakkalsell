@@ -1,13 +1,11 @@
 package com.company.pages;
 
 import com.company.dal.DB;
+import com.company.models.CartItem;
 import com.company.models.PageName;
 import com.company.models.Product;
 import com.company.services.ProductService;
 import com.company.services.UserService;
-
-import java.util.Arrays;
-import java.util.Scanner;
 
 public class ProductSalePage extends PageBase{
     public ProductSalePage(UserService userService, ProductService productService) {
@@ -20,23 +18,49 @@ public class ProductSalePage extends PageBase{
 
     @Override
     public PageName render() {
-        Scanner in = new Scanner(System.in);
 
-        DB.products.forEach(p-> System.out.printf("Kod:{%d} Ad:{%s} Fiyat:{%f} Kalan:{%d} \n", p.getId(),p.getName(),p.getPrice(),p.getQuantity()));
-        System.out.println("Ürünlerin Kodlarını Giriniz");
-        String productCodes =in.nextLine();
 
-        Arrays.stream(productCodes.split(","))
-                .forEach(c->{
-                    Product product=  DB.products.stream().filter(p->p.getId()==Integer.parseInt(c))
-                            .findFirst()
-                            .get();
-                    System.out.println("Ad: "+product.getName()+"  Fiyat: "+product.getPrice());
-                });
+        productService.getAll().forEach(p-> System.out.printf("Kod:{%d} Ad:{%s} Fiyat:{%f} Kalan:{%d} \n", p.getId(),p.getName(),p.getPrice(),p.getQuantity()));
+        while(true){
+            System.out.println("Ürünlerin Kodlarını Giriniz veya tamam yazın");
+            String productCode =in.nextLine();
+            if(productCode.equals("tamam")){
+                break;
+            }
+            System.out.println("Ürünlerin Miktarını Giriniz");
+            String productQuantity =in.nextLine();
 
-        System.out.println("Ürünlerin Onaylıyor musunuz");
-        if(in.nextLine().equals("y")){
-            System.out.println("Satış yapıldı");
+            Product product=productService.getAll().stream().filter(p->p.getId()==Integer.parseInt(productCode))
+                    .findFirst()
+                    .get();
+            if(product.getQuantity()>Integer.parseInt(productQuantity)){
+                DB.cart.add(new CartItem(product,Integer.parseInt(productQuantity)));
+            }
+            else
+                System.out.println("Yeterli stok yok");
+
+        }
+
+        DB.cart.forEach(c-> System.out.printf("Kod:{%d} Ad:{%s} Fiyat:{%f}  Alınan Miktar:{%d} Tutar:{%f} \n", c.product.getId(),c.product.getName(),c.product.getPrice(),c.quantity,c.product.getPrice()*c.quantity));
+        float toplamFiyat =0;
+        for (CartItem item:DB.cart) {
+            toplamFiyat+=item.quantity*item.product.getPrice();
+
+        }
+
+        System.out.printf("Toplam Tutar:{%f}",toplamFiyat);
+        System.out.println("\nÜrünlerin Onaylıyor musunuz? evet için e hayır için h");
+        if(in.nextLine().equals("e")){
+            System.out.println("Satış yapıldı\n Devam etmek için d basın veya çıkmak için çık yazın ");
+            if(DB.currentLoginedUser.getUserType()==0){
+                System.out.println("Anasayfa için home yazın");
+                if(in.nextLine().equals("home"))
+                    return PageName.HOME;
+            }else{
+               if(in.nextLine().equals("çık"))
+                   return PageName.LOGIN;
+            }
+
         }
 
         return PageName.PRODUCT_SALE;

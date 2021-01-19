@@ -2,6 +2,7 @@ package com.company.services;
 
 import com.company.dal.IRepository;
 import com.company.dal.ProductRepository;
+import com.company.models.CartItem;
 import com.company.models.Product;
 
 import java.util.List;
@@ -34,5 +35,8 @@ public class ProductService {
     }
     public void Sales(){
 
+    }
+    public void insertProductToCart(Product product){
+        //CartItem.productsList.add(product);
     }
 }
