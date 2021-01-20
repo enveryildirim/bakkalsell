@@ -4,6 +4,8 @@ import com.company.models.PageName;
 import com.company.services.ProductService;
 import com.company.services.UserService;
 
+import java.io.Console;
+
 public class LoginPage extends PageBase{
     public LoginPage(UserService userService, ProductService productService) {
         super(userService, productService);
@@ -24,7 +26,8 @@ public class LoginPage extends PageBase{
 
         if(this.userService.login(username,password))
             return PageName.HOME;
-
+        System.out.println("!!!! Lütfen bilgilerinizi doğru giriniz Bilgilerinizi unuttuysanız Adminle görüşün\n Devam etmek için bir tuşa basın");
+        in.nextLine();
         return PageName.LOGIN;
     }
 }

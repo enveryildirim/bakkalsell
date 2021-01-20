@@ -12,6 +12,7 @@ import com.company.pages.*;
 import com.company.services.ProductService;
 import com.company.services.UserService;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,6 +21,8 @@ public class Main {
     public static Map<PageName, PageBase> pages=new HashMap<>();
     public static void main(String[] args) {
         init();
+
+
 
         PageName current=PageName.LOGIN;
         while(true){
@@ -42,6 +45,17 @@ public class Main {
         }
 
     }
+    public static void clear()
+    {
+        try
+        {
+            if (System.getProperty("os.name").contains("Windows"))
+                new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+            else
+                Runtime.getRuntime().exec("clear");
+        } catch (IOException | InterruptedException ex) {}
+    }
+
 
     /**
      * Pre-conditions
@@ -79,6 +93,9 @@ public class Main {
         pages.put(PageName.HOME,new HomePage(userService,productService));
         pages.put(PageName.PRODUCT_SALE,new ProductSalePage(userService,productService));
         pages.put(PageName.USER_CREATE,new UserCreatePage(userService,productService));
+        pages.put(PageName.PRODUCT_CREATE,new ProductCreatePage(userService,productService));
+        pages.put(PageName.USER_LIST,new UserListPage(userService,productService));
+        pages.put(PageName.PRODUCT_LIST,new ProductListPage(userService,productService));
 
         /**
          * Varsayılan kullanıcıların bilgilerinin oluşturulması

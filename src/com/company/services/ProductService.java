@@ -29,9 +29,7 @@ public class ProductService {
         productRepository.delete(product);
     }
     public Product getProductById(int id){
-        ProductRepository pr =new ProductRepository();
-
-        return (Product) productRepository.getById(1);
+        return (Product) productRepository.getById(id);
 
     }
     public List<Product> getAll(){

@@ -4,6 +4,8 @@ import com.company.dal.DB;
 import com.company.dal.IRepository;
 import com.company.models.User;
 
+import java.util.List;
+
 /**
  * Kasiyer ve Admin kullanıcısının yapacağı işlemerin yapıldığı sınıf
  */
@@ -36,7 +38,7 @@ public class UserService {
     public boolean createUser(String nameSurname,String username,String password){
         int size=userRepository.getAll().size();
         int newID=userRepository.getAll().get(size-1).getId()+1;
-        User user = new User(newID,nameSurname,username,password,0);
+        User user = new User(newID,nameSurname,username,password,1);
         userRepository.create(user);
         return false;
     }
@@ -51,7 +53,7 @@ public class UserService {
     }
 
     public boolean deleteUser(User user){
-        return false;
+        return userRepository.delete(user);
     }
 
 
@@ -69,8 +71,11 @@ public class UserService {
      * @return
      */
     public User getUser(int id){
-        return null;
+        return userRepository.getById(id);
     }
 
+    public List<User> getAll(){
+        return userRepository.getAll();
+    }
 
 }
