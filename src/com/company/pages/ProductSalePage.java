@@ -29,12 +29,24 @@ public class ProductSalePage extends PageBase{
             if(productCode.equals("tamam")){
                 break;
             }
+            if(!this.isInt(productCode)){
+                System.out.printf("Uygun bir Id giriniz\n devam etmek için bir tuşa basınız");
+                in.nextLine();
+                return PageName.PRODUCT_SALE;
+            }
             System.out.println("Ürünlerin Miktarını Giriniz");
             String productQuantity =in.nextLine();
-
-            Product product=productService.getAll().stream().filter(p->p.getId()==Integer.parseInt(productCode))
-                    .findFirst()
-                    .get();
+            if(!this.isInt(productQuantity) || Integer.parseInt(productQuantity)<=0){
+                System.out.printf("Uygun bir miktar\n devam etmek için bir tuşa basınız");
+                in.nextLine();
+                return PageName.PRODUCT_SALE;
+            }
+            Product product=productService.getProductById(Integer.parseInt(productCode));
+            if(product==null){
+                System.out.printf("Uygun bir Id giriniz \n devam etmek için bir tuşa basınız");
+                in.nextLine();
+                return PageName.PRODUCT_SALE;
+            }
             if(product.getQuantity()>Integer.parseInt(productQuantity)){
                 DB.cart.add(new CartItem(product,Integer.parseInt(productQuantity)));
             }

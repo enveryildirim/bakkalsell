@@ -37,8 +37,8 @@ public class Main {
 
             //Gidelecek Sayfanın Yetki isteyip istemediği ve Kullanıcının bu yetkiye sahip olup olmadığı kotrolü yapılıyor.
             if(page.requiredAuth()){
-                //todo kullanıcı yetkilendirme yapılacak
-                //if(DB.currentLoginedUser.getId())
+                if(DB.currentLoginedUser.getUserType()==1)
+                    current =PageName.PRODUCT_SALE;
             }
             current= page.render();
 

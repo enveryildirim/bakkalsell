@@ -27,7 +27,7 @@ public class UserRepository implements IRepository<User>{
      * @param user
      * @return
      */
-    //todo Güncelleme revixe yapılacak yapılacak
+
     @Override
     public boolean update(User user) {
         User u = this.getById(user.getId());

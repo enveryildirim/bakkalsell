@@ -11,7 +11,7 @@ public class ProductRepository implements IRepository<Product>{
         return DB.products.add(product);
     }
 
-    //todo Güncelleme revixe yapılacak yapılacak
+
     @Override
     public boolean update(Product product) {
         Product p = this.getById(product.getId());

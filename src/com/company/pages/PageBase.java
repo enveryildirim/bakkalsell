@@ -15,7 +15,14 @@ public abstract class PageBase {
         this.userService = userService;
         this.productService = productService;
     }
-
+    public boolean isInt(String deger){
+        try {
+            int a=Integer.parseInt(deger);
+            return true;
+        }catch (Exception e){
+            return false;
+        }
+    }
     public abstract boolean requiredAuth();
     public abstract PageName render();
 }

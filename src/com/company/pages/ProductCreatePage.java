@@ -14,7 +14,7 @@ public class ProductCreatePage extends PageBase{
     public boolean requiredAuth() {
         return true;
     }
-    //todo hata mesajı verilecek
+
     @Override
     public PageName render() {
         System.out.println("Ürün oluşturma sayfası lütfen bilgileri giriniz ***Boş alan bırakmayınız");
