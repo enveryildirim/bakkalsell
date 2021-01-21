@@ -6,19 +6,19 @@ import java.util.List;
 
 public class CartItemRepository implements IRepository<CartItem>{
     @Override
-    public boolean create(CartItem cartItem) {
+    public void  create(CartItem cartItem) {
         DB.cart.add(cartItem);
-        return true;
+
     }
 
     @Override
-    public boolean update(CartItem cartItem) {
-        return false;
+    public void update(CartItem cartItem) {
+
     }
 
     @Override
-    public boolean delete(CartItem cartItem) {
-        return DB.cart.remove(cartItem);
+    public void delete(CartItem cartItem) {
+         DB.cart.remove(cartItem);
     }
 
     @Override

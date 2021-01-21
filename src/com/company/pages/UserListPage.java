@@ -27,7 +27,7 @@ public class UserListPage extends PageBase{
         if(command.equals("1")){
             System.out.printf("Kullanıcı İd giriniz \n");
             int id = in.nextInt();
-            //todo UUID için yeniden yapılcak
+
             User user=userService.getUser(id);
             if(user==null){
                 System.out.printf("İd uygun Kullanıcı Yok\n");
@@ -70,7 +70,7 @@ public class UserListPage extends PageBase{
         if(command.equals("2")){
             System.out.printf("Kullanıcı İd giriniz \n");
             int id = in.nextInt();
-            //todo UUID için değişiklik yapılcak
+
             User user=userService.getUser(id);
             if(user==null ||user.getUserType()==1){
                 System.out.printf("İd uygun Kullanıcı Yok\n");

@@ -22,7 +22,7 @@ public class TestPage extends PageBase{
         //productService.getAll().forEach(p-> System.out.printf("Kod:{%d} Ad:{%s} Fiyat:{%f} Kalan:{%d} \n", p.getId(),p.getName(),p.getPrice(),p.getQuantity()));
 
         while(true){
-            productService.getAllProductByCart().forEach(p-> {
+            productService.getAll().forEach(p-> {
                     CartItem cartItem= productService.getCart().stream()
                                          .filter(c->c.product.getId()==p.getId())
                                          .findFirst()

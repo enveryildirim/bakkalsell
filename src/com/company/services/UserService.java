@@ -27,33 +27,33 @@ public class UserService {
         return user==null?false:true;
     }
 
-    public boolean logout(){
-        return true;
+    public void logout(){
+
     }
 
-    public boolean createUser(User user){
+    public void createUser(User user){
         userRepository.create(user);
-        return false;
+
     }
-    public boolean createUser(String nameSurname,String username,String password){
+    public void createUser(String nameSurname,String username,String password){
         int size=userRepository.getAll().size();
         int newID=userRepository.getAll().get(size-1).getId()+1;
         User user = new User(newID,nameSurname,username,password,1);
         userRepository.create(user);
-        return false;
+
     }
     /**
      * Kullanıcı  bilgilerini güncelleme
      * @param user
      */
 
-    public boolean updateUser(User user){
+    public void updateUser(User user){
         this.userRepository.update(user);
-        return false;
+
     }
 
-    public boolean deleteUser(User user){
-        return userRepository.delete(user);
+    public void deleteUser(User user){
+         userRepository.delete(user);
     }
 
 

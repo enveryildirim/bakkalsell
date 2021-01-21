@@ -56,20 +56,23 @@ public class ProductService {
     public void clearCart(){
 
     }
-    //todo fonksiyonun isimi değiştirilecek
-    public List<Product> getAllProductByCart(){
-        List<Product> productList = new ArrayList<>();
-        productList.addAll(productRepository.getAll());
-        List<CartItem>cartItemList=cartItemIRepository.getAll();
+    static String durum="";
+    public String getAllProductForCart(){
+        durum="";
+        productRepository.getAll().stream().forEach(p-> {
 
-        cartItemList.forEach(c->{
-           Product product=productList.stream().filter(p->p.getId()==c.product.getId())
+            CartItem cartItem= cartItemIRepository.getAll().stream()
+                    .filter(c->c.product.getId()==p.getId())
                     .findFirst()
-                    .get();
-           //product.setQuantity(product.getQuantity()-c.getQuantity());
+                    .orElse(null);
+            if(cartItem!=null)
+               durum =durum+String.format("Kod:{%d} Ad:{%s} Fiyat:{%f} Kalan:{%d} \n", p.getId(),p.getName(),p.getPrice(),(p.getQuantity()-cartItem.quantity));
+            else
+                durum=durum+String.format("Kod:{%d} Ad:{%s} Fiyat:{%f} Kalan:{%d} \n", p.getId(),p.getName(),p.getPrice(),p.getQuantity());
 
         });
-        return productList;
+
+        return durum;
     }
     public List<CartItem> getCart(){
 

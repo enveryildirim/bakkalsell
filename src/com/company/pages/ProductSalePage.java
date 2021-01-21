@@ -23,8 +23,8 @@ public class ProductSalePage extends PageBase{
 
 
         while(true){
-            //todo product service içinde yapılması için revize edilecek
-            productService.getAllProductByCart().forEach(p-> {
+            //todo silenecek
+           /* productService.getAll().forEach(p-> {
                 CartItem cartItem= productService.getCart().stream()
                         .filter(c->c.product.getId()==p.getId())
                         .findFirst()
@@ -33,8 +33,10 @@ public class ProductSalePage extends PageBase{
                     System.out.printf("Kod:{%d} Ad:{%s} Fiyat:{%f} Kalan:{%d} \n", p.getId(),p.getName(),p.getPrice(),(p.getQuantity()-cartItem.quantity));
                 else
                     System.out.printf("Kod:{%d} Ad:{%s} Fiyat:{%f} Kalan:{%d} \n", p.getId(),p.getName(),p.getPrice(),p.getQuantity());
-            });
-
+            });*/
+            System.out.printf("------------ÜRÜN LİSTESİ----------\n");
+            System.out.printf("----------------------------------\n");
+            System.out.println(productService.getAllProductForCart());
             System.out.println("Ürünlerin Kodlarını Giriniz ve tamam yazın veya iptal yazıp çıkın");
             String productCode =in.nextLine();
             if (productCode.equals("iptal"))

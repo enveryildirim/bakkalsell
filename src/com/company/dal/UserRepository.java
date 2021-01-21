@@ -15,11 +15,11 @@ public class UserRepository implements IRepository<User>{
      * @return
      */
     @Override
-    public boolean create(User user) {
+    public void create(User user) {
 
         System.out.println("User oluşturuldu = "+user.getNameSurname());
 
-        return DB.users.add(user);
+         DB.users.add(user);
 
     }
 
@@ -30,12 +30,12 @@ public class UserRepository implements IRepository<User>{
      */
 
     @Override
-    public boolean update(User user) {
+    public void update(User user) {
         User u = this.getById(user.getId());
         u.setNameSurname(user.getNameSurname());
         u.setUsername(user.getUsername());
         u.setPassword(user.getPassword());
-       return true;
+
     }
 
     /**
@@ -44,8 +44,8 @@ public class UserRepository implements IRepository<User>{
      * @return
      */
     @Override
-    public boolean delete(User user) {
-       return DB.users.remove(user);
+    public void delete(User user) {
+        DB.users.remove(user);
     }
 
     /**
