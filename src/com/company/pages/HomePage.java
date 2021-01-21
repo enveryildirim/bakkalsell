@@ -23,7 +23,9 @@ public class HomePage extends PageBase{
         System.out.println("Anasayfa");
         if(DB.currentLoginedUser.getUserType()==1)
             return PageName.PRODUCT_SALE;
-
+        if(DB.currentLoginedUser.getUserType()==2){
+            return PageName.ORDER;
+        }
         System.out.println("İşleminizi Seçiniz");
 
         System.out.println("1-Satış");
@@ -31,6 +33,7 @@ public class HomePage extends PageBase{
         System.out.println("3-Yeni Kullanıcı Ekle");
         System.out.println("4-Kullanıcılar ");
         System.out.println("5-Ürünler ");
+        System.out.println("6-Siparişler ");
         System.out.println("0-Çıkış");
 
         Scanner in = new Scanner(System.in);
@@ -55,6 +58,9 @@ public class HomePage extends PageBase{
 
         if(islem.equals("5"))
             return PageName.PRODUCT_LIST;
+
+        if (islem.equals("6"))
+            return PageName.ORDER_VIEW;
 
         return PageName.HOME;
 

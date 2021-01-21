@@ -17,7 +17,7 @@ public class UserRepository implements IRepository<User>{
     @Override
     public void create(User user) {
 
-        System.out.println("User oluşturuldu = "+user.getNameSurname());
+        System.out.println("User oluşturuldu = "+user.getNameSurname()+"\n");
 
          DB.users.add(user);
 
@@ -68,5 +68,9 @@ public class UserRepository implements IRepository<User>{
                 .filter(p-> p.getId() == id)
                 .findFirst()
                 .orElse(null);
+    }
+
+    public User getLoginedUser(){
+        return DB.currentLoginedUser;
     }
 }

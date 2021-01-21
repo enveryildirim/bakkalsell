@@ -29,14 +29,17 @@ public class UserCreatePage extends PageBase{
         System.out.println("Şifre girin");
         String password = in.nextLine();
 
-        if(nameSurname.length()==0 || username.length()==0||password.length()==0||username.length()<5||password.length()<6)
+        System.out.println("Kullanıcının Türünü giriniz 1 == Kasiyer 2 == Müşteri");
+        String typeUser = in.nextLine();
+
+        if(nameSurname.length()==0 || username.length()==0||password.length()==0||username.length()<5||password.length()<6||!typeUser.equals("1")||!typeUser.equals("2"))
             return PageName.USER_CREATE;
 
         System.out.println("Ad Soyad:"+nameSurname+" Username: "+username+" Password: "+password);
         System.out.printf("Onay için evet iptal için hayır yazın ");
         if(in.nextLine().equals("evet")) {
             System.out.printf("Eklendi");
-            userService.createUser(nameSurname,username,password);
+            userService.createUser(nameSurname,username,password,typeUser);
         }
         else
             System.out.printf("İptal edildi");

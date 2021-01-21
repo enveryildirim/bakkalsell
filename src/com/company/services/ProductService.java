@@ -54,7 +54,7 @@ public class ProductService {
         }
     }
     public void clearCart(){
-
+        cartItemIRepository.getAll().clear();
     }
     static String durum="";
     public String getAllProductForCart(){

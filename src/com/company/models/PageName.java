@@ -10,6 +10,9 @@ public enum PageName {
     USER_CREATE,
     USER_UPDATE_DELETE,
     USER_LIST,
+    CUSTOMER_LIST,
+    ORDER,
+    ORDER_VIEW,
     TEST
 
 }

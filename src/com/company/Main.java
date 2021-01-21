@@ -1,19 +1,19 @@
 package com.company;
 
 import com.company.dal.*;
-import com.company.models.CartItem;
-import com.company.models.PageName;
-import com.company.models.Product;
+import com.company.models.*;
 
-import com.company.models.User;
 import com.company.pages.*;
+import com.company.services.OrderService;
 import com.company.services.ProductService;
 import com.company.services.UserService;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.UUID;
+
 
 public class Main {
 
@@ -26,7 +26,7 @@ public class Main {
     public static void main(String[] args) {
         init();
 
-        PageName current=PageName.HOME;
+        PageName current=PageName.ORDER_VIEW;
         while(true){
 
            //Eğer kullanıcı giriş yapmadıysa Login Sayfasına Gönder
@@ -73,13 +73,14 @@ public class Main {
         IRepository<User> userRepository=new UserRepository();
         IRepository<Product> productRepository= new ProductRepository();
         IRepository<CartItem> cartItemIRepository = new CartItemRepository();
+        IRepository<Order> orderIRepository= new OrderRepository();
         /**
          * Burada da Page katmanını Dependency injection constructor methodu kullandık
          * Page katmanı sadece servis katmanı ile haberleşiyor. Veritabını katmanı ile haberleşmiyor.
          * */
         UserService userService=new UserService(userRepository);
         ProductService productService=new ProductService(productRepository,cartItemIRepository);
-
+        OrderService orderService=new OrderService(userRepository,productRepository,cartItemIRepository,orderIRepository);
 
         /**
          * Sayfaların ayarlanması
@@ -93,16 +94,28 @@ public class Main {
         pages.put(PageName.PRODUCT_LIST,new ProductListPage(userService,productService));
         pages.put(PageName.TEST,new TestPage(userService,productService));
 
+        OrderPage orderPage= new OrderPage(userService,productService);
+        orderPage.setOrderService(orderService);
+        pages.put(PageName.ORDER,orderPage);
+        OrderViewPage orderViewPage = new OrderViewPage(userService,productService);
+        orderViewPage.setOrderService(orderService);
+        pages.put(PageName.ORDER_VIEW,orderViewPage);
         /**
          * Varsayılan kullanıcıların bilgilerinin oluşturulması
          */
         //User type 0 =Admin yetkisi 1 =kasiyer
         User userAdmin= new User(1,"admin admin","admin","admin",0);
         User user= new User(2,"user user","user","user",1);
+        User userCustomer= new User(3,"customer customer","custom","custom",2);
 
         userService.createUser(userAdmin);
         userService.createUser(user);
+        userService.createUser(userCustomer);
+        DB.currentLoginedUser=userAdmin;
 
+        List<CartItem> cartItemList= new ArrayList<>();
+        cartItemList.add(new CartItem(new Product(1,"gofret",2,50),10));
+        DB.orders.add(new Order(userCustomer,cartItemList));
 
     }
 

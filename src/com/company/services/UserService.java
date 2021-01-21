@@ -35,10 +35,10 @@ public class UserService {
         userRepository.create(user);
 
     }
-    public void createUser(String nameSurname,String username,String password){
+    public void createUser(String nameSurname,String username,String password,String typeUser){
         int size=userRepository.getAll().size();
         int newID=userRepository.getAll().get(size-1).getId()+1;
-        User user = new User(newID,nameSurname,username,password,1);
+        User user = new User(newID,nameSurname,username,password,Integer.parseInt(typeUser));
         userRepository.create(user);
 
     }
