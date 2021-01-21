@@ -82,7 +82,10 @@ public class ProductService {
                         .findFirst()
                         .get();
                 product.setQuantity(product.getQuantity()-c.getQuantity());
+
         });
+
+        cartItemIRepository.getAll().clear();
     }
 
 }

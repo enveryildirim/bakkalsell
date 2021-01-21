@@ -26,13 +26,13 @@ public class Main {
     public static void main(String[] args) {
         init();
 
-        PageName current=PageName.TEST;
+        PageName current=PageName.HOME;
         while(true){
 
            //Eğer kullanıcı giriş yapmadıysa Login Sayfasına Gönder
-           /* if(DB.currentLoginedUser==null)
+           if(DB.currentLoginedUser==null)
                 current=PageName.LOGIN;
-*/
+
             //Yüklenecek sayfanın gösterilmesi
             PageBase page =pages.get(current);
 
