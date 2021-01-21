@@ -4,6 +4,7 @@ import com.company.models.Product;
 import com.company.models.User;
 
 import java.util.List;
+import java.util.UUID;
 
 public class ProductRepository implements IRepository<Product>{
     @Override
@@ -18,7 +19,7 @@ public class ProductRepository implements IRepository<Product>{
         p.setName(product.getName());
         p.setPrice(product.getPrice());
         p.setQuantity(product.getQuantity());
-        return false;
+        return true;
     }
 
     @Override
@@ -38,4 +39,6 @@ public class ProductRepository implements IRepository<Product>{
                 .findFirst()
                 .orElse(null);
     }
+
+
 }

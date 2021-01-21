@@ -1,9 +1,7 @@
 package com.company;
 
-import com.company.dal.DB;
-import com.company.dal.IRepository;
-import com.company.dal.ProductRepository;
-import com.company.dal.UserRepository;
+import com.company.dal.*;
+import com.company.models.CartItem;
 import com.company.models.PageName;
 import com.company.models.Product;
 
@@ -15,23 +13,27 @@ import com.company.services.UserService;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class Main {
 
     public static Map<PageName, PageBase> pages=new HashMap<>();
+
+    /**
+     *
+     * @param args
+     */
     public static void main(String[] args) {
         init();
 
-
-
-        PageName current=PageName.LOGIN;
+        PageName current=PageName.TEST;
         while(true){
+
            //Eğer kullanıcı giriş yapmadıysa Login Sayfasına Gönder
-            if(DB.currentLoginedUser==null)
+           /* if(DB.currentLoginedUser==null)
                 current=PageName.LOGIN;
-
-
-
+*/
+            //Yüklenecek sayfanın gösterilmesi
             PageBase page =pages.get(current);
 
 
@@ -40,25 +42,17 @@ public class Main {
                 if(DB.currentLoginedUser.getUserType()==1)
                     current =PageName.PRODUCT_SALE;
             }
+
             current= page.render();
 
         }
 
     }
-    public static void clear()
-    {
-        try
-        {
-            if (System.getProperty("os.name").contains("Windows"))
-                new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
-            else
-                Runtime.getRuntime().exec("clear");
-        } catch (IOException | InterruptedException ex) {}
-    }
+
 
 
     /**
-     * Pre-conditions
+     * Gerekli işlemlerin yapılması
      */
     static void init(){
         /**
@@ -78,12 +72,13 @@ public class Main {
          * */
         IRepository<User> userRepository=new UserRepository();
         IRepository<Product> productRepository= new ProductRepository();
+        IRepository<CartItem> cartItemIRepository = new CartItemRepository();
         /**
          * Burada da Page katmanını Dependency injection constructor methodu kullandık
          * Page katmanı sadece servis katmanı ile haberleşiyor. Veritabını katmanı ile haberleşmiyor.
          * */
         UserService userService=new UserService(userRepository);
-        ProductService productService=new ProductService(productRepository);
+        ProductService productService=new ProductService(productRepository,cartItemIRepository);
 
 
         /**
@@ -96,6 +91,7 @@ public class Main {
         pages.put(PageName.PRODUCT_CREATE,new ProductCreatePage(userService,productService));
         pages.put(PageName.USER_LIST,new UserListPage(userService,productService));
         pages.put(PageName.PRODUCT_LIST,new ProductListPage(userService,productService));
+        pages.put(PageName.TEST,new TestPage(userService,productService));
 
         /**
          * Varsayılan kullanıcıların bilgilerinin oluşturulması

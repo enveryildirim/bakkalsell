@@ -1,6 +1,7 @@
 package com.company.dal;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface IRepository<T> {
     boolean create(T t);

@@ -48,7 +48,9 @@ public class ProductSalePage extends PageBase{
                 return PageName.PRODUCT_SALE;
             }
             if(product.getQuantity()>Integer.parseInt(productQuantity)){
+
                 DB.cart.add(new CartItem(product,Integer.parseInt(productQuantity)));
+                break;
             }
             else
                 System.out.println("Yeterli stok yok");
@@ -66,6 +68,7 @@ public class ProductSalePage extends PageBase{
         System.out.println("\nÜrünlerin Onaylıyor musunuz? evet için e hayır için h");
         if(in.nextLine().equals("e")){
             System.out.println("Satış yapıldı\n Devam etmek için d basın veya çıkmak için çık yazın ");
+
             if(DB.currentLoginedUser.getUserType()==0){
                 System.out.println("Anasayfa için home yazın");
                 if(in.nextLine().equals("home"))

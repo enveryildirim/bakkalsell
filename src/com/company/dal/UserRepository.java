@@ -2,6 +2,7 @@ package com.company.dal;
 import com.company.models.User;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Kullanıcı veritabanı ile olan işleri yapıldığı sınıf

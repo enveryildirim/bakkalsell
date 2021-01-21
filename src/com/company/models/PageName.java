@@ -9,6 +9,7 @@ public enum PageName {
     PRODUCT_LIST,
     USER_CREATE,
     USER_UPDATE_DELETE,
-    USER_LIST
+    USER_LIST,
+    TEST
 
 }

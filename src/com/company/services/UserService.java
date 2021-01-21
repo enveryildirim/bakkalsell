@@ -5,6 +5,7 @@ import com.company.dal.IRepository;
 import com.company.models.User;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Kasiyer ve Admin kullanıcısının yapacağı işlemerin yapıldığı sınıf
@@ -31,7 +32,6 @@ public class UserService {
     }
 
     public boolean createUser(User user){
-
         userRepository.create(user);
         return false;
     }
