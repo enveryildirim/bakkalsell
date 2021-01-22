@@ -31,7 +31,7 @@ public class CustomersPage extends PageBase{
 
             User user=userService.getUser(id);
             if(user==null){
-                System.out.printf("İd uygun Kullanıcı Yok\n");
+                System.out.printf("Id uygun Kullanıcı Yok\n");
                 return PageName.USER_LIST;
             }
 

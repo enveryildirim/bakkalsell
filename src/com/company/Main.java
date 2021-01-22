@@ -26,7 +26,7 @@ public class Main {
     public static void main(String[] args) {
         init();
 
-        PageName current=PageName.ORDER_VIEW;
+        PageName current=PageName.TEST;
         while(true){
 
            //Eğer kullanıcı giriş yapmadıysa Login Sayfasına Gönder
