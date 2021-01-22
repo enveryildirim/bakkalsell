@@ -25,6 +25,7 @@ public class ProductService {
         product.setId(newID);
         productRepository.create(product);
     }
+
     public void updateProduct(Product product){
         productRepository.update(product);
     }
@@ -60,6 +61,17 @@ public class ProductService {
 
         return cartItemIRepository.getAll();
     }
+    static String allCartString="";
+    public String getCartToString(){
+        allCartString="";
+        cartItemIRepository.getAll().forEach(c->{
+           allCartString=allCartString+String.format("Kod:{%d} Ad:{%s} Fiyat:{%f}  Alınan Miktar:{%d} Tutar:{%f} \n", c.product.getId(),c.product.getName(),c.product.getPrice(),c.quantity,c.product.getPrice()*c.quantity);
+        });
+
+        return allCartString;
+    }
+
+
     public void deleteProductFromCart(CartItem cartItem){
         cartItemIRepository.delete(cartItem);
     }
@@ -81,7 +93,6 @@ public class ProductService {
 
         return durum;
     }
-
 
     public void saleCart(){
         cartItemIRepository.getAll().forEach(c->{

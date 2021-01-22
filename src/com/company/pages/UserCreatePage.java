@@ -1,7 +1,8 @@
 package com.company.pages;
 
+import com.company.Constant;
 import com.company.models.PageName;
-import com.company.models.User;
+import com.company.pages.components.Input;
 import com.company.services.ProductService;
 import com.company.services.UserService;
 
@@ -20,24 +21,26 @@ public class UserCreatePage extends PageBase{
         System.out.println("kullanıcı oluşturma sayfası lütfen bilgileri giriniz Boş alan bırakmayınız");
         System.out.println("Kullanıcı Adı en az 5 haneli ve Şifre 6 haneli olmalı");
 
-        System.out.println("Ad Soyad girin");
-        String nameSurname=in.nextLine();
+        Input inName=new Input(null,"Ad Soyad: ","[a-zA-Z]",true);
+        String nameSurname=inName.render();
 
-        System.out.println("Kullanıcı Adı girin");
-        String username=in.nextLine();
+        Input inUsername=new Input(null,"Kullanıcı Adı", Constant.USERNAME,true);
+        String username=inUsername.render();
 
-        System.out.println("Şifre girin");
-        String password = in.nextLine();
+        Input inPassword=new Input(null,"Parola", Constant.PASSWORD,true);
+        String password = inPassword.render();
 
-        System.out.println("Kullanıcının Türünü giriniz 1 == Kasiyer 2 == Müşteri");
-        String typeUser = in.nextLine();
-
-        if(nameSurname.length()==0 || username.length()==0||password.length()==0||username.length()<5||password.length()<6||!typeUser.equals("1")||!typeUser.equals("2"))
-            return PageName.USER_CREATE;
+        Input inType=new Input(null,"Kullanıcının Türünü giriniz 1 == Kasiyer 2 == Müşteri","[12]",true);
+        String typeUser  = inType.render();
 
         System.out.println("Ad Soyad:"+nameSurname+" Username: "+username+" Password: "+password);
         System.out.printf("Onay için evet iptal için hayır yazın ");
-        if(in.nextLine().equals("evet")) {
+
+        Input inConfirm=new Input(null,"Onay için evet iptal için hayır yazın","(evet|hayır)$/",true);
+        String confirm=inConfirm.render();
+
+
+        if(confirm.equals("evet")) {
             System.out.printf("Eklendi");
             userService.createUser(nameSurname,username,password,typeUser);
         }

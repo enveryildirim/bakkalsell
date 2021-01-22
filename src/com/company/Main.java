@@ -92,7 +92,10 @@ public class Main {
         pages.put(PageName.PRODUCT_CREATE,new ProductCreatePage(userService,productService));
         pages.put(PageName.USER_LIST,new UserListPage(userService,productService));
         pages.put(PageName.PRODUCT_LIST,new ProductListPage(userService,productService));
-        pages.put(PageName.TEST,new TestPage(userService,productService));
+        
+        TestPage testPage=new TestPage(userService,productService);
+        testPage.setOrderService(orderService);
+        pages.put(PageName.TEST,testPage);
 
         OrderPage orderPage= new OrderPage(userService,productService);
         orderPage.setOrderService(orderService);
@@ -104,8 +107,8 @@ public class Main {
          * Varsayılan kullanıcıların bilgilerinin oluşturulması
          */
         //User type 0 =Admin yetkisi 1 =kasiyer
-        User userAdmin= new User(1,"admin admin","admin","admin",0);
-        User user= new User(2,"user user","user","user",1);
+        User userAdmin= new User(1,"admin admin","admin","adminadmin",0);
+        User user= new User(2,"user user","user","useruser",1);
         User userCustomer= new User(3,"customer customer","custom","custom",2);
 
         userService.createUser(userAdmin);

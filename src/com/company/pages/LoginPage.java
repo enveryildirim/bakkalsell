@@ -1,10 +1,10 @@
 package com.company.pages;
 
+import com.company.Constant;
 import com.company.models.PageName;
+import com.company.pages.components.Input;
 import com.company.services.ProductService;
 import com.company.services.UserService;
-
-import java.io.Console;
 
 public class LoginPage extends PageBase{
     public LoginPage(UserService userService, ProductService productService) {
@@ -18,11 +18,12 @@ public class LoginPage extends PageBase{
 
     @Override
     public PageName render() {
-        System.out.println("Kullanıcı Adı");
-        String username=in.nextLine();
 
-        System.out.println("Şifre");
-        String password=in.nextLine();
+        Input inUsername=new Input(null,"Kullanıcı Adı", Constant.USERNAME,true);
+        String username=inUsername.render();
+
+        Input inPassword=new Input(null,"Parola", Constant.PASSWORD,true);
+        String password=inPassword.render();
 
         if(this.userService.login(username,password))
             return PageName.HOME;

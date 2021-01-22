@@ -23,6 +23,7 @@ public class ProductSalePage extends PageBase{
             System.out.printf("------------ÜRÜN LİSTESİ----------\n");
             System.out.printf("----------------------------------\n");
             System.out.println(productService.getAllProductForCart());
+            System.out.println(orderService.listOrder());
             System.out.println("Ürünlerin Kodlarını Giriniz ve tamam yazın veya iptal yazıp çıkın");
             String productCode =in.nextLine();
             if (productCode.equals("iptal")) {

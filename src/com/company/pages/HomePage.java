@@ -2,11 +2,9 @@ package com.company.pages;
 
 import com.company.dal.DB;
 import com.company.models.PageName;
+import com.company.pages.components.Input;
 import com.company.services.ProductService;
 import com.company.services.UserService;
-
-import java.io.Console;
-import java.util.Scanner;
 
 public class HomePage extends PageBase{
     public HomePage(UserService userService, ProductService productService) {
@@ -26,7 +24,6 @@ public class HomePage extends PageBase{
         if(DB.currentLoginedUser.getUserType()==2){
             return PageName.ORDER;
         }
-        System.out.println("İşleminizi Seçiniz");
 
         System.out.println("1-Satış");
         System.out.println("2-Yeni Ürün Ekle");
@@ -36,10 +33,8 @@ public class HomePage extends PageBase{
         System.out.println("6-Siparişler ");
         System.out.println("0-Çıkış");
 
-        Scanner in = new Scanner(System.in);
-        String islem =in.nextLine();
-
-
+        Input inIslem=new Input(null,"İşleminizi Seçiniz","[0123456]",true);
+        String islem =inIslem.render();
 
         if(islem.equals("0"))
             return PageName.LOGIN;
