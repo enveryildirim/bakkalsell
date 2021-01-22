@@ -58,6 +58,36 @@ public class ProductSalePage extends PageBase{
             else
                 System.out.println("Yeterli stok yok");
 
+            System.out.printf("---Sepettekiler---\n");
+            productService.getCart().forEach(c-> System.out.printf("Kod:{%d} Ad:{%s} Fiyat:{%f}  Alınan Miktar:{%d} Tutar:{%f} \n", c.product.getId(),c.product.getName(),c.product.getPrice(),c.quantity,c.product.getPrice()*c.quantity));
+
+        }
+        //todo sepetten ürün silme işlemi yapıldı güncellenmesi lazım veri akışının
+        while(true){
+            //sepet duzenleme
+            System.out.println("Düzenlemek için d yazın");
+            String commandUpdate=in.nextLine();
+            if(commandUpdate.equals("d")){
+                System.out.println("id giriniz çıkarmak istediğiniz ");
+                String id=in.nextLine();
+                if(!this.isInt(id)){
+                    System.out.printf("Uygun bir Id giriniz\n devam etmek için bir tuşa basınız");
+                    in.nextLine();
+                    continue;
+                }
+               CartItem cartItem=productService.getCart()
+                       .stream()
+                       .filter(c->c.product.getId()==Integer.parseInt(id))
+                       .findFirst()
+                       .get();
+                if(cartItem==null){
+                    System.out.println("id bulunamadı");
+                }
+
+                productService.deleteProductFromCart(cartItem);
+
+            }else
+                break;
         }
 
         productService.getCart().forEach(c-> System.out.printf("Kod:{%d} Ad:{%s} Fiyat:{%f}  Alınan Miktar:{%d} Tutar:{%f} \n", c.product.getId(),c.product.getName(),c.product.getPrice(),c.quantity,c.product.getPrice()*c.quantity));
@@ -67,9 +97,10 @@ public class ProductSalePage extends PageBase{
             toplamFiyat+=item.quantity*item.product.getPrice();
 
         }
-//todo sepetten ürün silme işlemi yapılacak ve sipariş sayfasında sepetten ve siparişten ürün silme işlemi
+
         System.out.printf("Toplam Tutar:{%f}",toplamFiyat);
-        System.out.println("\nÜrünlerin Onaylıyor musunuz? evet için e hayır için h");
+
+        System.out.println("\nÜrünlerin Onaylıyor musunuz? evet için e hayır için h ");
         if(in.nextLine().equals("e")){
             System.out.println("Satış yapıldı\n Devam etmek için d basın veya çıkmak için çık yazın ");
             productService.saleCart();

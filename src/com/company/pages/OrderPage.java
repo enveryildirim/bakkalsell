@@ -16,7 +16,7 @@ public class OrderPage extends PageBase{
     public boolean requiredAuth() {
         return true;
     }
-//TODO ürünler,n sepetten çıkarılması işleminin yapılması
+//TODO ürünlerin sepetten çıkarılması işleminin yapılmadı İş akışınını düzenlenmesi
     @Override
     public PageName render() {
         while(true){
@@ -24,9 +24,33 @@ public class OrderPage extends PageBase{
             System.out.printf("----------------------------------\n");
             System.out.println(productService.getAllProductForCart());
             System.out.println(orderService.listOrder());
-            System.out.println("Ürünlerin Kodlarını Giriniz ve tamam yazın veya iptal yazıp çıkın");
+            System.out.println("Ürünlerin Kodlarını Giriniz ve tamam yazın veya iptal yazıp çıkın veya düzenlemek için d basın");
 
             String productCode =in.nextLine();
+            if(productCode.equals("d")){
+                while(true){
+                        System.out.println("id giriniz çıkarmak istediğiniz veya iptal yazın ");
+                        String id=in.nextLine();
+
+                        if(id.equals("iptal"))
+                            break;
+                        if(!this.isInt(id)){
+                            System.out.printf("Uygun bir Id giriniz\n devam etmek için bir tuşa basınız");
+                            in.nextLine();
+                            continue;
+                        }
+                        CartItem cartItem=productService.getCart()
+                                .stream()
+                                .filter(c->c.product.getId()==Integer.parseInt(id))
+                                .findFirst()
+                                .get();
+                        if(cartItem==null){
+                            System.out.println("id bulunamadı");
+                        }
+                        productService.deleteProductFromCart(cartItem);
+                }
+            }
+
             if (productCode.equals("iptal")) {
                 productService.clearCart();
                 return PageName.LOGIN;
@@ -35,7 +59,7 @@ public class OrderPage extends PageBase{
             if(productCode.equals("tamam")){
                 break;
             }
-            if(!this.isInt(productCode)){
+            if(!this.isInt(productCode) && !productCode.equals("d")){
                 System.out.printf("Uygun bir Id giriniz\n devam etmek için bir tuşa basınız");
                 in.nextLine();
                 return PageName.ORDER;

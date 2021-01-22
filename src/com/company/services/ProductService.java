@@ -56,6 +56,13 @@ public class ProductService {
     public void clearCart(){
         cartItemIRepository.getAll().clear();
     }
+    public List<CartItem> getCart(){
+
+        return cartItemIRepository.getAll();
+    }
+    public void deleteProductFromCart(CartItem cartItem){
+        cartItemIRepository.delete(cartItem);
+    }
     static String durum="";
     public String getAllProductForCart(){
         durum="";
@@ -74,10 +81,7 @@ public class ProductService {
 
         return durum;
     }
-    public List<CartItem> getCart(){
 
-        return cartItemIRepository.getAll();
-    }
 
     public void saleCart(){
         cartItemIRepository.getAll().forEach(c->{
