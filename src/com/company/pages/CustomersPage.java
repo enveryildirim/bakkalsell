@@ -15,8 +15,6 @@ public class CustomersPage extends PageBase{
         return true;
     }
 
-    //TODO Müşterilere uygun olarak veri girişleri güncellenecek
-    //TODO Silme ve güncelleme işlemeri yapılacak
     @Override
     public PageName render() {
         System.out.printf("kullanıcı Listeleme\n");

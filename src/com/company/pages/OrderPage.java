@@ -16,7 +16,7 @@ public class OrderPage extends PageBase{
     public boolean requiredAuth() {
         return true;
     }
-//TODO ürünlerin sepetten çıkarılması işleminin yapılmadı İş akışınını düzenlenmesi
+
     @Override
     public PageName render() {
         System.out.printf("--------------SİPARİŞ SAYFASI-------------\n");
