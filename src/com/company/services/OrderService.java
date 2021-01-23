@@ -7,6 +7,7 @@ import com.company.models.Order;
 import com.company.models.Product;
 import com.company.models.User;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class OrderService {
@@ -23,13 +24,49 @@ public class OrderService {
         this.userIRepository=userIRepository;
     }
 
-    public void addOrder(){
+    public void addOrder(Product product,int quantity){
 
         //todo logined userı getirme işini repository sınıfnda yapılacak
-        orderIRepository.create(new Order(DB.currentLoginedUser,cartItemIRepository.getAll()));
-        List<Order> orderList= DB.orders;
+        User user=DB.currentLoginedUser;
+        Order order=orderIRepository.getAll()
+                .stream()
+                .filter(o->o.customer.getId()==user.getId())
+                .findFirst()
+                .orElse(null);
+        if(order==null){
+            List<CartItem> cartItemList = new ArrayList<>();
+            cartItemList.add(new CartItem(product,quantity));
+            Order newOrder=new Order(user,cartItemList);
+            orderIRepository.create(newOrder);
+            return;
+        }
+
+        order.orders.add(new CartItem(product,quantity));
 
     }
+    public void deleteCartItem(int id,CartItem cartItem){
+       Order order= this.getOrder(id);
+       if(order==null)
+           return;
+
+       if(order.orders.size()==0){
+           orderIRepository.getAll().remove(order);
+           return;
+       }
+       order.orders.remove(cartItem);
+
+
+    }
+    public void deleteOrder(int id){
+        Order order= orderIRepository.getAll()
+                .stream()
+                .filter(o->o.customer.getId()==id)
+                .findFirst()
+                .orElse(null);
+        if(order!=null)
+            orderIRepository.getAll().remove(order);
+    }
+
     static String durum="";
     public String listOrder(){
         durum="";
@@ -54,6 +91,16 @@ public class OrderService {
 
         return allOrder;
     }
+    public Order getOrder(int id){
+        return orderIRepository.getAll()
+                .stream()
+                .filter(o->o.customer.getId()==id)
+                .findFirst()
+                .orElse(null);
+    }
 
+    public void saleOrder(){
+        orderIRepository.getAll().clear();
+    }
 
 }

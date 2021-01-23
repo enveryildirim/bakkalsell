@@ -108,16 +108,17 @@ public class Main {
          */
         //User type 0 =Admin yetkisi 1 =kasiyer
         User userAdmin= new User(1,"admin admin","admin","adminadmin",0);
-        User user= new User(2,"user user","user","useruser",1);
+        User user= new User(2,"user user","useruser","useruser",1);
         User userCustomer= new User(3,"customer customer","custom","custom",2);
 
         userService.createUser(userAdmin);
         userService.createUser(user);
         userService.createUser(userCustomer);
-        DB.currentLoginedUser=userAdmin;
+        DB.currentLoginedUser=userCustomer;
 
         List<CartItem> cartItemList= new ArrayList<>();
         cartItemList.add(new CartItem(new Product(1,"gofret",2,50),10));
+        cartItemList.add(new CartItem(new Product(2,"gazoz",1,50),15));
         DB.orders.add(new Order(userCustomer,cartItemList));
 
     }

@@ -2,6 +2,7 @@ package com.company.services;
 
 import com.company.dal.DB;
 import com.company.dal.IRepository;
+import com.company.dal.UserRepository;
 import com.company.models.User;
 
 import java.util.List;
@@ -76,6 +77,10 @@ public class UserService {
 
     public List<User> getAll(){
         return userRepository.getAll();
+    }
+
+    public User getLoginedUser(){
+        return new UserRepository().getLoginedUser();
     }
 
 }

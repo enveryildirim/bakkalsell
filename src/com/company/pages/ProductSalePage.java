@@ -1,121 +1,140 @@
 package com.company.pages;
 
+import com.company.Constant;
 import com.company.dal.DB;
 import com.company.models.CartItem;
 import com.company.models.PageName;
 import com.company.models.Product;
+import com.company.pages.components.Input;
 import com.company.services.ProductService;
 import com.company.services.UserService;
 
-public class ProductSalePage extends PageBase{
+public class ProductSalePage extends PageBase {
     public ProductSalePage(UserService userService, ProductService productService) {
         super(userService, productService);
     }
 
     @Override
     public boolean requiredAuth() {
-        return false;    }
+        return false;
+    }
 
     @Override
     public PageName render() {
 
-        while(true){
-            System.out.printf("------------ÜRÜN LİSTESİ----------\n");
-            System.out.printf("----------------------------------\n");
-            System.out.println(productService.getAllProductForCart());
-            System.out.println(orderService.listOrder());
-            System.out.println("Ürünlerin Kodlarını Giriniz ve tamam yazın veya iptal yazıp çıkın");
-            String productCode =in.nextLine();
-            if (productCode.equals("iptal")) {
-                productService.clearCart();
-                return PageName.LOGIN;
-            }
-            if(productCode.equals("tamam")){
-                break;
-            }
-            if(!this.isInt(productCode)){
-                System.out.printf("Uygun bir Id giriniz\n devam etmek için bir tuşa basınız");
-                in.nextLine();
-                return PageName.PRODUCT_SALE;
-            }
-            System.out.println("Ürünlerin Miktarını Giriniz");
-            String productQuantity =in.nextLine();
-            if(!this.isInt(productQuantity) || Integer.parseInt(productQuantity)<=0){
-                System.out.printf("Uygun bir miktar\n devam etmek için bir tuşa basınız");
-                in.nextLine();
-                return PageName.PRODUCT_SALE;
-            }
-            Product product=productService.getProductById(Integer.parseInt(productCode));
-            if(product==null){
-                System.out.printf("Uygun bir Id giriniz \n devam etmek için bir tuşa basınız");
-                in.nextLine();
-                return PageName.PRODUCT_SALE;
-            }
-            if(product.getQuantity()>Integer.parseInt(productQuantity)){
+        System.out.printf("------------ÜRÜN LİSTESİ----------\n");
+        System.out.printf("----------------------------------\n");
+        System.out.println(productService.getAllProductForCart());
+        System.out.println(productService.getCartToString());
 
-                productService.insertProductToCart(product,Integer.parseInt(productQuantity));
-
-            }
+        Input inCommand = new Input(null, "Sepete Ürün Ekleme=1\nSepete Ürün Silme=2\nSepeti Satış=3\nGeri Dön=0", "[0123]", true);
+        String command = inCommand.render();
+        if (command.equals("1")) {
+            this.renderEkleme();
+        } else if (command.equals("2")) {
+            this.renderSilme();
+        } else if (command.equals("3")) {
+            this.renderSale();
+        } else {
+            if (userService.getLoginedUser().getUserType() == 0)
+                return PageName.HOME;
             else
-                System.out.println("Yeterli stok yok");
-
-            System.out.printf("---Sepettekiler---\n");
-            productService.getCart().forEach(c-> System.out.printf("Kod:{%d} Ad:{%s} Fiyat:{%f}  Alınan Miktar:{%d} Tutar:{%f} \n", c.product.getId(),c.product.getName(),c.product.getPrice(),c.quantity,c.product.getPrice()*c.quantity));
-
-        }
-        //todo sepetten ürün silme işlemi yapıldı güncellenmesi lazım veri akışının
-        while(true){
-            //sepet duzenleme
-            System.out.println("Düzenlemek için d yazın");
-            String commandUpdate=in.nextLine();
-            if(commandUpdate.equals("d")){
-                System.out.println("id giriniz çıkarmak istediğiniz ");
-                String id=in.nextLine();
-                if(!this.isInt(id)){
-                    System.out.printf("Uygun bir Id giriniz\n devam etmek için bir tuşa basınız");
-                    in.nextLine();
-                    continue;
-                }
-               CartItem cartItem=productService.getCart()
-                       .stream()
-                       .filter(c->c.product.getId()==Integer.parseInt(id))
-                       .findFirst()
-                       .get();
-                if(cartItem==null){
-                    System.out.println("id bulunamadı");
-                }
-
-                productService.deleteProductFromCart(cartItem);
-
-            }else
-                break;
-        }
-
-        productService.getCart().forEach(c-> System.out.printf("Kod:{%d} Ad:{%s} Fiyat:{%f}  Alınan Miktar:{%d} Tutar:{%f} \n", c.product.getId(),c.product.getName(),c.product.getPrice(),c.quantity,c.product.getPrice()*c.quantity));
-
-        float toplamFiyat =0;
-        for (CartItem item:DB.cart) {
-            toplamFiyat+=item.quantity*item.product.getPrice();
+                return PageName.LOGIN;
 
         }
 
-        System.out.printf("Toplam Tutar:{%f}",toplamFiyat);
 
-        System.out.println("\nÜrünlerin Onaylıyor musunuz? evet için e hayır için h ");
-        if(in.nextLine().equals("e")){
-            System.out.println("Satış yapıldı\n Devam etmek için d basın veya çıkmak için çık yazın ");
-            productService.saleCart();
-            if(DB.currentLoginedUser.getUserType()==0){
-                System.out.println("Anasayfa için home yazın");
-                if(in.nextLine().equals("home"))
-                    return PageName.HOME;
-            }else{
-               if(in.nextLine().equals("çık"))
-                   return PageName.LOGIN;
-            }
-
-        }
 
         return PageName.PRODUCT_SALE;
+    }
+
+    void renderEkleme() {
+        String id, quantity = "";
+        Product product;
+        while (true) {
+            Input inID = new Input(null, "Ürün ID giriniz veya çıkmak için 0'a basın ", Constant.ONLY_DIGIT, true);
+            id = inID.render();
+            if (id.equals("0"))
+                return;
+            product = productService.getProductById(inID.getInt());
+            if (product == null) {
+                System.out.printf("ID göre ürün bulunamadı tekrar deneyiniz");
+            } else
+                break;
+        }
+        while (true) {
+            Input inQuantity = new Input(null, "Ürün miktar giriniz veya çıkmak için 0'a basın", Constant.ONLY_DIGIT, true);
+            quantity = inQuantity.render();
+            int quantityInt = inQuantity.getInt();
+            if (quantity.equals("0"))
+                return;
+
+            if (product.getQuantity() < quantityInt) {
+                System.out.printf("Yeterli stok yok tekrar deneyiniz");
+            } else {
+                productService.insertProductToCart(product, quantityInt);
+                break;
+            }
+
+
+        }
+
+
+    }
+
+    void renderSilme() {
+        String id = "";
+        CartItem cartItem;
+        if (productService.getCart().size() == 0) {
+            System.out.printf("Sepet Boş Ürün Silinemez \n");
+            return;
+        }
+        while (true) {
+            Input inID = new Input(null, "Ürün ID giriniz veya çıkmak için 0'a basın ", Constant.ONLY_DIGIT, true);
+            id = inID.render();
+
+            int idInt = inID.getInt();
+
+            if (id.equals("0"))
+                return;
+
+            cartItem = productService.getCart()
+                    .stream()
+                    .filter(c -> c.product.getId() == idInt)
+                    .findFirst()
+                    .get();
+
+            if (cartItem != null) {
+                productService.deleteProductFromCart(cartItem);
+                break;
+
+            }
+
+        }
+    }
+
+    void renderSale() {
+        if (productService.getCart().size() == 0) {
+            System.out.printf("Sepette ürün yok satmak için ürün ekleyiniz!!!\n");
+            return;
+        }
+
+        System.out.println(productService.getCartToString());
+        float toplamFiyat = 0;
+        for (CartItem item : productService.getCart()) {
+            toplamFiyat += item.quantity * item.product.getPrice();
+        }
+        System.out.println("Toplam Fiyat:" + toplamFiyat);
+
+        Input inConfirm = new Input(null, "Satışı onaylıyor musunuz evet yoksa hayır", "(evet|hayır)", true);
+        String confirm = inConfirm.render();
+        if (confirm.equals("evet")) {
+            productService.saleCart();
+            System.out.println("Ürünler satıldı ");
+        } else {
+            productService.clearCart();
+            System.out.println("Satış iptal edildi sepet boşaltıldı");
+
+        }
     }
 }
