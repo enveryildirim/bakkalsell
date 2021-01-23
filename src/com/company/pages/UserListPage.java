@@ -1,7 +1,9 @@
 package com.company.pages;
 
+import com.company.Constant;
 import com.company.models.PageName;
 import com.company.models.User;
+import com.company.pages.components.Input;
 import com.company.services.ProductService;
 import com.company.services.UserService;
 
@@ -14,84 +16,104 @@ public class UserListPage extends PageBase{
     public boolean requiredAuth() {
         return true;
     }
-
+    String typeToString(int durum){
+        if(durum==0)
+            return "Admin";
+        else if(durum==1)
+            return "Kasiyer";
+        else if(durum==2)
+            return "Müşteri";
+        else
+            return "Bilinmiyor";
+    }
     @Override
     public PageName render() {
 
-        System.out.printf("kullanıcı Listeleme\n");
+        System.out.printf("Kullanıcı Listeleme\n");
         userService.getAll().forEach(u->
-                System.out.printf("ID:%d -- Ad Soyad: %s -- Username:%s -- Password:%s\n",u.getId(),u.getNameSurname(),u.getUsername(),u.getPassword()));
-        System.out.printf("1-Kullanıcı Düzenleme\n");
-        System.out.printf("2-KUllanıcı Silme\n");
-        String command=in.nextLine();
+                System.out.printf("ID:%d -- Ad Soyad: %s -- Username:%s -- Password:%s -- Tipi:%s\n",u.getId(),u.getNameSurname(),u.getUsername(),u.getPassword(),this.typeToString(u.getUserType())));
+
+
+        String msj="1-Kullanıcı Düzenleme\n2-KUllanıcı Silme\n0-Anasayfa";
+
+        Input inCommand= new Input(null,msj,"[012]",true);
+        String command=inCommand.render();
         if(command.equals("1")){
-            System.out.printf("Kullanıcı İd giriniz \n");
-            int id = in.nextInt();
-
-            User user=userService.getUser(id);
-            if(user==null){
-                System.out.printf("İd uygun Kullanıcı Yok\n");
-                return PageName.USER_LIST;
-            }
-
-            while(true){
-                System.out.printf("\nŞimdiki İsim:%s",user.getNameSurname());
-                String newName2=in.nextLine();
-                String newName=in.nextLine();
-                System.out.printf("\nŞimdiki Kullanıcı Adı:%s",user.getUsername());
-                String newUsername=in.nextLine();
-                System.out.printf("\nŞimdiki Şifre:%s",user.getPassword());
-                String newPassword=in.nextLine();
-               if(newName.length()==0||newUsername.length()==0||newPassword.length()==00||newUsername.length()<5||newPassword.length()<6){
-                   System.out.printf("\nBilgileri kurallara uygun giriniz lütfen, devam etmek için bir tuşa basınız\n");
-                   in.nextLine();
-                   in.nextLine();
-                   break;
-               }
-               System.out.printf("\n Onaylamak için evet iptal için hayır yazın\n");
-               String dneme=in.nextLine();
-               String onay=in.nextLine();
-               if(onay.equals("evet")){
-                   System.out.printf("Güncelendi");
-
-                   user.setNameSurname(newName);
-                   user.setUsername(newUsername);
-                   user.setPassword(newPassword);
-
-                   userService.updateUser(user);
-
-                   return PageName.USER_LIST;
-               }else
-                return PageName.USER_LIST;
-
-
-            }
-        }
-        if(command.equals("2")){
-            System.out.printf("Kullanıcı İd giriniz \n");
-            int id = in.nextInt();
-
-            User user=userService.getUser(id);
-            if(user==null ||user.getUserType()==1){
-                System.out.printf("İd uygun Kullanıcı Yok\n");
-                return PageName.USER_LIST;
-            }
-
-            System.out.printf("\n Onaylamak için evet iptal için hayır yazın\n");
-            String onay=in.nextLine();
-            String dneme=in.nextLine();
-            if(dneme.equals("evet")){
-                System.out.printf("Silindi");
-
-                userService.deleteUser(user);
-                return PageName.USER_LIST;
-            }else
-                return PageName.USER_LIST;
-
-        }if(command.equals("0"))
+            renderUpdate();
+        }else if(command.equals("2")){
+            renderDelete();
+        }else if(command.equals("0")){
             return PageName.HOME;
+        }else{
+            System.out.printf("Yanlış giriş yapmdınız");
+            return PageName.USER_LIST;
+        }
+
+
 
 
         return PageName.USER_LIST;
+    }
+
+    void renderUpdate(){
+
+        Input inID =new Input(null,"Kullanıcı İd giriniz", Constant.ONLY_DIGIT,true);
+        String id = inID.render();
+        int idInt=inID.getInt();
+        User user=userService.getUser(idInt);
+        if(user==null){
+            System.out.printf("İd uygun Ürün Yok\n");
+            return;
+        }
+        String msjName=String.format("Şimdiki İsim: %s\n",user.getNameSurname());
+        Input inName=new Input(null,msjName,"[a-zA-Z]",true);
+        String newName=inName.render();
+
+        String msjUsername=String.format("Şimdiki Kullanıcı Adı: %s\n",user.getUsername());
+        Input inUsername=new Input(null,msjName,Constant.USERNAME,true);
+        String newUsername=inUsername.render();
+
+        String msjPassword=String.format("Şimdiki Şifre:%f\n",user.getPassword());
+        Input inPassword=new Input(null,msjName,Constant.PASSWORD,true);
+        String newPassword=inPassword.render();
+
+        Input inConfirm=new Input(null,"Onaylamak için evet iptal için hayır yazın","(evet|hayır)",true);
+        String confirm=inConfirm.render();
+        if(confirm.equals("evet")){
+            //güncelleme
+            System.out.printf("Güncelendi");
+
+            user.setNameSurname(newName);
+            user.setUsername(newUsername);
+            user.setPassword(newPassword);
+
+            userService.updateUser(user);
+        }else{
+            System.out.printf("İptal Edildi");
+            return;
+        }
+
+    }
+    void renderDelete(){
+
+        Input inID =new Input(null,"Kullanıcı İd giriniz",Constant.ONLY_DIGIT,true);
+        String id = inID.render();
+        int idInt=inID.getInt();
+        User user=userService.getUser(idInt);
+        if(user==null){
+            System.out.printf("İd uygun Ürün Yok\n");
+            return;
+        }
+        System.out.printf("%d %s silinecek\n",user.getId(),user.getNameSurname());
+        Input inConfirm=new Input(null,"Onaylamak için evet iptal için hayır yazın","(evet|hayır)",true);
+        String confirm=inConfirm.render();
+        if(confirm.equals("evet")){
+            //silme işlemi
+            System.out.printf("Silindi");
+            userService.deleteUser(user);
+        }else{
+            System.out.printf("İptal Edildi");
+            return;
+        }
     }
 }
