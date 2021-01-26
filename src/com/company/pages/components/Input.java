@@ -3,18 +3,17 @@ package com.company.pages.components;
 import java.util.Scanner;
 
 public class Input {
+    private String text;
+    private String label;
+    private String regex;
+    private boolean required;
+
     public Input(String text, String label, String regex, boolean required) {
         this.text = text;
         this.label = label;
         this.regex = regex;
         this.required = required;
     }
-
-    private String text;
-    private String label;
-    private String regex;
-    private boolean required;
-
 
     public boolean isRequired() {
         return required;

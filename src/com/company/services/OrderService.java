@@ -2,6 +2,7 @@ package com.company.services;
 
 import com.company.dal.DB;
 import com.company.dal.IRepository;
+import com.company.dal.UserRepository;
 import com.company.models.CartItem;
 import com.company.models.Order;
 import com.company.models.Product;
@@ -25,14 +26,14 @@ public class OrderService {
     }
 
     public void addOrder(Product product,int quantity){
+        User user=((UserRepository)userIRepository).getLoginedUser();;
 
-        //todo logined userı getirme işini repository sınıfnda yapılacak
-        User user=DB.currentLoginedUser;
         Order order=orderIRepository.getAll()
                 .stream()
                 .filter(o->o.customer.getId()==user.getId())
                 .findFirst()
                 .orElse(null);
+
         if(order==null){
             List<CartItem> cartItemList = new ArrayList<>();
             cartItemList.add(new CartItem(product,quantity));
@@ -67,30 +68,32 @@ public class OrderService {
             orderIRepository.getAll().remove(order);
     }
 
-    static String durum="";
+    static String listOrderText="";
     public String listOrder(){
-        durum="";
+        listOrderText="";
         Order order = orderIRepository.getById(DB.currentLoginedUser.getId());
         if(order==null)
             return "Sepetiniz boş";
-        durum=durum+String.format("%s isimli kullanıcının şiparişleri \n",order.customer.getNameSurname());
-        order.orders.forEach(o->durum=durum+String.format("Kod:{%d} Ad:{%s} Fiyat:{%f} Kalan:{%d} \n", o.product.getId(),o.product.getName(),o.product.getPrice(),o.getQuantity()));
-        return durum;
+        listOrderText=listOrderText+String.format("%s isimli kullanıcının şiparişleri \n",order.customer.getNameSurname());
+        order.orders.forEach(o->listOrderText=listOrderText+String.format("Kod:{%d} Ad:{%s} Fiyat:{%f} Kalan:{%d} \n", o.getProduct().getId(),o.getProduct().getName(),o.getProduct().getPrice(),o.getQuantity()));
+        return listOrderText;
     }
 
-    static String allOrder="";
+    static String allOrderText="";
     public String getAllOrder(){
-        allOrder="";
+        allOrderText="";
         orderIRepository.getAll()
                 .forEach(o->{
-                    allOrder=allOrder+String.format("%d ID'ye sahip %s isimli kullanıcının şiparişleri \n",o.customer.getId(),o.customer.getNameSurname());
+                    allOrderText=allOrderText+String.format("%d ID'ye sahip %s isimli kullanıcının şiparişleri \n",o.customer.getId(),o.customer.getNameSurname());
                     o.orders.forEach(c->{
-                        allOrder=allOrder+String.format("Kod:{%d} Ad:{%s} Fiyat:{%f} Kalan:{%d} \n", c.product.getId(),c.product.getName(),c.product.getPrice(),c.getQuantity());
+                        allOrderText=allOrderText+String.format("Kod:{%d} Ad:{%s} Fiyat:{%f} Kalan:{%d} \n", c.getProduct().getId(),c.getProduct().getName(),c.getProduct().getPrice(),c.getQuantity());
                     });
                 });
 
-        return allOrder;
+        return allOrderText;
     }
+
+
     public Order getOrder(int id){
         return orderIRepository.getAll()
                 .stream()

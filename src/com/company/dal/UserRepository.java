@@ -17,8 +17,7 @@ public class UserRepository implements IRepository<User>{
     @Override
     public void create(User user) {
 
-        System.out.println("User oluşturuldu = "+user.getNameSurname()+"\n");
-
+         //System.out.println("User oluşturuldu = "+user.getNameSurname()+"\n");
          DB.users.add(user);
 
     }

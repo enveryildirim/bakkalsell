@@ -24,23 +24,21 @@ public class OrderPage extends PageBase{
         System.out.println(productService.getAllProductForCart());
         System.out.println(orderService.listOrder());
 
-        Input inCommand = new Input(null, "Sepete Ürün Ekleme=1\nSepete Ürün Silme=2\nSepeti Satış=3\nGeri Dön=0", "[0123]", true);
+        Input inCommand = new Input(null, "Sepete Ürün Ekleme=1\nSepete Ürün Silme=2\nGeri Dön=0", "[0123]", true);
         String command = inCommand.render();
         if (command.equals("1")) {
             this.renderEkleme();
         } else if (command.equals("2")) {
             this.renderSilme();
-        } else if (command.equals("3")) {
-            this.renderSale();
         } else {
             if(userService.getLoginedUser().getUserType()==0)
                 return PageName.HOME;
             else
-                return PageName.TEST;
+                return PageName.LOGIN;
 
         }
 
-        return PageName.TEST;
+        return PageName.ORDER;
     }
     void renderEkleme() {
         String id, quantity = "";
@@ -63,7 +61,7 @@ public class OrderPage extends PageBase{
             if (quantity.equals("0"))
                 return;
 
-            if (product.getQuantity() < quantityInt) {
+            if (product.getQuantity() < quantityInt || quantityInt==-1) {
                 System.out.printf("Yeterli stok yok tekrar deneyiniz");
             } else{
                 orderService.addOrder(product,quantityInt);
@@ -99,7 +97,7 @@ public class OrderPage extends PageBase{
             cartItem=order
                     .orders
                     .stream()
-                    .filter(c->c.product.getId()==idInt)
+                    .filter(c->c.getProduct().getId()==idInt)
                     .findFirst()
                     .orElse(null);
 
@@ -110,28 +108,5 @@ public class OrderPage extends PageBase{
 
         }
     }
-    void renderSale(){
-        User user=userService.getLoginedUser();
-        if(orderService.getOrder(user.getId()).orders.size()==0){
-            System.out.printf("Sepette ürün yok satmak için ürün ekleyiniz!!!\n");
-            return;
-        }
 
-        System.out.println(orderService.listOrder());
-        float toplamFiyat =0;
-        for (CartItem item: orderService.getOrder(user.getId()).orders) {
-            toplamFiyat+=item.quantity*item.product.getPrice();
-        }
-        System.out.println("Toplam Fiyat:"+toplamFiyat);
-
-        Input inConfirm=new Input(null,"Siparişi onaylıyor musunuz evet yoksa hayır","(evet|hayır)",true);
-        String confirm=inConfirm.render();
-        if(confirm.equals("evet")){
-            System.out.println("Ürünler sepete eklendi");
-        }else{
-            orderService.deleteOrder(user.getId());
-            System.out.println(" İşlem iptal edildi sepet boşaltıldı");
-
-        }
-    }
 }

@@ -1,6 +1,7 @@
 package com.company.dal;
 
 import com.company.models.CartItem;
+import com.company.models.User;
 
 import java.util.List;
 
@@ -8,12 +9,13 @@ public class CartItemRepository implements IRepository<CartItem>{
     @Override
     public void  create(CartItem cartItem) {
         DB.cart.add(cartItem);
-
     }
 
     @Override
     public void update(CartItem cartItem) {
-
+        CartItem updatingCartItem = this.getById(cartItem.getProduct().getId());
+        updatingCartItem.setProduct(cartItem.getProduct());
+        updatingCartItem.setQuantity(cartItem.getQuantity());
     }
 
     @Override
@@ -29,7 +31,7 @@ public class CartItemRepository implements IRepository<CartItem>{
     @Override
     public CartItem getById(int id) {
         return DB.cart.stream()
-                .filter(p->p.product.getId()==id)
+                .filter(p->p.getProduct().getId()==id)
                 .findFirst()
                 .orElse(null);
     }

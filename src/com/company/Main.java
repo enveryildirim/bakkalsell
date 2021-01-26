@@ -19,14 +19,11 @@ public class Main {
 
     public static Map<PageName, PageBase> pages=new HashMap<>();
 
-    /**
-     *
-     * @param args
-     */
+
     public static void main(String[] args) {
         init();
 
-        PageName current=PageName.TEST;
+        PageName current=PageName.LOGIN;
         while(true){
 
            //Eğer kullanıcı giriş yapmadıysa Login Sayfasına Gönder

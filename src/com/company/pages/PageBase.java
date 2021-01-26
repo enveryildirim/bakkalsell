@@ -6,7 +6,7 @@ import com.company.services.ProductService;
 import com.company.services.UserService;
 
 import java.util.Scanner;
-//TODO genel olarak mimari tasarım gözden geçirilecek
+
 public abstract class PageBase {
     protected UserService userService;
     protected ProductService productService;

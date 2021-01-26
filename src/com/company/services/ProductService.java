@@ -61,11 +61,12 @@ public class ProductService {
 
         return cartItemIRepository.getAll();
     }
+
     static String allCartString="";
     public String getCartToString(){
         allCartString="";
         cartItemIRepository.getAll().forEach(c->{
-           allCartString=allCartString+String.format("Kod:{%d} Ad:{%s} Fiyat:{%f}  Alınan Miktar:{%d} Tutar:{%f} \n", c.product.getId(),c.product.getName(),c.product.getPrice(),c.quantity,c.product.getPrice()*c.quantity);
+           allCartString=allCartString+String.format("Kod:{%d} Ad:{%s} Fiyat:{%f}  Alınan Miktar:{%d} Tutar:{%f} \n", c.getProduct().getId(),c.getProduct().getName(),c.getProduct().getPrice(),c.getQuantity(),c.getProduct().getPrice()*c.getQuantity());
         });
 
         return allCartString;
@@ -75,30 +76,32 @@ public class ProductService {
     public void deleteProductFromCart(CartItem cartItem){
         cartItemIRepository.delete(cartItem);
     }
-    static String durum="";
+
+    static String getAllProductForCartText="";
     public String getAllProductForCart(){
-        durum="";
+        getAllProductForCartText="";
         productRepository.getAll().stream().forEach(p-> {
 
             CartItem cartItem= cartItemIRepository.getAll().stream()
-                    .filter(c->c.product.getId()==p.getId())
+                    .filter(c->c.getProduct().getId()==p.getId())
                     .findFirst()
                     .orElse(null);
+
             if(cartItem!=null)
-               durum =durum+String.format("Kod:{%d} Ad:{%s} Fiyat:{%f} Kalan:{%d} \n", p.getId(),p.getName(),p.getPrice(),(p.getQuantity()-cartItem.quantity));
+                getAllProductForCartText =getAllProductForCartText+String.format("Kod:{%d} Ad:{%s} Fiyat:{%f} Kalan:{%d} \n", p.getId(),p.getName(),p.getPrice(),(p.getQuantity()-cartItem.getQuantity()));
             else
-                durum=durum+String.format("Kod:{%d} Ad:{%s} Fiyat:{%f} Kalan:{%d} \n", p.getId(),p.getName(),p.getPrice(),p.getQuantity());
+                getAllProductForCartText=getAllProductForCartText+String.format("Kod:{%d} Ad:{%s} Fiyat:{%f} Kalan:{%d} \n", p.getId(),p.getName(),p.getPrice(),p.getQuantity());
 
         });
 
-        return durum;
+        return getAllProductForCartText;
     }
 
     public void saleCart(){
         cartItemIRepository.getAll().forEach(c->{
-                Product product=productRepository.getAll().stream().filter(p->p.getId()==c.product.getId())
+                Product product=productRepository.getAll().stream().filter(p->p.getId()==c.getProduct().getId())
                         .findFirst()
-                        .get();
+                        .orElse(null);
                 product.setQuantity(product.getQuantity()-c.getQuantity());
 
         });

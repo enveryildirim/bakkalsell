@@ -69,7 +69,7 @@ public class ProductSalePage extends PageBase {
             if (quantity.equals("0"))
                 return;
 
-            if (product.getQuantity() < quantityInt) {
+            if (product.getQuantity() < quantityInt || quantityInt==-1) {
                 System.out.printf("Yeterli stok yok tekrar deneyiniz");
             } else {
                 productService.insertProductToCart(product, quantityInt);
@@ -100,7 +100,7 @@ public class ProductSalePage extends PageBase {
 
             cartItem = productService.getCart()
                     .stream()
-                    .filter(c -> c.product.getId() == idInt)
+                    .filter(c -> c.getProduct().getId() == idInt)
                     .findFirst()
                     .get();
 
@@ -122,7 +122,7 @@ public class ProductSalePage extends PageBase {
         System.out.println(productService.getCartToString());
         float toplamFiyat = 0;
         for (CartItem item : productService.getCart()) {
-            toplamFiyat += item.quantity * item.product.getPrice();
+            toplamFiyat += item.getQuantity() * item.getProduct().getPrice();
         }
         System.out.println("Toplam Fiyat:" + toplamFiyat);
 

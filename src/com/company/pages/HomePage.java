@@ -21,6 +21,7 @@ public class HomePage extends PageBase{
         System.out.println("Anasayfa");
         if(DB.currentLoginedUser.getUserType()==1)
             return PageName.PRODUCT_SALE;
+
         if(DB.currentLoginedUser.getUserType()==2){
             return PageName.ORDER;
         }

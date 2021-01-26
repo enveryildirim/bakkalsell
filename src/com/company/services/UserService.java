@@ -8,9 +8,6 @@ import com.company.models.User;
 import java.util.List;
 import java.util.UUID;
 
-/**
- * Kasiyer ve Admin kullanıcısının yapacağı işlemerin yapıldığı sınıf
- */
 public class UserService {
 
     protected IRepository<User> userRepository;
