@@ -31,6 +31,7 @@ public class ProductCreatePage extends PageBase{
         String quantity = in.nextLine();
         float deger =0;
         int stok=0;
+
         if(name.length()==0||price.length()==0||quantity.length()==0) {
             System.out.printf("Lütfen boş alan bırakmayınız \n devam etmek için bir tuşa basınız");
             in.nextLine();

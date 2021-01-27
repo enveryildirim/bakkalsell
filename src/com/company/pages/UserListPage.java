@@ -27,6 +27,7 @@ public class UserListPage extends PageBase{
         if(command.equals("1")){
             System.out.printf("Kullanıcı İd giriniz \n");
             int id = in.nextInt();
+
             User user=userService.getUser(id);
             if(user==null){
                 System.out.printf("İd uygun Kullanıcı Yok\n");
@@ -69,6 +70,7 @@ public class UserListPage extends PageBase{
         if(command.equals("2")){
             System.out.printf("Kullanıcı İd giriniz \n");
             int id = in.nextInt();
+
             User user=userService.getUser(id);
             if(user==null ||user.getUserType()==1){
                 System.out.printf("İd uygun Kullanıcı Yok\n");
@@ -86,7 +88,8 @@ public class UserListPage extends PageBase{
             }else
                 return PageName.USER_LIST;
 
-        }
+        }if(command.equals("0"))
+            return PageName.HOME;
 
 
         return PageName.USER_LIST;

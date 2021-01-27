@@ -20,8 +20,12 @@ public class ProductSalePage extends PageBase{
     public PageName render() {
 
 
-        productService.getAll().forEach(p-> System.out.printf("Kod:{%d} Ad:{%s} Fiyat:{%f} Kalan:{%d} \n", p.getId(),p.getName(),p.getPrice(),p.getQuantity()));
+
+
         while(true){
+            System.out.printf("------------ÜRÜN LİSTESİ----------\n");
+            System.out.printf("----------------------------------\n");
+            System.out.println(productService.getAllProductForCart());
             System.out.println("Ürünlerin Kodlarını Giriniz ve tamam yazın veya iptal yazıp çıkın");
             String productCode =in.nextLine();
             if (productCode.equals("iptal"))
@@ -48,14 +52,17 @@ public class ProductSalePage extends PageBase{
                 return PageName.PRODUCT_SALE;
             }
             if(product.getQuantity()>Integer.parseInt(productQuantity)){
-                DB.cart.add(new CartItem(product,Integer.parseInt(productQuantity)));
+
+                productService.insertProductToCart(product,Integer.parseInt(productQuantity));
+
             }
             else
                 System.out.println("Yeterli stok yok");
 
         }
 
-        DB.cart.forEach(c-> System.out.printf("Kod:{%d} Ad:{%s} Fiyat:{%f}  Alınan Miktar:{%d} Tutar:{%f} \n", c.product.getId(),c.product.getName(),c.product.getPrice(),c.quantity,c.product.getPrice()*c.quantity));
+        productService.getCart().forEach(c-> System.out.printf("Kod:{%d} Ad:{%s} Fiyat:{%f}  Alınan Miktar:{%d} Tutar:{%f} \n", c.product.getId(),c.product.getName(),c.product.getPrice(),c.quantity,c.product.getPrice()*c.quantity));
+
         float toplamFiyat =0;
         for (CartItem item:DB.cart) {
             toplamFiyat+=item.quantity*item.product.getPrice();
@@ -66,6 +73,7 @@ public class ProductSalePage extends PageBase{
         System.out.println("\nÜrünlerin Onaylıyor musunuz? evet için e hayır için h");
         if(in.nextLine().equals("e")){
             System.out.println("Satış yapıldı\n Devam etmek için d basın veya çıkmak için çık yazın ");
+            productService.saleCart();
             if(DB.currentLoginedUser.getUserType()==0){
                 System.out.println("Anasayfa için home yazın");
                 if(in.nextLine().equals("home"))

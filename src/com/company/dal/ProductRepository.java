@@ -4,26 +4,27 @@ import com.company.models.Product;
 import com.company.models.User;
 
 import java.util.List;
+import java.util.UUID;
 
 public class ProductRepository implements IRepository<Product>{
     @Override
-    public boolean create(Product product) {
-        return DB.products.add(product);
+    public void create(Product product) {
+         DB.products.add(product);
     }
 
 
     @Override
-    public boolean update(Product product) {
+    public void update(Product product) {
         Product p = this.getById(product.getId());
         p.setName(product.getName());
         p.setPrice(product.getPrice());
         p.setQuantity(product.getQuantity());
-        return false;
+
     }
 
     @Override
-    public boolean delete(Product product) {
-        return DB.products.remove(product);
+    public void delete(Product product) {
+         DB.products.remove(product);
     }
 
     @Override
@@ -38,4 +39,6 @@ public class ProductRepository implements IRepository<Product>{
                 .findFirst()
                 .orElse(null);
     }
+
+
 }

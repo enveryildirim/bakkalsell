@@ -6,14 +6,17 @@ import com.company.models.CartItem;
 import com.company.models.Product;
 import com.company.models.User;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ProductService {
     private IRepository<Product> productRepository;
+    private IRepository<CartItem> cartItemIRepository;
 
-    public ProductService(IRepository productRepository)
+    public ProductService(IRepository productRepository,IRepository cartItemIRepository)
     {
         this.productRepository = productRepository;
+        this.cartItemIRepository=cartItemIRepository;
     }
 
     public void createProduct(Product product){
@@ -35,10 +38,57 @@ public class ProductService {
     public List<Product> getAll(){
         return this.productRepository.getAll();
     }
-    public void Sales(){
+
+
+    /**
+     * Cart ile alakalı kısım
+     */
+
+    public void insertProductToCart(Product product,int quantity){
+        CartItem cartItem=cartItemIRepository.getById(product.getId());
+        if(cartItem==null)
+            cartItemIRepository.create(new CartItem(product,quantity));
+        else{
+            cartItem.setQuantity(cartItem.getQuantity()+quantity);
+            cartItemIRepository.update(cartItem);
+        }
+    }
+    public void clearCart(){
 
     }
-    public void insertProductToCart(Product product){
-        //CartItem.productsList.add(product);
+    static String durum="";
+    public String getAllProductForCart(){
+        durum="";
+        productRepository.getAll().stream().forEach(p-> {
+
+            CartItem cartItem= cartItemIRepository.getAll().stream()
+                    .filter(c->c.product.getId()==p.getId())
+                    .findFirst()
+                    .orElse(null);
+            if(cartItem!=null)
+               durum =durum+String.format("Kod:{%d} Ad:{%s} Fiyat:{%f} Kalan:{%d} \n", p.getId(),p.getName(),p.getPrice(),(p.getQuantity()-cartItem.quantity));
+            else
+                durum=durum+String.format("Kod:{%d} Ad:{%s} Fiyat:{%f} Kalan:{%d} \n", p.getId(),p.getName(),p.getPrice(),p.getQuantity());
+
+        });
+
+        return durum;
     }
+    public List<CartItem> getCart(){
+
+        return cartItemIRepository.getAll();
+    }
+
+    public void saleCart(){
+        cartItemIRepository.getAll().forEach(c->{
+                Product product=productRepository.getAll().stream().filter(p->p.getId()==c.product.getId())
+                        .findFirst()
+                        .get();
+                product.setQuantity(product.getQuantity()-c.getQuantity());
+
+        });
+
+        cartItemIRepository.getAll().clear();
+    }
+
 }

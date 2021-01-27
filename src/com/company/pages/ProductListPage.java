@@ -24,6 +24,9 @@ public class ProductListPage extends PageBase{
         System.out.printf("1-Ürün Düzenleme\n");
         System.out.printf("2-Ürün Silme\n");
         String command=in.nextLine();
+        if(command.equals("iptal"))
+            return PageName.HOME;
+
         if(command.equals("1")){
             System.out.printf("Ürün İd giriniz \n");
             int id = in.nextInt();

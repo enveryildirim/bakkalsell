@@ -1,5 +1,7 @@
 package com.company.models;
 
+import java.util.UUID;
+
 public class Product {
     private int id;
     private String name;
