@@ -5,6 +5,7 @@ import com.company.dal.DB;
 import com.company.models.CartItem;
 import com.company.models.PageName;
 import com.company.models.Product;
+import com.company.models.UserType;
 import com.company.pages.components.Input;
 import com.company.services.ProductService;
 import com.company.services.UserService;
@@ -27,7 +28,7 @@ public class ProductSalePage extends PageBase {
         System.out.println(productService.getAllProductForCart());
         System.out.println(productService.getCartToString());
 
-        Input inCommand = new Input(null, "Sepete Ürün Ekleme=1\nSepete Ürün Silme=2\nSepeti Satış=3\nGeri Dön=0", "[0123]", true);
+        Input inCommand = new Input("Sepete Ürün Ekleme=1\nSepete Ürün Silme=2\nSepeti Satış=3\nGeri Dön=0", "[0123]", true);
         String command = inCommand.render();
         if (command.equals("1")) {
             this.renderEkleme();
@@ -36,13 +37,12 @@ public class ProductSalePage extends PageBase {
         } else if (command.equals("3")) {
             this.renderSale();
         } else {
-            if (userService.getLoginedUser().getUserType() == 0)
+            if (userService.getLoginedUser().getUserType() == UserType.ADMIN)
                 return PageName.HOME;
             else
                 return PageName.LOGIN;
 
         }
-
 
 
         return PageName.PRODUCT_SALE;
@@ -52,7 +52,7 @@ public class ProductSalePage extends PageBase {
         String id, quantity = "";
         Product product;
         while (true) {
-            Input inID = new Input(null, "Ürün ID giriniz veya çıkmak için 0'a basın ", Constant.ONLY_DIGIT, true);
+            Input inID = new Input("Ürün ID giriniz veya çıkmak için 0'a basın ", Constant.ONLY_DIGIT, true);
             id = inID.render();
             if (id.equals("0"))
                 return;
@@ -63,13 +63,13 @@ public class ProductSalePage extends PageBase {
                 break;
         }
         while (true) {
-            Input inQuantity = new Input(null, "Ürün miktar giriniz veya çıkmak için 0'a basın", Constant.ONLY_DIGIT, true);
+            Input inQuantity = new Input("Ürün miktar giriniz veya çıkmak için 0'a basın", Constant.ONLY_DIGIT, true);
             quantity = inQuantity.render();
             int quantityInt = inQuantity.getInt();
             if (quantity.equals("0"))
                 return;
 
-            if (product.getQuantity() < quantityInt || quantityInt==-1) {
+            if (product.getQuantity() < quantityInt || quantityInt == -1) {
                 System.out.printf("Yeterli stok yok tekrar deneyiniz");
             } else {
                 productService.insertProductToCart(product, quantityInt);
@@ -90,7 +90,7 @@ public class ProductSalePage extends PageBase {
             return;
         }
         while (true) {
-            Input inID = new Input(null, "Ürün ID giriniz veya çıkmak için 0'a basın ", Constant.ONLY_DIGIT, true);
+            Input inID = new Input("Ürün ID giriniz veya çıkmak için 0'a basın ", Constant.ONLY_DIGIT, true);
             id = inID.render();
 
             int idInt = inID.getInt();
@@ -126,7 +126,7 @@ public class ProductSalePage extends PageBase {
         }
         System.out.println("Toplam Fiyat:" + toplamFiyat);
 
-        Input inConfirm = new Input(null, "Satışı onaylıyor musunuz evet yoksa hayır", "(evet|hayır)", true);
+        Input inConfirm = new Input("Satışı onaylıyor musunuz evet yoksa hayır", "(evet|hayır)", true);
         String confirm = inConfirm.render();
         if (confirm.equals("evet")) {
             productService.saleCart();

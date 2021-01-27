@@ -8,8 +8,8 @@ public class Input {
     private String regex;
     private boolean required;
 
-    public Input(String text, String label, String regex, boolean required) {
-        this.text = text;
+    public Input(String label, String regex, boolean required) {
+        this.text = "";
         this.label = label;
         this.regex = regex;
         this.required = required;

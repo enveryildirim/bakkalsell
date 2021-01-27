@@ -1,4 +1,5 @@
 package com.company.dal;
+
 import com.company.models.User;
 
 import java.util.List;
@@ -7,23 +8,25 @@ import java.util.UUID;
 /**
  * Kullanıcı veritabanı ile olan işleri yapıldığı sınıf
  */
-public class UserRepository implements IRepository<User>{
+public class UserRepository implements IRepository<User> {
 
     /**
      * Kullanıcı oluşturma
-     * @param user
+     *
+     * @param user fdgdg
      * @return
      */
     @Override
     public void create(User user) {
 
-         //System.out.println("User oluşturuldu = "+user.getNameSurname()+"\n");
-         DB.users.add(user);
+        //System.out.println("User oluşturuldu = "+user.getNameSurname()+"\n");
+        DB.users.add(user);
 
     }
 
     /**
      * Kullanıcı güncelleme
+     *
      * @param user
      * @return
      */
@@ -39,6 +42,7 @@ public class UserRepository implements IRepository<User>{
 
     /**
      * Kullanıcı Silme
+     *
      * @param user
      * @return
      */
@@ -49,6 +53,7 @@ public class UserRepository implements IRepository<User>{
 
     /**
      * Tüm Kullancılar
+     *
      * @return
      */
     @Override
@@ -58,18 +63,19 @@ public class UserRepository implements IRepository<User>{
 
     /**
      * id ile Kullanıcı bilgileri getirir
+     *
      * @param id
      * @return
      */
     @Override
     public User getById(int id) {
         return DB.users.stream()
-                .filter(p-> p.getId() == id)
+                .filter(p -> p.getId() == id)
                 .findFirst()
                 .orElse(null);
     }
 
-    public User getLoginedUser(){
+    public User getLoginedUser() {
         return DB.currentLoginedUser;
     }
 }

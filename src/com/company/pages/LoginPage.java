@@ -6,11 +6,13 @@ import com.company.pages.components.Input;
 import com.company.services.ProductService;
 import com.company.services.UserService;
 
-public class LoginPage extends PageBase{
+//todo çizgiyi araştıralacak
+public class LoginPage extends PageBase {
     public LoginPage(UserService userService, ProductService productService) {
         super(userService, productService);
     }
 
+    //todo fiil olarak isimlendirilecek
     @Override
     public boolean requiredAuth() {
         return false;
@@ -18,17 +20,19 @@ public class LoginPage extends PageBase{
 
     @Override
     public PageName render() {
+        //todo Input classa Field constructor atama clean code standartlarına uygun şekilde revize edilecek
+        Input inUsername = new Input("Kullanıcı Adı", Constant.USERNAME, true);
+        String username = inUsername.render();
 
-        Input inUsername=new Input(null,"Kullanıcı Adı", Constant.USERNAME,true);
-        String username=inUsername.render();
+        Input inPassword = new Input("Parola", Constant.PASSWORD, true);
+        String password = inPassword.render();
 
-        Input inPassword=new Input(null,"Parola", Constant.PASSWORD,true);
-        String password=inPassword.render();
-
-        if(this.userService.login(username,password))
+        if (this.userService.login(username, password))
             return PageName.HOME;
+
         System.out.println("!!!! Lütfen bilgilerinizi doğru giriniz Bilgilerinizi unuttuysanız Adminle görüşün\n Devam etmek için bir tuşa basın");
         in.nextLine();
+
         return PageName.LOGIN;
     }
 }

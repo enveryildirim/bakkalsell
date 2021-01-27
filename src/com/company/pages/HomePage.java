@@ -2,11 +2,12 @@ package com.company.pages;
 
 import com.company.dal.DB;
 import com.company.models.PageName;
+import com.company.models.UserType;
 import com.company.pages.components.Input;
 import com.company.services.ProductService;
 import com.company.services.UserService;
 
-public class HomePage extends PageBase{
+public class HomePage extends PageBase {
     public HomePage(UserService userService, ProductService productService) {
         super(userService, productService);
     }
@@ -19,10 +20,11 @@ public class HomePage extends PageBase{
     @Override
     public PageName render() {
         System.out.println("Anasayfa");
-        if(DB.currentLoginedUser.getUserType()==1)
+        //todo logineduserların düzenlenmesi her sınıftan
+        if (DB.currentLoginedUser.getUserType() == UserType.EMPLOYEE)
             return PageName.PRODUCT_SALE;
 
-        if(DB.currentLoginedUser.getUserType()==2){
+        if (DB.currentLoginedUser.getUserType() == UserType.CUSTOMER) {
             return PageName.ORDER;
         }
 
@@ -34,25 +36,25 @@ public class HomePage extends PageBase{
         System.out.println("6-Siparişler ");
         System.out.println("0-Çıkış");
 
-        Input inIslem=new Input(null,"İşleminizi Seçiniz","[0123456]",true);
-        String islem =inIslem.render();
+        Input inIslem = new Input("İşleminizi Seçiniz", "[0123456]", true);
+        String islem = inIslem.render();
 
-        if(islem.equals("0"))
+        if (islem.equals("0"))
             return PageName.LOGIN;
 
-        if(islem.equals("1"))
+        if (islem.equals("1"))
             return PageName.PRODUCT_SALE;
 
-        if(islem.equals("2"))
+        if (islem.equals("2"))
             return PageName.PRODUCT_CREATE;
 
-        if(islem.equals("3"))
+        if (islem.equals("3"))
             return PageName.USER_CREATE;
 
-        if(islem.equals("4"))
+        if (islem.equals("4"))
             return PageName.USER_LIST;
 
-        if(islem.equals("5"))
+        if (islem.equals("5"))
             return PageName.PRODUCT_LIST;
 
         if (islem.equals("6"))

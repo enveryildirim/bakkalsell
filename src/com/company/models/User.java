@@ -9,18 +9,21 @@ public class User {
     private String nameSurname;
     private String username;
     private String password;
-    private int userType;
+    //todo enum tip olarak değiştirilecek
+    private UserType userType;
 
-    public User(int id, String nameSurname, String username, String password, int userType) {
+    public User(int id, String nameSurname, String username, String password, UserType userType) {
         this.id = id;
         this.nameSurname = nameSurname;
         this.username = username;
         this.password = password;
         this.userType = userType;
     }
+
     public int getId() {
         return id;
     }
+
     public String getNameSurname() {
         return nameSurname;
     }
@@ -45,15 +48,13 @@ public class User {
         this.password = password;
     }
 
-    public int getUserType() {
+    public UserType getUserType() {
         return userType;
     }
 
-    public void setUserType(int userType) {
+    public void setUserType(UserType userType) {
         this.userType = userType;
     }
-
-
 
 
 }

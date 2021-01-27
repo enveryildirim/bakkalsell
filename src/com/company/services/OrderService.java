@@ -18,75 +18,80 @@ public class OrderService {
     private IRepository<User> userIRepository;
 
 
-    public OrderService(IRepository<User> userIRepository,IRepository<Product> productRepository, IRepository<CartItem> cartItemIRepository, IRepository<Order> orderIRepository) {
+    public OrderService(IRepository<User> userIRepository, IRepository<Product> productRepository, IRepository<CartItem> cartItemIRepository, IRepository<Order> orderIRepository) {
         this.productRepository = productRepository;
         this.cartItemIRepository = cartItemIRepository;
         this.orderIRepository = orderIRepository;
-        this.userIRepository=userIRepository;
+        this.userIRepository = userIRepository;
     }
 
-    public void addOrder(Product product,int quantity){
-        User user=((UserRepository)userIRepository).getLoginedUser();;
+    public void addOrder(Product product, int quantity) {
+        User user = ((UserRepository) userIRepository).getLoginedUser();
 
-        Order order=orderIRepository.getAll()
+        Order order = orderIRepository.getAll()
                 .stream()
-                .filter(o->o.customer.getId()==user.getId())
+                .filter(o -> o.customer.getId() == user.getId())
                 .findFirst()
                 .orElse(null);
 
-        if(order==null){
+        if (order == null) {
             List<CartItem> cartItemList = new ArrayList<>();
-            cartItemList.add(new CartItem(product,quantity));
-            Order newOrder=new Order(user,cartItemList);
+            cartItemList.add(new CartItem(product, quantity));
+            Order newOrder = new Order(user, cartItemList);
             orderIRepository.create(newOrder);
             return;
         }
 
-        order.orders.add(new CartItem(product,quantity));
+        order.orders.add(new CartItem(product, quantity));
 
     }
-    public void deleteCartItem(int id,CartItem cartItem){
-       Order order= this.getOrder(id);
-       if(order==null)
-           return;
 
-       if(order.orders.size()==0){
-           orderIRepository.getAll().remove(order);
-           return;
-       }
-       order.orders.remove(cartItem);
+    public void deleteCartItem(int id, CartItem cartItem) {
+        Order order = this.getOrder(id);
+        if (order == null)
+            return;
+
+        if (order.orders.size() == 0) {
+            orderIRepository.getAll().remove(order);
+            return;
+        }
+        order.orders.remove(cartItem);
 
 
     }
-    public void deleteOrder(int id){
-        Order order= orderIRepository.getAll()
+
+    public void deleteOrder(int id) {
+        Order order = orderIRepository.getAll()
                 .stream()
-                .filter(o->o.customer.getId()==id)
+                .filter(o -> o.customer.getId() == id)
                 .findFirst()
                 .orElse(null);
-        if(order!=null)
+        if (order != null)
             orderIRepository.getAll().remove(order);
     }
 
-    static String listOrderText="";
-    public String listOrder(){
-        listOrderText="";
-        Order order = orderIRepository.getById(DB.currentLoginedUser.getId());
-        if(order==null)
+    static String listOrderText = "";
+
+    public String listOrder() {
+        listOrderText = "";
+        User user = ((UserRepository) userIRepository).getLoginedUser();
+        Order order = orderIRepository.getById(user.getId());
+        if (order == null)
             return "Sepetiniz boş";
-        listOrderText=listOrderText+String.format("%s isimli kullanıcının şiparişleri \n",order.customer.getNameSurname());
-        order.orders.forEach(o->listOrderText=listOrderText+String.format("Kod:{%d} Ad:{%s} Fiyat:{%f} Kalan:{%d} \n", o.getProduct().getId(),o.getProduct().getName(),o.getProduct().getPrice(),o.getQuantity()));
+        listOrderText = listOrderText + String.format("%s isimli kullanıcının şiparişleri \n", order.customer.getNameSurname());
+        order.orders.forEach(o -> listOrderText = listOrderText + String.format("Kod:{%d} Ad:{%s} Fiyat:{%f} Kalan:{%d} \n", o.getProduct().getId(), o.getProduct().getName(), o.getProduct().getPrice(), o.getQuantity()));
         return listOrderText;
     }
 
-    static String allOrderText="";
-    public String getAllOrder(){
-        allOrderText="";
+    static String allOrderText = "";
+
+    public String getAllOrder() {
+        allOrderText = "";
         orderIRepository.getAll()
-                .forEach(o->{
-                    allOrderText=allOrderText+String.format("%d ID'ye sahip %s isimli kullanıcının şiparişleri \n",o.customer.getId(),o.customer.getNameSurname());
-                    o.orders.forEach(c->{
-                        allOrderText=allOrderText+String.format("Kod:{%d} Ad:{%s} Fiyat:{%f} Kalan:{%d} \n", c.getProduct().getId(),c.getProduct().getName(),c.getProduct().getPrice(),c.getQuantity());
+                .forEach(o -> {
+                    allOrderText = allOrderText + String.format("%d ID'ye sahip %s isimli kullanıcının şiparişleri \n", o.customer.getId(), o.customer.getNameSurname());
+                    o.orders.forEach(c -> {
+                        allOrderText = allOrderText + String.format("Kod:{%d} Ad:{%s} Fiyat:{%f} Kalan:{%d} \n", c.getProduct().getId(), c.getProduct().getName(), c.getProduct().getPrice(), c.getQuantity());
                     });
                 });
 
@@ -94,15 +99,15 @@ public class OrderService {
     }
 
 
-    public Order getOrder(int id){
+    public Order getOrder(int id) {
         return orderIRepository.getAll()
                 .stream()
-                .filter(o->o.customer.getId()==id)
+                .filter(o -> o.customer.getId() == id)
                 .findFirst()
                 .orElse(null);
     }
 
-    public void saleOrder(){
+    public void saleOrder() {
         orderIRepository.getAll().clear();
     }
 
