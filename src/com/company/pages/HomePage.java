@@ -7,6 +7,9 @@ import com.company.pages.components.Input;
 import com.company.services.ProductService;
 import com.company.services.UserService;
 
+/**
+ * Sadece Admin kullanıcısının kullanacağı işlemlerin gösterilip yönlendiriliği sınıf
+ */
 public class HomePage extends PageBase {
 
     public HomePage(UserService userService, ProductService productService) {

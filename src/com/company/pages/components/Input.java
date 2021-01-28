@@ -2,6 +2,9 @@ package com.company.pages.components;
 
 import java.util.Scanner;
 
+/**
+ * Kullanıcının veri girişi için kullanılacak component sınıfı
+ */
 public class Input {
 
     private String text;
@@ -9,7 +12,7 @@ public class Input {
     private String regex;
     private boolean isRequired;
 
-    //todo javadoc ile parametrelerin nasıl kullancağı anlatılacak regex boş olursa şu olur diye
+
     public Input(String label, String regex, boolean required) {
         this.text = "";
         this.label = label;
@@ -49,6 +52,11 @@ public class Input {
         this.text = text;
     }
 
+    /**
+     * Kullanıcıdan akınan string ifadeyi int türüne dönüşütürüp döndürür.
+     * @exception Integer dönüştürmede hata olursa işlem başarısız olduğuna alamet -1 döner
+     * @return int değer döner
+     */
     public int getTextAfterConvertToInt() {
         try {
             return Integer.parseInt(getText());
@@ -57,6 +65,11 @@ public class Input {
         }
     }
 
+    /**
+     * Kullanıcıdan akınan string ifadeyi float türüne dönüşütürüp döndürür.
+     * @exception Float dönüştürmede hata olursa işlem başarısız olduğuna alamet -1 döner
+     * @return int değer döner
+     */
     public float getTextAfterConvertToFloat() {
         try {
             return Float.parseFloat(getText());
@@ -65,6 +78,10 @@ public class Input {
         }
     }
 
+    /**
+     * Kullanıcının veri girişi yapmasını,girielne veriyi belirtilen değerlere uygun mu kontrolu yapar.
+     * @return Kullanıcıının girdiği veriyi döner
+     */
     public String renderAndGetText() {
         Scanner in = new Scanner(System.in);
         String msjLabel = this.getLabel() == null ? "Etiket Yok" : this.getLabel();

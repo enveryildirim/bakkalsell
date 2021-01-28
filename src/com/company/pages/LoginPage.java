@@ -7,7 +7,7 @@ import com.company.services.ProductService;
 import com.company.services.UserService;
 
 /**
- *
+ *Kullanıcı login işlemlerini ekrana basar
  */
 public class LoginPage extends PageBase {
 

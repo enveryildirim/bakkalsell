@@ -109,7 +109,7 @@ public class ProductSalePage extends PageBase {
             if (productId.equals("0"))
                 return;
 
-            cartItem = productService.getCart()
+            cartItem = productService.getCartAll()
                     .stream()
                     .filter(c -> c.getProduct().getId() == idInt)
                     .findFirst()
@@ -132,7 +132,7 @@ public class ProductSalePage extends PageBase {
 
         System.out.println(productService.getCartListConvertToString());
         float sumPrice = 0;
-        for (CartItem item : productService.getCart()) {
+        for (CartItem item : productService.getCartAll()) {
             sumPrice += item.getQuantity() * item.getProduct().getPrice();
         }
         System.out.println("Toplam Fiyat:" + sumPrice);

@@ -2,6 +2,9 @@ package com.company;
 
 import java.security.PublicKey;
 
+/**
+ * Uygulama geneli sabitlerin tanımlandığı sınıf
+ */
 public class Constant {
     //REGEX FORMATLARI
     public static String ONLY_DIGIT = "^[0-9]+$";

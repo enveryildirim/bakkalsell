@@ -6,6 +6,9 @@ import com.company.models.Product;
 
 import java.util.List;
 
+/**
+ * Kullanıcıdan gelen veriler ve talimatlara göre  Ürün ve Sepet ile alakalı işlemlerin yapıldığı sıınf
+ */
 public class ProductService {
 
     static String cartListString = "";
@@ -39,7 +42,11 @@ public class ProductService {
         return this.productRepository.getAll();
     }
 
-
+    /**
+     * Sepete ürün ekler
+     * @param product sepete eklenecek ürün
+     * @param quantity sepete eklenecek ürün miktarı
+     */
     public void insertProductToCart(Product product, int quantity) {
         CartItem cartItem = cartItemIRepository.getById(product.getId());
         if (cartItem == null)
@@ -50,15 +57,22 @@ public class ProductService {
         }
     }
 
+    /**
+     * Sepeti temizler
+     */
     public void clearCart() {
         cartItemIRepository.getAll().clear();
     }
 
-    public List<CartItem> getCart() {
+    public List<CartItem> getCartAll() {
 
         return cartItemIRepository.getAll();
     }
 
+    /**
+     * Tüm sepeti string döner
+     * @return String sepeti nesnesini string formatında döner
+     */
     public String getCartListConvertToString() {
         cartListString = "";
         cartItemIRepository.getAll().forEach(cartItem -> {
@@ -70,10 +84,18 @@ public class ProductService {
         return cartListString;
     }
 
+    /**
+     * İstenilen ürünü sepetten siler
+     * @param cartItem silenmesi istenen ürün
+     */
     public void deleteProductFromCart(CartItem cartItem) {
         cartItemIRepository.delete(cartItem);
     }
 
+    /**
+     * Tüm ürünlerin string formatında döner
+     * @return String ürünleri string formatında döner
+     */
     public String getAllProductConvertToString() {
         productListString = "";
         productRepository.getAll().forEach(product -> {
@@ -92,6 +114,9 @@ public class ProductService {
         return productListString;
     }
 
+    /**
+     * Sepeti satar
+     */
     public void saleCart() {
         cartItemIRepository.getAll().forEach(cartItem -> {
             Product product = productRepository.getAll().stream().filter(p -> p.getId() == cartItem.getProduct().getId())
@@ -104,6 +129,10 @@ public class ProductService {
         cartItemIRepository.getAll().clear();
     }
 
+    /**
+     * Sepette ürün olup olmadıpıını kontrol eder
+     * @return boolean döner
+     */
     public boolean isEmptyCart() {
         return cartItemIRepository.getAll().size() == 0;
     }

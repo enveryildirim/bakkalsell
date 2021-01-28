@@ -3,6 +3,9 @@ package com.company.models;
 
 import java.util.UUID;
 
+/**
+ * kullanıcı ile alakalı verileri tutuan sınıf
+ */
 public class User {
 
     private int id;

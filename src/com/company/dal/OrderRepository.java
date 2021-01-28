@@ -5,6 +5,9 @@ import com.company.models.Product;
 
 import java.util.List;
 
+/**
+ * Siparişler ile alakalı veritabanı işlemlerinin yapıldığı sınıf
+ */
 public class OrderRepository implements IRepository<Order> {
 
     @Override

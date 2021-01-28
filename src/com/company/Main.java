@@ -19,6 +19,7 @@ public class Main {
 
     public static void main(String[] args) {
         init();
+
         IRepository<User> userRepository = new UserRepository();
         UserService userService = new UserService(userRepository);
 
@@ -51,9 +52,6 @@ public class Main {
      * Gerekli işlemlerin yapılması
      */
     static void init() {
-        /**
-         * Bazı ürünlerin girilmesi
-         * */
 
 
         /**
@@ -95,6 +93,9 @@ public class Main {
         orderViewPage.setOrderService(orderService);
         pages.put(PageName.ORDER_VIEW, orderViewPage);
 
+        /**
+         * Varsayılan ürünlerin girilmesi
+         */
         productService.createProduct(new Product("gofret", 2, 50));
         productService.createProduct(new Product("gazoz", 1, 50));
         productService.createProduct(new Product("pirinç", 10, 20));
@@ -115,7 +116,9 @@ public class Main {
         userService.createUser(user);
         userService.createUser(userCustomer);
 
-
+        /**
+         * müşteri şiparişleri test için oluşturuluyor testen sonra kaldırılacak
+         */
         List<CartItem> cartItemList = new ArrayList<>();
         cartItemList.add(new CartItem(new Product("gofret", 2, 50), 10));
         cartItemList.add(new CartItem(new Product("gazoz", 1, 50), 15));

@@ -4,6 +4,9 @@ import com.company.models.Product;
 
 import java.util.List;
 
+/**
+ * Ürünler ile alakalı veritabanı işlemlerinin yapıldığı sınıf
+ */
 public class ProductRepository implements IRepository<Product> {
 
     @Override

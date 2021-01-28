@@ -8,7 +8,9 @@ import com.company.models.User;
 import java.util.ArrayList;
 import java.util.List;
 
-
+/**
+ *Uygulama ile alakalı verilerin tutulduğu sınıf
+ */
 public class DB {
 
     public static List<User> users = new ArrayList<>();

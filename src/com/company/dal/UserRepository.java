@@ -5,16 +5,10 @@ import com.company.models.User;
 import java.util.List;
 
 /**
- * Kullanıcı veritabanı ile olan işleri yapıldığı sınıf
+ * Kullanıcı veritabanı ile olan işlerin yapıldığı sınıf
  */
 public class UserRepository implements IRepository<User> {
 
-    /**
-     * Kullanıcı oluşturma
-     *
-     * @param user fdgdg
-     * @return
-     */
     @Override
     public void create(User user) {
 
@@ -32,12 +26,6 @@ public class UserRepository implements IRepository<User> {
 
     }
 
-    /**
-     * Kullanıcı güncelleme
-     *
-     * @param user
-     * @return
-     */
     @Override
     public void update(User user) {
         User u = this.getById(user.getId());
@@ -47,33 +35,16 @@ public class UserRepository implements IRepository<User> {
 
     }
 
-    /**
-     * Kullanıcı Silme
-     *
-     * @param user
-     * @return
-     */
     @Override
     public void delete(User user) {
         DB.users.remove(user);
     }
 
-    /**
-     * Tüm Kullancılar
-     *
-     * @return
-     */
     @Override
     public List<User> getAll() {
         return DB.users;
     }
 
-    /**
-     * id ile Kullanıcı bilgileri getirir
-     *
-     * @param id
-     * @return
-     */
     @Override
     public User getById(int id) {
         return DB.users.stream()

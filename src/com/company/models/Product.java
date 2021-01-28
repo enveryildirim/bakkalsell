@@ -2,6 +2,9 @@ package com.company.models;
 
 import java.util.UUID;
 
+/**
+ * Ürünlerin verilerini tutan sınıf
+ */
 public class Product {
 
     private int id;

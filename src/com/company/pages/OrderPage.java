@@ -6,6 +6,9 @@ import com.company.pages.components.Input;
 import com.company.services.ProductService;
 import com.company.services.UserService;
 
+/**
+ * müşterinin sipariş işlemlerini yapar
+ */
 public class OrderPage extends PageBase {
 
     public OrderPage(UserService userService, ProductService productService) {
@@ -17,6 +20,10 @@ public class OrderPage extends PageBase {
         return true;
     }
 
+    /**
+     * Ürünlerin listelendiği ve şipariş verilir
+     * @return PageName
+     */
     @Override
     public PageName render() {
         System.out.println("--------------SİPARİŞ SAYFASI-------------");
@@ -45,6 +52,9 @@ public class OrderPage extends PageBase {
         return PageName.ORDER;
     }
 
+    /**
+     * Siparişi ürün ekleme ile alakalı kısın,mlarıını ekrana basılır.
+     */
     void renderAddCommandContent() {
         String productId;
         Product updatingProduct;
@@ -87,6 +97,9 @@ public class OrderPage extends PageBase {
 
     }
 
+    /**
+     * Siparişten ürün silme ile alakalı işlemlerin ekrana yansıltıldığı fonksiyon
+     */
     void renderDeleteCommandContent() {
         String cartItemid;
         User loginedUser = userService.getLoginedUser();

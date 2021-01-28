@@ -7,6 +7,9 @@ import com.company.pages.components.Input;
 import com.company.services.ProductService;
 import com.company.services.UserService;
 
+/**
+ * ürün işlemleirnin yapıldığı sınıf
+ */
 public class ProductListPage extends PageBase {
 
     public ProductListPage(UserService userService, ProductService productService) {
@@ -43,6 +46,9 @@ public class ProductListPage extends PageBase {
         return PageName.PRODUCT_LIST;
     }
 
+    /**
+     * Ürün güncelleme ko9mutu işlemlerini ekrana basar
+     */
     void renderUpdateCommandContent() {
         String labelId = "Ürün İd giriniz";
         boolean isRequiredID = true;
@@ -92,6 +98,9 @@ public class ProductListPage extends PageBase {
 
     }
 
+    /**
+     * ürün silme işlemlerini ekrana basar
+     */
     void renderDeleteCommandContent() {
 
         Input inID = new Input("Ürün İd giriniz", Constant.ONLY_DIGIT, true);

@@ -10,6 +10,9 @@ import com.company.models.User;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ *Kullanıcıdan gelen veriler ve talimatlara göre Siparişle ile alakalı işlerin yapıldığı sınıf
+ */
 public class OrderService {
 
     static String listOrderString = "";
@@ -26,6 +29,11 @@ public class OrderService {
         this.userIRepository = userIRepository;
     }
 
+    /**
+     * Kullanıcının siparişine ürün eklediği fonksiyon
+     * @param product siparişi verilen ürün
+     * @param quantity şipariş miktarı
+     */
     public void addProductToOrder(Product product, int quantity) {
         User user = ((UserRepository) userIRepository).getLoginedUser();
 
@@ -42,11 +50,16 @@ public class OrderService {
             orderIRepository.create(newOrder);
             return;
         }
-        CartItem newCartItem=new CartItem(product, quantity);
+        CartItem newCartItem = new CartItem(product, quantity);
         order.orders.add(newCartItem);
 
     }
 
+    /**
+     * Kullanıcının siparişinden istenilen ürünü siler
+     * @param id ürününü silineceği şiparişin id'si
+     * @param cartItem silinecek ürün item'ı
+     */
     public void deleteProductFromOrder(int id, CartItem cartItem) {
         Order order = this.getOrder(id);
         if (order == null)
@@ -60,6 +73,10 @@ public class OrderService {
 
     }
 
+    /**
+     * Kullanıcının id'si verilen şiparişini siler
+     * @param id silinecek siparişin id'si
+     */
     public void deleteOrder(int id) {
         Order order = orderIRepository.getAll()
                 .stream()
@@ -71,6 +88,10 @@ public class OrderService {
             orderIRepository.getAll().remove(order);
     }
 
+    /**
+     * Giriş yapan kullanıcının siparişlerini String olarak döner
+     * @return String oalrak siparişleri formatlanmış bir şekilde döner
+     */
     public String getUserOrderListConvertToString() {
         listOrderString = "";
         User user = ((UserRepository) userIRepository).getLoginedUser();
@@ -83,6 +104,10 @@ public class OrderService {
         return listOrderString;
     }
 
+    /**
+     * veritabanındaki tüm siparişleri string e cevirip döner
+     * @return String siparişleri  döner
+     */
     public String getAllOrderConvertToString() {
         allOrderString = "";
         orderIRepository.getAll()
@@ -96,7 +121,11 @@ public class OrderService {
         return allOrderString;
     }
 
-
+    /**
+     * ID si verilen Siparişi getirir
+     * @param id istenen siparişin id'si
+     * @return Order nesnesi döner
+     */
     public Order getOrder(int id) {
         return orderIRepository.getAll()
                 .stream()
@@ -105,6 +134,9 @@ public class OrderService {
                 .orElse(null);
     }
 
+    /**
+     * Siparişleri satar
+     */
     public void saleOrder() {
         orderIRepository.getAll().clear();
     }

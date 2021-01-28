@@ -1,5 +1,8 @@
 package com.company.models;
 
+/**
+ *Kullanıcıların türleri için kullanılan sınıf
+ */
 public enum UserType {
     ADMIN(0),
     EMPLOYEE(1),
@@ -10,6 +13,7 @@ public enum UserType {
     UserType(int type) {
         this.type = type;
     }
+
     public int getType() {
         return this.type;
     }

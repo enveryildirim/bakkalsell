@@ -8,6 +8,9 @@ import com.company.pages.components.Input;
 import com.company.services.ProductService;
 import com.company.services.UserService;
 
+/**
+ * Müşterilerlin siparişlerinin satış işlemi yapar
+ */
 public class OrderViewPage extends PageBase {
 
     public OrderViewPage(UserService userService, ProductService productService) {
@@ -44,6 +47,9 @@ public class OrderViewPage extends PageBase {
         return PageName.ORDER_VIEW;
     }
 
+    /**
+     * Satış komutu ile alakalı işlemler ekrana basar
+     */
     void renderSaleCommandContent() {
         String labelUserID = "Kullanıcının ID'sini girin";
         boolean isRequiredID = true;

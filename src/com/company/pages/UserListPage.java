@@ -7,6 +7,9 @@ import com.company.pages.components.Input;
 import com.company.services.ProductService;
 import com.company.services.UserService;
 
+/**
+ * Kullanıcı işlemleri yapar
+ */
 public class UserListPage extends PageBase {
 
     public UserListPage(UserService userService, ProductService productService) {
@@ -33,9 +36,9 @@ public class UserListPage extends PageBase {
         String command = inCommand.renderAndGetText();
 
         if (command.equals("1")) {
-            renderUpdate();
+            renderUpdateCommandContent();
         } else if (command.equals("2")) {
-            renderDelete();
+            renderDeleteCommandContent();
         } else if (command.equals("0")) {
             return PageName.HOME;
         } else {
@@ -45,7 +48,10 @@ public class UserListPage extends PageBase {
         return PageName.USER_LIST;
     }
 
-    void renderUpdate() {
+    /**
+     * Kullanıcı güncelleme işlemlerini ekrana basar
+     */
+    void renderUpdateCommandContent() {
         String labelID = "Kullanıcı İd giriniz";
         boolean isRequiredID = true;
         Input inID = new Input(labelID, Constant.ONLY_DIGIT, isRequiredID);
@@ -93,7 +99,10 @@ public class UserListPage extends PageBase {
 
     }
 
-    void renderDelete() {
+    /**
+     * Kullanıcı silme işlemlerini ekrana basar
+     */
+    void renderDeleteCommandContent() {
         String labelID = "Kullanıcı İd giriniz";
         boolean isRequiredID = true;
         Input inID = new Input(labelID, Constant.ONLY_DIGIT, isRequiredID);

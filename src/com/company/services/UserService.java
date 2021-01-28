@@ -17,7 +17,12 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    //todo fonksiyonların javadoc ne için yazıldığı ne döndüğü nsaıl döndüğü yazılacak niçin true dönüyor niye false geliyor new mana işfade ediyor
+    /**
+     * Kullanıcın sisteme giriş yapmasını sağlar. Eğer başarılı ise true değlse false değer döner
+     * @param username kullanıcı adı
+     * @param password şifre
+     * @return boolean işlem başarı durumunu döner.
+     */
     public boolean login(String username, String password) {
 
         User user = this.userRepository.getAll().stream()
@@ -28,6 +33,9 @@ public class UserService {
         return user != null;
     }
 
+    /**
+     * Giriş yapan kullanıcı çıkış yapar
+     */
     public void logout() {
         DB.currentLoginedUser = null;
     }
@@ -54,6 +62,10 @@ public class UserService {
         return userRepository.getAll();
     }
 
+    /**
+     * Sisteme giriş yapan kullanıcının bilgilerini getirir. Eğer giriş yapan kullanınıcı yoksa null değer döner
+     * @return User login olmuş kullanıcı
+     */
     public User getLoginedUser() {
         return ((UserRepository) userRepository).getLoginedUser();
     }

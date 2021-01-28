@@ -5,6 +5,9 @@ import com.company.models.User;
 
 import java.util.List;
 
+/**
+ *Sepet ile alakalı veritabanı işlemlerinin yapıldığı sınıf
+ */
 public class CartItemRepository implements IRepository<CartItem> {
 
     @Override
