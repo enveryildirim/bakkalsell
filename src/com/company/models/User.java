@@ -5,15 +5,14 @@ import java.util.UUID;
 
 public class User {
 
+
     private int id;
     private String nameSurname;
     private String username;
     private String password;
-    //todo enum tip olarak değiştirilecek
     private UserType userType;
 
-    public User(int id, String nameSurname, String username, String password, UserType userType) {
-        this.id = id;
+    public User(String nameSurname, String username, String password, UserType userType) {
         this.nameSurname = nameSurname;
         this.username = username;
         this.password = password;
@@ -22,6 +21,10 @@ public class User {
 
     public int getId() {
         return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getNameSurname() {

@@ -16,9 +16,6 @@ public class ProductService {
     }
 
     public void createProduct(Product product) {
-        int size = productRepository.getAll().size();
-        int newID = productRepository.getAll().get(size - 1).getId() + 1;
-        product.setId(newID);
         productRepository.create(product);
     }
 
@@ -39,11 +36,7 @@ public class ProductService {
         return this.productRepository.getAll();
     }
 
-
-    /**
-     * Cart ile alakalı kısım
-     */
-
+    //todo javadoc bilgilendirmeler eklenecek ne iş yapar ne fonsiyon döner.
     public void insertProductToCart(Product product, int quantity) {
         CartItem cartItem = cartItemIRepository.getById(product.getId());
         if (cartItem == null)
@@ -110,6 +103,10 @@ public class ProductService {
         });
 
         cartItemIRepository.getAll().clear();
+    }
+
+    public boolean isEmptyCart(){
+        return cartItemIRepository.getAll().size() == 0;
     }
 
 }

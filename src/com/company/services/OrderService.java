@@ -1,6 +1,5 @@
 package com.company.services;
 
-import com.company.dal.DB;
 import com.company.dal.IRepository;
 import com.company.dal.UserRepository;
 import com.company.models.CartItem;

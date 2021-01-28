@@ -13,7 +13,7 @@ public class ProductCreatePage extends PageBase {
     }
 
     @Override
-    public boolean requiredAuth() {
+    public boolean isRequiredAuth() {
         return true;
     }
 
@@ -23,39 +23,40 @@ public class ProductCreatePage extends PageBase {
 
         System.out.println("**Ürün miktarı ve fiyatı eksi  değer olamaz \n Aynı ürün iki defa eklenemez. ");
 
-        Input inName = new Input("AD giriniz", "[a-zA-z]", true);
+        String labelName = "AD giriniz";
+        boolean isRequiredName = true;
+        Input inName = new Input(labelName, Constant.CUMLE_TR, isRequiredName);
         String name = inName.render();
 
-        Input inPrice = new Input("FİYAT giriniz", Constant.ONLY_DIGIT, true);
-        String price = inPrice.render();
+        String labelPrice = "FİYAT giriniz";
+        boolean isRequiredPrice = true;
+        Input inPrice = new Input(labelPrice, Constant.ONLY_DIGIT, isRequiredPrice);
+        String priceString = inPrice.render();
 
-        Input inQuantity = new Input("STOK giriniz", Constant.ONLY_DIGIT, true);
-        String quantity = inQuantity.render();
+        String labelQuantity = "STOK giriniz";
+        boolean isRequiredQuantity = true;
+        Input inQuantity = new Input(labelQuantity, Constant.ONLY_DIGIT, isRequiredQuantity);
+        String quantityString = inQuantity.render();
 
-        float deger = 0;
-        int stok = 0;
 
-        if (name.length() == 0 || price.length() == 0 || quantity.length() == 0) {
+        if (name.length() == 0 || priceString.length() == 0 || quantityString.length() == 0) {
             System.out.printf("Lütfen boş alan bırakmayınız \n devam etmek için bir tuşa basınız");
             in.nextLine();
             return PageName.PRODUCT_CREATE;
         }
-        try {
-            deger = Float.parseFloat(price);
-            stok = Integer.parseInt(quantity);
-            if (deger <= 0 || stok <= 0) {
-                System.out.printf("Lütfen değerleri eksi girmeyiniz \n devam etmek için bir tuşa basınız.");
-                in.nextLine();
-                return PageName.PRODUCT_CREATE;
-            }
-        } catch (Exception e) {
-            System.out.printf("Lütfen değerleri sayı formatında giriniz \n devam etmek için bir tuşa basınız.");
+
+        float price = inPrice.getTextAfterConvertToFloat();
+        int quantity = inPrice.getTextAfterConvertToInt();
+        if (price <= 0 || quantity <= 0) {
+            System.out.printf("Lütfen değerleri eksi girmeyiniz \n devam etmek için bir tuşa basınız.");
             in.nextLine();
             return PageName.PRODUCT_CREATE;
         }
 
-        productService.createProduct(new Product(0, name, deger, stok));
+        Product newProduct = new Product(name, price, quantity);
+        productService.createProduct(newProduct);
         System.out.printf("Eklendi Ürün Başarılı");
+
         return PageName.HOME;
     }
 }

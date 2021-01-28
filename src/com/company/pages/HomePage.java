@@ -1,5 +1,6 @@
 package com.company.pages;
 
+import com.company.Constant;
 import com.company.dal.DB;
 import com.company.models.PageName;
 import com.company.models.UserType;
@@ -13,13 +14,14 @@ public class HomePage extends PageBase {
     }
 
     @Override
-    public boolean requiredAuth() {
+    public boolean isRequiredAuth() {
         return true;
     }
 
     @Override
     public PageName render() {
         System.out.println("Anasayfa");
+
         //todo logineduserların düzenlenmesi her sınıftan
         if (DB.currentLoginedUser.getUserType() == UserType.EMPLOYEE)
             return PageName.PRODUCT_SALE;
@@ -36,28 +38,30 @@ public class HomePage extends PageBase {
         System.out.println("6-Siparişler ");
         System.out.println("0-Çıkış");
 
-        Input inIslem = new Input("İşleminizi Seçiniz", "[0123456]", true);
-        String islem = inIslem.render();
+        String labelCommand = "İşleminizi Seçiniz";
+        boolean isRequiredCommand = true;
+        Input inCommand = new Input(labelCommand, Constant.HOME_PAGE_COMMAND_LIST, isRequiredCommand);
+        String command = inCommand.render();
 
-        if (islem.equals("0"))
+        if (command.equals("0"))
             return PageName.LOGIN;
 
-        if (islem.equals("1"))
+        if (command.equals("1"))
             return PageName.PRODUCT_SALE;
 
-        if (islem.equals("2"))
+        if (command.equals("2"))
             return PageName.PRODUCT_CREATE;
 
-        if (islem.equals("3"))
+        if (command.equals("3"))
             return PageName.USER_CREATE;
 
-        if (islem.equals("4"))
+        if (command.equals("4"))
             return PageName.USER_LIST;
 
-        if (islem.equals("5"))
+        if (command.equals("5"))
             return PageName.PRODUCT_LIST;
 
-        if (islem.equals("6"))
+        if (command.equals("6"))
             return PageName.ORDER_VIEW;
 
         return PageName.HOME;

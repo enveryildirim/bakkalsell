@@ -8,8 +8,8 @@ public class Product {
     private float price;
     private int quantity;
 
-    public Product(int id, String name, float price, int quantity) {
-        this.id = id;
+    public Product(String name, float price, int quantity) {
+        this.id = 0;
         this.name = name;
         this.price = price;
         this.quantity = quantity;

@@ -12,22 +12,28 @@ public class LoginPage extends PageBase {
         super(userService, productService);
     }
 
-    //todo fiil olarak isimlendirilecek
+
     @Override
-    public boolean requiredAuth() {
+    public boolean isRequiredAuth() {
         return false;
     }
 
     @Override
     public PageName render() {
         //todo Input classa Field constructor atama clean code standartlarına uygun şekilde revize edilecek
-        Input inUsername = new Input("Kullanıcı Adı", Constant.USERNAME, true);
+        String labelUsernameInput = "Kullanıcı Adı";
+        boolean isRequiredUsername = true;
+        Input inUsername = new Input(labelUsernameInput, Constant.USERNAME, isRequiredUsername);
         String username = inUsername.render();
 
-        Input inPassword = new Input("Parola", Constant.PASSWORD, true);
+        String labelPassword = "Parola";
+        boolean isRequiredPassword = true;
+        Input inPassword = new Input(labelPassword, Constant.PASSWORD, isRequiredPassword);
         String password = inPassword.render();
 
-        if (this.userService.login(username, password))
+
+        boolean isSuccuesLogin = this.userService.login(username, password);
+        if (isSuccuesLogin)
             return PageName.HOME;
 
         System.out.println("!!!! Lütfen bilgilerinizi doğru giriniz Bilgilerinizi unuttuysanız Adminle görüşün\n Devam etmek için bir tuşa basın");

@@ -13,7 +13,7 @@ public class UserListPage extends PageBase {
     }
 
     @Override
-    public boolean requiredAuth() {
+    public boolean isRequiredAuth() {
         return true;
     }
 
@@ -37,8 +37,8 @@ public class UserListPage extends PageBase {
 
 
         String msj = "1-Kullanıcı Düzenleme\n2-KUllanıcı Silme\n0-Anasayfa";
-
-        Input inCommand = new Input(msj, "[012]", true);
+        boolean isRequiredCommand = true;
+        Input inCommand = new Input(msj, Constant.USER_LIST_PAGE_COMMAND_LIST, isRequiredCommand);
         String command = inCommand.render();
 
         if (command.equals("1")) {
@@ -56,40 +56,46 @@ public class UserListPage extends PageBase {
     }
 
     void renderUpdate() {
-
-        Input inID = new Input("Kullanıcı İd giriniz", Constant.ONLY_DIGIT, true);
+        String labelID = "Kullanıcı İd giriniz";
+        boolean isRequiredID = true;
+        Input inID = new Input(labelID, Constant.ONLY_DIGIT, isRequiredID);
         String id = inID.render();
-        int idInt = inID.getInt();
-        User user = userService.getUser(idInt);
-        if (user == null) {
+        int idInt = inID.getTextAfterConvertToInt();
+
+        User updatingUser = userService.getUser(idInt);
+        if (updatingUser == null) {
             System.out.printf("İd uygun Ürün Yok\n");
             return;
         }
 
-        String msjName = String.format("Şimdiki İsim: %s\n", user.getNameSurname());
-        Input inName = new Input(msjName, "[a-zA-Z]", true);
+        String msjName = String.format("Şimdiki İsim: %s\n", updatingUser.getNameSurname());
+        boolean isRequiredName = true;
+        Input inName = new Input(msjName, Constant.NAME_SURNAME_TR, isRequiredName);
         String newName = inName.render();
 
-        String msjUsername = String.format("Şimdiki Kullanıcı Adı: %s\n", user.getUsername());
-        Input inUsername = new Input(msjUsername, Constant.USERNAME, true);
+        String msjUsername = String.format("Şimdiki Kullanıcı Adı: %s\n", updatingUser.getUsername());
+        boolean isRequiredUsername = true;
+        Input inUsername = new Input(msjUsername, Constant.USERNAME, isRequiredUsername);
         String newUsername = inUsername.render();
 
-        String msjPassword = String.format("Şimdiki Şifre:%f\n", user.getPassword());
-        Input inPassword = new Input(msjPassword, Constant.PASSWORD, true);
+        String msjPassword = String.format("Şimdiki Şifre:%f\n", updatingUser.getPassword());
+        boolean isRequiredPassword = true;
+        Input inPassword = new Input(msjPassword, Constant.PASSWORD, isRequiredPassword);
         String newPassword = inPassword.render();
 
-        Input inConfirm = new Input("Onaylamak için evet iptal için hayır yazın", "(evet|hayır)", true);
+        String labelConfirm = "Onaylamak için evet iptal için hayır yazın";
+        boolean isRequiredConfirm = true;
+        Input inConfirm = new Input(labelConfirm, Constant.COMMAND_YES_NO, isRequiredConfirm);
         String confirm = inConfirm.render();
 
         if (confirm.equals("evet")) {
 
+            updatingUser.setNameSurname(newName);
+            updatingUser.setUsername(newUsername);
+            updatingUser.setPassword(newPassword);
+            userService.updateUser(updatingUser);
+
             System.out.printf("Güncelendi");
-
-            user.setNameSurname(newName);
-            user.setUsername(newUsername);
-            user.setPassword(newPassword);
-
-            userService.updateUser(user);
         } else {
             System.out.printf("İptal Edildi");
             return;
@@ -98,10 +104,12 @@ public class UserListPage extends PageBase {
     }
 
     void renderDelete() {
-
-        Input inID = new Input("Kullanıcı İd giriniz", Constant.ONLY_DIGIT, true);
+        String labelID = "Kullanıcı İd giriniz";
+        boolean isRequiredID = true;
+        Input inID = new Input(labelID, Constant.ONLY_DIGIT, isRequiredID);
         String id = inID.render();
-        int idInt = inID.getInt();
+        int idInt = inID.getTextAfterConvertToInt();
+
         User user = userService.getUser(idInt);
         if (user == null) {
             System.out.printf("İd uygun Ürün Yok\n");
@@ -109,12 +117,14 @@ public class UserListPage extends PageBase {
         }
         System.out.printf("%d %s silinecek\n", user.getId(), user.getNameSurname());
 
-        Input inConfirm = new Input("Onaylamak için evet iptal için hayır yazın", "(evet|hayır)", true);
+        String labelConfirm = "Onaylamak için evet iptal için hayır yazın";
+        boolean isRequiredCommand = true;
+        Input inConfirm = new Input(labelConfirm, Constant.COMMAND_YES_NO, isRequiredCommand);
         String confirm = inConfirm.render();
 
         if (confirm.equals("evet")) {
-            System.out.printf("Silindi");
             userService.deleteUser(user);
+            System.out.printf("Silindi");
         } else {
             System.out.printf("İptal Edildi");
             return;

@@ -24,7 +24,7 @@ public abstract class PageBase {
     }
 
 
-    public abstract boolean requiredAuth();
+    public abstract boolean isRequiredAuth();
 
     public abstract PageName render();
 }

@@ -10,74 +10,54 @@ import java.util.List;
 import java.util.UUID;
 
 public class UserService {
-    //
+
     protected IRepository<User> userRepository;
 
-    public UserService(IRepository<User> userRepository){
-        this.userRepository=userRepository;
+    public UserService(IRepository<User> userRepository) {
+        this.userRepository = userRepository;
     }
-    //todo javadoc ,değişken isimi..
-    public boolean login(String username,String password){
-       User user = this.userRepository.getAll().stream()
-                .filter(u->u.getUsername().equals(username) && u.getPassword().equals(password))
-               .findFirst()
-               .orElse(null);
-        DB.currentLoginedUser=user;
+
+    //todo javadoc
+    //todo değişken isimi değiştirilmesi
+    //todo fonksiyonların javadoc neiçin yazıldığı ne döndüğü nsaıl döndüğü yazılacak niçin true dönüyor niye false geliyor new mana işfade ediyor
+    public boolean login(String username, String password) {
+
+        User user = this.userRepository.getAll().stream()
+                .filter(u -> u.getUsername().equals(username) && u.getPassword().equals(password))
+                .findFirst()
+                .orElse(null);
+        DB.currentLoginedUser = user;
         return user != null;
     }
 
-    public void logout(){
-
+    public void logout() {
+        DB.currentLoginedUser = null;
     }
 
-    public void createUser(User user){
+    public void createUser(User user) {
         userRepository.create(user);
-
     }
-    public void createUser(String nameSurname, String username, String password, UserType typeUser){
-        int size=userRepository.getAll().size();
-        int newID=userRepository.getAll().get(size-1).getId()+1;
-        User user = new User(newID,nameSurname,username,password,typeUser);
-        userRepository.create(user);
 
-    }
-    /**
-     * Kullanıcı  bilgilerini güncelleme
-     * @param user
-     */
 
-    public void updateUser(User user){
+    public void updateUser(User user) {
         this.userRepository.update(user);
 
     }
 
-    public void deleteUser(User user){
-         userRepository.delete(user);
+    public void deleteUser(User user) {
+        userRepository.delete(user);
     }
 
 
-    /**
-     * Kullanıcı şifre değiştirme
-     * @param user
-     */
-    public void changePassword(User user){
-
-    }
-
-    /**
-     * Kullanıcı İd ye göre Kullanıcı bilgilerini döndürür
-     * @param id
-     * @return
-     */
-    public User getUser(int id){
+    public User getUser(int id) {
         return userRepository.getById(id);
     }
 
-    public List<User> getAll(){
+    public List<User> getAll() {
         return userRepository.getAll();
     }
 
-    public User getLoginedUser(){
+    public User getLoginedUser() {
         return new UserRepository().getLoginedUser();
     }
 

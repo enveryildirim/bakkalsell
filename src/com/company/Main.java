@@ -2,12 +2,10 @@ package com.company;
 
 import com.company.dal.*;
 import com.company.models.*;
-
 import com.company.pages.*;
 import com.company.services.OrderService;
 import com.company.services.ProductService;
 import com.company.services.UserService;
-
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,7 +19,7 @@ public class Main {
 
     public static void main(String[] args) {
         init();
-        PageName currentPage = PageName.LOGIN;
+        PageName currentPage = PageName.TEST;
         while (true) {
 
             //Eğer kullanıcı giriş yapmadıysa Login Sayfasına Gönder
@@ -33,7 +31,7 @@ public class Main {
 
 
             //Gidelecek Sayfanın Yetki isteyip istemediği ve Kullanıcının bu yetkiye sahip olup olmadığı kotrolü yapılıyor.
-            if (page.requiredAuth()) {
+            if (page.isRequiredAuth()) {
                 if (DB.currentLoginedUser.getUserType() == UserType.EMPLOYEE)
                     currentPage = PageName.PRODUCT_SALE;
             }
@@ -52,12 +50,12 @@ public class Main {
         /**
          * Bazı ürünlerin girilmesi
          * */
-        DB.products.add(new Product(1, "gofret", 2, 50));
-        DB.products.add(new Product(2, "gazoz", 1, 50));
-        DB.products.add(new Product(3, "pirinç", 10, 20));
-        DB.products.add(new Product(4, "ekmek", 2, 30));
-        DB.products.add(new Product(5, "kek", 2, 60));
-        DB.products.add(new Product(6, "mercimek", 14, 20));
+        DB.products.add(new Product("gofret", 2, 50));
+        DB.products.add(new Product("gazoz", 1, 50));
+        DB.products.add(new Product("pirinç", 10, 20));
+        DB.products.add(new Product("ekmek", 2, 30));
+        DB.products.add(new Product("kek", 2, 60));
+        DB.products.add(new Product("mercimek", 14, 20));
 
         /**
          * Dependcy injection constructor kullanıldı
@@ -101,9 +99,9 @@ public class Main {
          * Varsayılan kullanıcıların bilgilerinin oluşturulması
          */
         //User type 0 =Admin yetkisi 1 =kasiyer
-        User userAdmin = new User(1, "admin admin", "admin", "adminadmin", UserType.ADMIN);
-        User user = new User(2, "user user", "useruser", "useruser", UserType.EMPLOYEE);
-        User userCustomer = new User(3, "customer customer", "custom", "custom", UserType.CUSTOMER);
+        User userAdmin = new User("admin admin", "admin", "adminadmin", UserType.ADMIN);
+        User user = new User("user user", "useruser", "useruser", UserType.EMPLOYEE);
+        User userCustomer = new User("customer customer", "custom", "custom", UserType.CUSTOMER);
 
         userService.createUser(userAdmin);
         userService.createUser(user);
@@ -111,8 +109,8 @@ public class Main {
         DB.currentLoginedUser = userCustomer;
 
         List<CartItem> cartItemList = new ArrayList<>();
-        cartItemList.add(new CartItem(new Product(1, "gofret", 2, 50), 10));
-        cartItemList.add(new CartItem(new Product(2, "gazoz", 1, 50), 15));
+        cartItemList.add(new CartItem(new Product("gofret", 2, 50), 10));
+        cartItemList.add(new CartItem(new Product("gazoz", 1, 50), 15));
         DB.orders.add(new Order(userCustomer, cartItemList));
 
     }

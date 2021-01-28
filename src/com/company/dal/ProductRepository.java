@@ -1,15 +1,16 @@
 package com.company.dal;
 
 import com.company.models.Product;
-import com.company.models.User;
 
 import java.util.List;
-import java.util.UUID;
 
-public class ProductRepository implements IRepository<Product>{
+public class ProductRepository implements IRepository<Product> {
     @Override
     public void create(Product product) {
-         DB.products.add(product);
+        int size = DB.products.size();
+        int newID = size == 0 ? 0 : DB.products.get(size - 1).getId() + 1;
+        product.setId(newID);
+        DB.products.add(product);
     }
 
 
@@ -24,7 +25,7 @@ public class ProductRepository implements IRepository<Product>{
 
     @Override
     public void delete(Product product) {
-         DB.products.remove(product);
+        DB.products.remove(product);
     }
 
     @Override
@@ -35,7 +36,7 @@ public class ProductRepository implements IRepository<Product>{
     @Override
     public Product getById(int id) {
         return DB.products.stream()
-                .filter(p->p.getId()==id)
+                .filter(p -> p.getId() == id)
                 .findFirst()
                 .orElse(null);
     }
