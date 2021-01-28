@@ -9,9 +9,9 @@ import com.company.services.ProductService;
 import com.company.services.UserService;
 
 public class OrderViewPage extends PageBase {
+
     public OrderViewPage(UserService userService, ProductService productService) {
         super(userService, productService);
-
     }
 
     @Override
@@ -23,12 +23,12 @@ public class OrderViewPage extends PageBase {
     public PageName render() {
 
         System.out.printf("--------------SİPARİŞ SAYFASI-------------\n");
-        System.out.printf(orderService.getAllOrder());
+        System.out.printf(orderService.getAllOrderConvertToString());
 
         String labelCommand = "Satış=1\nGeri Dön=0";
         boolean isRequiredCommand = true;
         Input inCommand = new Input(labelCommand, Constant.ORDER_PAGE_VIEW_COMMAND_LIST, isRequiredCommand);
-        String command = inCommand.render();
+        String command = inCommand.renderAndGetText();
 
         if (command.equals("1")) {
             this.renderSaleCommandContent();
@@ -48,7 +48,7 @@ public class OrderViewPage extends PageBase {
         String labelUserID = "Kullanıcının ID'sini girin";
         boolean isRequiredID = true;
         Input inID = new Input(labelUserID, Constant.ONLY_DIGIT, isRequiredID);
-        String id = inID.render();
+        String id = inID.renderAndGetText();
         int customerID = inID.getTextAfterConvertToInt();
 
         User user = userService.getUser(customerID);
@@ -57,10 +57,11 @@ public class OrderViewPage extends PageBase {
             return;
         }
 
-        String msjSale = String.format("%s ID'li %s İsimli ---- siparişi onaylamak için evet iptal için hayır giriniz", user.getId(), user.getNameSurname());
+        String msjSale = String.format("%s ID'li %s İsimli ---- siparişi onaylamak için evet iptal için hayır giriniz",
+                user.getId(), user.getNameSurname());
         boolean isRequiredCommand = true;
         Input inCommand = new Input(msjSale, Constant.COMMAND_YES_NO, isRequiredCommand);
-        String command = inCommand.render();
+        String command = inCommand.renderAndGetText();
 
         if (command.equals("evet")) {
             orderService.saleOrder();

@@ -7,10 +7,13 @@ import com.company.models.Product;
 import java.util.List;
 
 public class ProductService {
+
+    static String cartListString = "";
+    static String productListString = "";
     private IRepository<Product> productRepository;
     private IRepository<CartItem> cartItemIRepository;
 
-    public ProductService(IRepository productRepository, IRepository cartItemIRepository) {
+    public ProductService(IRepository<Product> productRepository, IRepository<CartItem>  cartItemIRepository) {
         this.productRepository = productRepository;
         this.cartItemIRepository = cartItemIRepository;
     }
@@ -28,7 +31,7 @@ public class ProductService {
     }
 
     public Product getProductById(int id) {
-        return (Product) productRepository.getById(id);
+        return productRepository.getById(id);
 
     }
 
@@ -36,7 +39,7 @@ public class ProductService {
         return this.productRepository.getAll();
     }
 
-    //todo javadoc bilgilendirmeler eklenecek ne iş yapar ne fonsiyon döner.
+
     public void insertProductToCart(Product product, int quantity) {
         CartItem cartItem = cartItemIRepository.getById(product.getId());
         if (cartItem == null)
@@ -56,56 +59,52 @@ public class ProductService {
         return cartItemIRepository.getAll();
     }
 
-    static String allCartString = "";
-
-    public String getCartToString() {
-        allCartString = "";
-        cartItemIRepository.getAll().forEach(c -> {
-            allCartString = allCartString + String.format("Kod:{%d} Ad:{%s} Fiyat:{%f}  Alınan Miktar:{%d} Tutar:{%f} \n", c.getProduct().getId(), c.getProduct().getName(), c.getProduct().getPrice(), c.getQuantity(), c.getProduct().getPrice() * c.getQuantity());
+    public String getCartListConvertToString() {
+        cartListString = "";
+        cartItemIRepository.getAll().forEach(cartItem -> {
+            cartListString = cartListString + String.format("Kod:{%d} Ad:{%s} Fiyat:{%f}  Alınan Miktar:{%d} Tutar:{%f} \n",
+                    cartItem.getProduct().getId(), cartItem.getProduct().getName(), cartItem.getProduct().getPrice(),
+                    cartItem.getQuantity(), cartItem.getProduct().getPrice() * cartItem.getQuantity());
         });
 
-        return allCartString;
+        return cartListString;
     }
-
 
     public void deleteProductFromCart(CartItem cartItem) {
         cartItemIRepository.delete(cartItem);
     }
 
-    static String getAllProductForCartText = "";
-
-    public String getAllProductForCart() {
-        getAllProductForCartText = "";
-        productRepository.getAll().stream().forEach(p -> {
-
+    public String getAllProductConvertToString() {
+        productListString = "";
+        productRepository.getAll().forEach(product -> {
             CartItem cartItem = cartItemIRepository.getAll().stream()
-                    .filter(c -> c.getProduct().getId() == p.getId())
+                    .filter(c -> c.getProduct().getId() == product.getId())
                     .findFirst()
                     .orElse(null);
 
             if (cartItem != null)
-                getAllProductForCartText = getAllProductForCartText + String.format("Kod:{%d} Ad:{%s} Fiyat:{%f} Kalan:{%d} \n", p.getId(), p.getName(), p.getPrice(), (p.getQuantity() - cartItem.getQuantity()));
+                productListString = productListString + String.format("Kod:{%d} Ad:{%s} Fiyat:{%f} Kalan:{%d} \n", product.getId(), product.getName(), product.getPrice(), (product.getQuantity() - cartItem.getQuantity()));
             else
-                getAllProductForCartText = getAllProductForCartText + String.format("Kod:{%d} Ad:{%s} Fiyat:{%f} Kalan:{%d} \n", p.getId(), p.getName(), p.getPrice(), p.getQuantity());
+                productListString = productListString + String.format("Kod:{%d} Ad:{%s} Fiyat:{%f} Kalan:{%d} \n", product.getId(), product.getName(), product.getPrice(), product.getQuantity());
 
         });
 
-        return getAllProductForCartText;
+        return productListString;
     }
 
     public void saleCart() {
-        cartItemIRepository.getAll().forEach(c -> {
-            Product product = productRepository.getAll().stream().filter(p -> p.getId() == c.getProduct().getId())
+        cartItemIRepository.getAll().forEach(cartItem -> {
+            Product product = productRepository.getAll().stream().filter(p -> p.getId() == cartItem.getProduct().getId())
                     .findFirst()
                     .orElse(null);
-            product.setQuantity(product.getQuantity() - c.getQuantity());
+            product.setQuantity(product.getQuantity() - cartItem.getQuantity());
 
         });
 
         cartItemIRepository.getAll().clear();
     }
 
-    public boolean isEmptyCart(){
+    public boolean isEmptyCart() {
         return cartItemIRepository.getAll().size() == 0;
     }
 

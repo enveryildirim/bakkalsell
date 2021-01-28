@@ -6,6 +6,7 @@ import com.company.models.Product;
 import java.util.List;
 
 public class OrderRepository implements IRepository<Order> {
+
     @Override
     public void create(Order order) {
         DB.orders.add(order);

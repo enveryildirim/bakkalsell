@@ -8,6 +8,7 @@ import com.company.services.ProductService;
 import com.company.services.UserService;
 
 public class ProductCreatePage extends PageBase {
+
     public ProductCreatePage(UserService userService, ProductService productService) {
         super(userService, productService);
     }
@@ -26,21 +27,21 @@ public class ProductCreatePage extends PageBase {
         String labelName = "AD giriniz";
         boolean isRequiredName = true;
         Input inName = new Input(labelName, Constant.CUMLE_TR, isRequiredName);
-        String name = inName.render();
+        String name = inName.renderAndGetText();
 
         String labelPrice = "FİYAT giriniz";
         boolean isRequiredPrice = true;
         Input inPrice = new Input(labelPrice, Constant.ONLY_DIGIT, isRequiredPrice);
-        String priceString = inPrice.render();
+        String priceString = inPrice.renderAndGetText();
 
         String labelQuantity = "STOK giriniz";
         boolean isRequiredQuantity = true;
         Input inQuantity = new Input(labelQuantity, Constant.ONLY_DIGIT, isRequiredQuantity);
-        String quantityString = inQuantity.render();
+        String quantityString = inQuantity.renderAndGetText();
 
 
         if (name.length() == 0 || priceString.length() == 0 || quantityString.length() == 0) {
-            System.out.printf("Lütfen boş alan bırakmayınız \n devam etmek için bir tuşa basınız");
+            System.out.println("Lütfen boş alan bırakmayınız \n devam etmek için bir tuşa basınız");
             in.nextLine();
             return PageName.PRODUCT_CREATE;
         }
@@ -48,15 +49,16 @@ public class ProductCreatePage extends PageBase {
         float price = inPrice.getTextAfterConvertToFloat();
         int quantity = inPrice.getTextAfterConvertToInt();
         if (price <= 0 || quantity <= 0) {
-            System.out.printf("Lütfen değerleri eksi girmeyiniz \n devam etmek için bir tuşa basınız.");
+            System.out.println("Lütfen değerleri 0 veya eksi değer girmeyiniz \n devam etmek için bir tuşa basınız.");
             in.nextLine();
             return PageName.PRODUCT_CREATE;
         }
 
         Product newProduct = new Product(name, price, quantity);
         productService.createProduct(newProduct);
-        System.out.printf("Eklendi Ürün Başarılı");
+        System.out.println("Eklendi Ürün Başarılı");
 
         return PageName.HOME;
     }
+
 }

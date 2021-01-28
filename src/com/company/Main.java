@@ -19,7 +19,10 @@ public class Main {
 
     public static void main(String[] args) {
         init();
-        PageName currentPage = PageName.TEST;
+        IRepository<User> userRepository = new UserRepository();
+        UserService userService = new UserService(userRepository);
+
+        PageName currentPage = PageName.LOGIN;
         while (true) {
 
             //Eğer kullanıcı giriş yapmadıysa Login Sayfasına Gönder
@@ -31,9 +34,10 @@ public class Main {
 
 
             //Gidelecek Sayfanın Yetki isteyip istemediği ve Kullanıcının bu yetkiye sahip olup olmadığı kotrolü yapılıyor.
-            if (page.isRequiredAuth()) {
-                if (DB.currentLoginedUser.getUserType() == UserType.EMPLOYEE)
-                    currentPage = PageName.PRODUCT_SALE;
+            boolean isEmployeeAndRequiredAuth = page.isRequiredAuth() &&
+                    (userService.getLoginedUser().getUserType() == UserType.EMPLOYEE);
+            if (isEmployeeAndRequiredAuth) {
+                currentPage = PageName.PRODUCT_SALE;
             }
 
             currentPage = page.render();
@@ -50,12 +54,7 @@ public class Main {
         /**
          * Bazı ürünlerin girilmesi
          * */
-        DB.products.add(new Product("gofret", 2, 50));
-        DB.products.add(new Product("gazoz", 1, 50));
-        DB.products.add(new Product("pirinç", 10, 20));
-        DB.products.add(new Product("ekmek", 2, 30));
-        DB.products.add(new Product("kek", 2, 60));
-        DB.products.add(new Product("mercimek", 14, 20));
+
 
         /**
          * Dependcy injection constructor kullanıldı
@@ -95,10 +94,19 @@ public class Main {
         OrderViewPage orderViewPage = new OrderViewPage(userService, productService);
         orderViewPage.setOrderService(orderService);
         pages.put(PageName.ORDER_VIEW, orderViewPage);
+
+        productService.createProduct(new Product("gofret", 2, 50));
+        productService.createProduct(new Product("gazoz", 1, 50));
+        productService.createProduct(new Product("pirinç", 10, 20));
+        productService.createProduct(new Product("ekmek", 2, 30));
+        productService.createProduct(new Product("kek", 2, 60));
+        productService.createProduct(new Product("mercimek", 14, 20));
+
+
         /**
          * Varsayılan kullanıcıların bilgilerinin oluşturulması
          */
-        //User type 0 =Admin yetkisi 1 =kasiyer
+
         User userAdmin = new User("admin admin", "admin", "adminadmin", UserType.ADMIN);
         User user = new User("user user", "useruser", "useruser", UserType.EMPLOYEE);
         User userCustomer = new User("customer customer", "custom", "custom", UserType.CUSTOMER);
@@ -106,7 +114,7 @@ public class Main {
         userService.createUser(userAdmin);
         userService.createUser(user);
         userService.createUser(userCustomer);
-        DB.currentLoginedUser = userCustomer;
+
 
         List<CartItem> cartItemList = new ArrayList<>();
         cartItemList.add(new CartItem(new Product("gofret", 2, 50), 10));

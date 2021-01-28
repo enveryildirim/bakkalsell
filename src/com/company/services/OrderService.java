@@ -11,11 +11,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class OrderService {
+
+    static String listOrderString = "";
+    static String allOrderString = "";
     private IRepository<Product> productRepository;
     private IRepository<CartItem> cartItemIRepository;
     private IRepository<Order> orderIRepository;
     private IRepository<User> userIRepository;
-
 
     public OrderService(IRepository<User> userIRepository, IRepository<Product> productRepository, IRepository<CartItem> cartItemIRepository, IRepository<Order> orderIRepository) {
         this.productRepository = productRepository;
@@ -24,7 +26,7 @@ public class OrderService {
         this.userIRepository = userIRepository;
     }
 
-    public void addOrder(Product product, int quantity) {
+    public void addProductToOrder(Product product, int quantity) {
         User user = ((UserRepository) userIRepository).getLoginedUser();
 
         Order order = orderIRepository.getAll()
@@ -40,12 +42,12 @@ public class OrderService {
             orderIRepository.create(newOrder);
             return;
         }
-
-        order.orders.add(new CartItem(product, quantity));
+        CartItem newCartItem=new CartItem(product, quantity);
+        order.orders.add(newCartItem);
 
     }
 
-    public void deleteCartItem(int id, CartItem cartItem) {
+    public void deleteProductFromOrder(int id, CartItem cartItem) {
         Order order = this.getOrder(id);
         if (order == null)
             return;
@@ -56,7 +58,6 @@ public class OrderService {
         }
         order.orders.remove(cartItem);
 
-
     }
 
     public void deleteOrder(int id) {
@@ -65,43 +66,41 @@ public class OrderService {
                 .filter(o -> o.customer.getId() == id)
                 .findFirst()
                 .orElse(null);
+
         if (order != null)
             orderIRepository.getAll().remove(order);
     }
 
-    static String listOrderText = "";
-
-    public String listOrder() {
-        listOrderText = "";
+    public String getUserOrderListConvertToString() {
+        listOrderString = "";
         User user = ((UserRepository) userIRepository).getLoginedUser();
         Order order = orderIRepository.getById(user.getId());
         if (order == null)
             return "Sepetiniz boş";
-        listOrderText = listOrderText + String.format("%s isimli kullanıcının şiparişleri \n", order.customer.getNameSurname());
-        order.orders.forEach(o -> listOrderText = listOrderText + String.format("Kod:{%d} Ad:{%s} Fiyat:{%f} Kalan:{%d} \n", o.getProduct().getId(), o.getProduct().getName(), o.getProduct().getPrice(), o.getQuantity()));
-        return listOrderText;
+
+        listOrderString = listOrderString + String.format("%s isimli kullanıcının şiparişleri \n", order.customer.getNameSurname());
+        order.orders.forEach(orderItem -> listOrderString = listOrderString + String.format("Kod:{%d} Ad:{%s} Fiyat:{%f} Kalan:{%d} \n", orderItem.getProduct().getId(), orderItem.getProduct().getName(), orderItem.getProduct().getPrice(), orderItem.getQuantity()));
+        return listOrderString;
     }
 
-    static String allOrderText = "";
-
-    public String getAllOrder() {
-        allOrderText = "";
+    public String getAllOrderConvertToString() {
+        allOrderString = "";
         orderIRepository.getAll()
-                .forEach(o -> {
-                    allOrderText = allOrderText + String.format("%d ID'ye sahip %s isimli kullanıcının şiparişleri \n", o.customer.getId(), o.customer.getNameSurname());
-                    o.orders.forEach(c -> {
-                        allOrderText = allOrderText + String.format("Kod:{%d} Ad:{%s} Fiyat:{%f} Kalan:{%d} \n", c.getProduct().getId(), c.getProduct().getName(), c.getProduct().getPrice(), c.getQuantity());
+                .forEach(order -> {
+                    allOrderString = allOrderString + String.format("%d ID'ye sahip %s isimli kullanıcının şiparişleri \n", order.customer.getId(), order.customer.getNameSurname());
+                    order.orders.forEach(c -> {
+                        allOrderString = allOrderString + String.format("Kod:{%d} Ad:{%s} Fiyat:{%f} Kalan:{%d} \n", c.getProduct().getId(), c.getProduct().getName(), c.getProduct().getPrice(), c.getQuantity());
                     });
                 });
 
-        return allOrderText;
+        return allOrderString;
     }
 
 
     public Order getOrder(int id) {
         return orderIRepository.getAll()
                 .stream()
-                .filter(o -> o.customer.getId() == id)
+                .filter(order -> order.customer.getId() == id)
                 .findFirst()
                 .orElse(null);
     }

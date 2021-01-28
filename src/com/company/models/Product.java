@@ -3,18 +3,17 @@ package com.company.models;
 import java.util.UUID;
 
 public class Product {
+
     private int id;
     private String name;
     private float price;
     private int quantity;
 
     public Product(String name, float price, int quantity) {
-        this.id = 0;
         this.name = name;
         this.price = price;
         this.quantity = quantity;
     }
-
 
     public int getId() {
         return id;
@@ -47,6 +46,5 @@ public class Product {
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
-
 
 }

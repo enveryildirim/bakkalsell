@@ -10,6 +10,7 @@ import java.util.List;
 
 
 public class DB {
+
     public static List<User> users = new ArrayList<>();
     public static List<Product> products = new ArrayList<>();
     public static User currentLoginedUser = null;

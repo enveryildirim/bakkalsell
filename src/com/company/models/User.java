@@ -5,7 +5,6 @@ import java.util.UUID;
 
 public class User {
 
-
     private int id;
     private String nameSurname;
     private String username;
@@ -58,6 +57,5 @@ public class User {
     public void setUserType(UserType userType) {
         this.userType = userType;
     }
-
 
 }

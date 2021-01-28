@@ -3,7 +3,6 @@ package com.company.dal;
 import com.company.models.User;
 
 import java.util.List;
-import java.util.UUID;
 
 /**
  * Kullanıcı veritabanı ile olan işleri yapıldığı sınıf
@@ -18,9 +17,17 @@ public class UserRepository implements IRepository<User> {
      */
     @Override
     public void create(User user) {
-        int size = DB.users.size();
-        int newID = size == 0 ? 0 : DB.users.get(size - 1).getId() + 1;
-        user.setId(newID);
+
+        if (DB.users.isEmpty()) {
+            user.setId(0);
+        }
+        else {
+            int userListSize =DB.users.size();
+            User lastUser=DB.users.get(userListSize-1);
+            int newID =  lastUser.getId() + 1;
+            user.setId(newID);
+        }
+
         DB.users.add(user);
 
     }
@@ -31,7 +38,6 @@ public class UserRepository implements IRepository<User> {
      * @param user
      * @return
      */
-
     @Override
     public void update(User user) {
         User u = this.getById(user.getId());

@@ -8,6 +8,7 @@ import com.company.services.ProductService;
 import com.company.services.UserService;
 
 public class UserListPage extends PageBase {
+
     public UserListPage(UserService userService, ProductService productService) {
         super(userService, productService);
     }
@@ -17,29 +18,19 @@ public class UserListPage extends PageBase {
         return true;
     }
 
-    String typeToString(int durum) {
-        if (durum == 0)
-            return "Admin";
-        else if (durum == 1)
-            return "Kasiyer";
-        else if (durum == 2)
-            return "Müşteri";
-        else
-            return "Bilinmiyor";
-    }
-
     @Override
     public PageName render() {
 
         System.out.printf("Kullanıcı Listeleme\n");
         userService.getAll().forEach(u ->
-                System.out.printf("ID:%d -- Ad Soyad: %s -- Username:%s -- Password:%s -- Tipi:%s\n", u.getId(), u.getNameSurname(), u.getUsername(), u.getPassword(), u.getUserType().toString()));
+                System.out.printf("ID:%d -- Ad Soyad: %s -- Username:%s -- Password:%s -- Tipi:%s\n",
+                        u.getId(), u.getNameSurname(), u.getUsername(), u.getPassword(), u.getUserType().toString()));
 
 
         String msj = "1-Kullanıcı Düzenleme\n2-KUllanıcı Silme\n0-Anasayfa";
         boolean isRequiredCommand = true;
         Input inCommand = new Input(msj, Constant.USER_LIST_PAGE_COMMAND_LIST, isRequiredCommand);
-        String command = inCommand.render();
+        String command = inCommand.renderAndGetText();
 
         if (command.equals("1")) {
             renderUpdate();
@@ -49,7 +40,6 @@ public class UserListPage extends PageBase {
             return PageName.HOME;
         } else {
             System.out.printf("Yanlış giriş yapmdınız");
-            return PageName.USER_LIST;
         }
 
         return PageName.USER_LIST;
@@ -59,7 +49,7 @@ public class UserListPage extends PageBase {
         String labelID = "Kullanıcı İd giriniz";
         boolean isRequiredID = true;
         Input inID = new Input(labelID, Constant.ONLY_DIGIT, isRequiredID);
-        String id = inID.render();
+        String id = inID.renderAndGetText();
         int idInt = inID.getTextAfterConvertToInt();
 
         User updatingUser = userService.getUser(idInt);
@@ -71,22 +61,22 @@ public class UserListPage extends PageBase {
         String msjName = String.format("Şimdiki İsim: %s\n", updatingUser.getNameSurname());
         boolean isRequiredName = true;
         Input inName = new Input(msjName, Constant.NAME_SURNAME_TR, isRequiredName);
-        String newName = inName.render();
+        String newName = inName.renderAndGetText();
 
         String msjUsername = String.format("Şimdiki Kullanıcı Adı: %s\n", updatingUser.getUsername());
         boolean isRequiredUsername = true;
         Input inUsername = new Input(msjUsername, Constant.USERNAME, isRequiredUsername);
-        String newUsername = inUsername.render();
+        String newUsername = inUsername.renderAndGetText();
 
         String msjPassword = String.format("Şimdiki Şifre:%f\n", updatingUser.getPassword());
         boolean isRequiredPassword = true;
         Input inPassword = new Input(msjPassword, Constant.PASSWORD, isRequiredPassword);
-        String newPassword = inPassword.render();
+        String newPassword = inPassword.renderAndGetText();
 
         String labelConfirm = "Onaylamak için evet iptal için hayır yazın";
         boolean isRequiredConfirm = true;
         Input inConfirm = new Input(labelConfirm, Constant.COMMAND_YES_NO, isRequiredConfirm);
-        String confirm = inConfirm.render();
+        String confirm = inConfirm.renderAndGetText();
 
         if (confirm.equals("evet")) {
 
@@ -107,7 +97,7 @@ public class UserListPage extends PageBase {
         String labelID = "Kullanıcı İd giriniz";
         boolean isRequiredID = true;
         Input inID = new Input(labelID, Constant.ONLY_DIGIT, isRequiredID);
-        String id = inID.render();
+        String id = inID.renderAndGetText();
         int idInt = inID.getTextAfterConvertToInt();
 
         User user = userService.getUser(idInt);
@@ -120,7 +110,7 @@ public class UserListPage extends PageBase {
         String labelConfirm = "Onaylamak için evet iptal için hayır yazın";
         boolean isRequiredCommand = true;
         Input inConfirm = new Input(labelConfirm, Constant.COMMAND_YES_NO, isRequiredCommand);
-        String confirm = inConfirm.render();
+        String confirm = inConfirm.renderAndGetText();
 
         if (confirm.equals("evet")) {
             userService.deleteUser(user);

@@ -6,6 +6,7 @@ import com.company.models.User;
 import java.util.List;
 
 public class CartItemRepository implements IRepository<CartItem> {
+
     @Override
     public void create(CartItem cartItem) {
         DB.cart.add(cartItem);

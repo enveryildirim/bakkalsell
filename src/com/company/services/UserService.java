@@ -4,10 +4,10 @@ import com.company.dal.DB;
 import com.company.dal.IRepository;
 import com.company.dal.UserRepository;
 import com.company.models.User;
-import com.company.models.UserType;
+
 
 import java.util.List;
-import java.util.UUID;
+
 
 public class UserService {
 
@@ -17,9 +17,7 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    //todo javadoc
-    //todo değişken isimi değiştirilmesi
-    //todo fonksiyonların javadoc neiçin yazıldığı ne döndüğü nsaıl döndüğü yazılacak niçin true dönüyor niye false geliyor new mana işfade ediyor
+    //todo fonksiyonların javadoc ne için yazıldığı ne döndüğü nsaıl döndüğü yazılacak niçin true dönüyor niye false geliyor new mana işfade ediyor
     public boolean login(String username, String password) {
 
         User user = this.userRepository.getAll().stream()
@@ -41,7 +39,6 @@ public class UserService {
 
     public void updateUser(User user) {
         this.userRepository.update(user);
-
     }
 
     public void deleteUser(User user) {
@@ -58,7 +55,7 @@ public class UserService {
     }
 
     public User getLoginedUser() {
-        return new UserRepository().getLoginedUser();
+        return ((UserRepository) userRepository).getLoginedUser();
     }
 
 }

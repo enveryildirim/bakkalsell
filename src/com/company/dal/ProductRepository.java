@@ -5,17 +5,25 @@ import com.company.models.Product;
 import java.util.List;
 
 public class ProductRepository implements IRepository<Product> {
+
     @Override
     public void create(Product product) {
-        int size = DB.products.size();
-        int newID = size == 0 ? 0 : DB.products.get(size - 1).getId() + 1;
-        product.setId(newID);
+
+        if (DB.products.isEmpty()) {
+            product.setId(0);
+        } else {
+            int productListSize = DB.products.size();
+            Product lastProduct = DB.products.get(productListSize - 1);
+            int newID = lastProduct.getId() + 1;
+            product.setId(newID);
+        }
+
         DB.products.add(product);
     }
 
-
     @Override
     public void update(Product product) {
+
         Product p = this.getById(product.getId());
         p.setName(product.getName());
         p.setPrice(product.getPrice());
@@ -40,6 +48,5 @@ public class ProductRepository implements IRepository<Product> {
                 .findFirst()
                 .orElse(null);
     }
-
 
 }

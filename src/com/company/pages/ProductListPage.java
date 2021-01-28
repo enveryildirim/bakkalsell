@@ -3,12 +3,12 @@ package com.company.pages;
 import com.company.Constant;
 import com.company.models.PageName;
 import com.company.models.Product;
-import com.company.models.User;
 import com.company.pages.components.Input;
 import com.company.services.ProductService;
 import com.company.services.UserService;
 
 public class ProductListPage extends PageBase {
+
     public ProductListPage(UserService userService, ProductService productService) {
         super(userService, productService);
     }
@@ -25,9 +25,9 @@ public class ProductListPage extends PageBase {
                 System.out.printf("ID:%d -- Ad: %s -- Fiyat:%f -- Stok:%d\n", p.getId(), p.getName(), p.getPrice(), p.getQuantity()));
 
         String msjCommand = "1-Ürün Düzenleme\n2-Ürün Silme\n0-Anasayfa";
-        boolean isRequiredCommand=true;
+        boolean isRequiredCommand = true;
         Input inCommand = new Input(msjCommand, Constant.PRODUCT_LIST_PAGE_COMMAND_LIST, isRequiredCommand);
-        String command = inCommand.render();
+        String command = inCommand.renderAndGetText();
 
         if (command.equals("1")) {
             renderUpdateCommandContent();
@@ -40,15 +40,14 @@ public class ProductListPage extends PageBase {
             return PageName.TEST;
         }
 
-
         return PageName.PRODUCT_LIST;
     }
 
     void renderUpdateCommandContent() {
-        String labelId="Ürün İd giriniz";
-        boolean isRequiredID=true;
+        String labelId = "Ürün İd giriniz";
+        boolean isRequiredID = true;
         Input inID = new Input(labelId, Constant.ONLY_DIGIT, isRequiredID);
-        String idStr = inID.render();
+        String idStr = inID.renderAndGetText();
 
         int idInt = inID.getTextAfterConvertToInt();
         Product product = productService.getProductById(idInt);
@@ -58,25 +57,25 @@ public class ProductListPage extends PageBase {
         }
 
         String msjName = String.format("Şimdiki İsim:%s\n", product.getName());
-        boolean isRequiredName=true;
+        boolean isRequiredName = true;
         Input inName = new Input(msjName, "[a-zA-Z]", isRequiredName);
-        String newName = inName.render();
+        String newName = inName.renderAndGetText();
 
         String msjPrice = String.format("Şimdiki Fiyat:%f\n", product.getPrice());
-        boolean isRequiredPrice=true;
+        boolean isRequiredPrice = true;
         Input inPrice = new Input(msjPrice, Constant.ONLY_DIGIT, isRequiredPrice);
-        float newPrice = Float.parseFloat(inPrice.render());
+        float newPrice = Float.parseFloat(inPrice.renderAndGetText());
 
         String msjQuantity = String.format("Şimdiki Miktar:%f\n", product.getQuantity());
-        boolean isRequiredQuantity=true;
+        boolean isRequiredQuantity = true;
         Input inQuantity = new Input(msjQuantity, Constant.ONLY_DIGIT, isRequiredQuantity);
-        String strQuantity = inQuantity.render();
+        String strQuantity = inQuantity.renderAndGetText();
         int newQuantity = inQuantity.getTextAfterConvertToInt();
 
-        String labelConfirm="Onaylamak için evet iptal için hayır yazın";
-        boolean isRequiredConfirm=true;
+        String labelConfirm = "Onaylamak için evet iptal için hayır yazın";
+        boolean isRequiredConfirm = true;
         Input inConfirm = new Input(labelConfirm, Constant.COMMAND_YES_NO, isRequiredConfirm);
-        String confirm = inConfirm.render();
+        String confirm = inConfirm.renderAndGetText();
 
         if (confirm.equals("evet")) {
 
@@ -96,16 +95,18 @@ public class ProductListPage extends PageBase {
     void renderDeleteCommandContent() {
 
         Input inID = new Input("Ürün İd giriniz", Constant.ONLY_DIGIT, true);
-        String id = inID.render();
+        String id = inID.renderAndGetText();
         int idInt = inID.getTextAfterConvertToInt();
         Product product = productService.getProductById(idInt);
         if (product == null) {
             System.out.printf("İd uygun Ürün Yok\n");
             return;
         }
+
         System.out.printf("%d %s silinecek\n", product.getId(), product.getName());
         Input inConfirm = new Input("Onaylamak için evet iptal için hayır yazın", "(evet|hayır)", true);
-        String confirm = inConfirm.render();
+        String confirm = inConfirm.renderAndGetText();
+
         if (confirm.equals("evet")) {
             productService.deleteProduct(product);
             System.out.printf("Silindi");
@@ -114,4 +115,5 @@ public class ProductListPage extends PageBase {
             return;
         }
     }
+
 }
