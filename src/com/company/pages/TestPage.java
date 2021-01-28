@@ -1,13 +1,15 @@
 package com.company.pages;
 
+import com.company.Constant;
 import com.company.dal.DB;
-import com.company.models.CartItem;
-import com.company.models.PageName;
-import com.company.models.Product;
+import com.company.models.*;
+import com.company.pages.components.Input;
 import com.company.services.ProductService;
 import com.company.services.UserService;
 
-public class TestPage extends PageBase{
+import java.util.List;
+
+public class TestPage extends PageBase {
     public TestPage(UserService userService, ProductService productService) {
         super(userService, productService);
     }
@@ -19,66 +21,89 @@ public class TestPage extends PageBase{
 
     @Override
     public PageName render() {
-        //productService.getAll().forEach(p-> System.out.printf("Kod:{%d} Ad:{%s} Fiyat:{%f} Kalan:{%d} \n", p.getId(),p.getName(),p.getPrice(),p.getQuantity()));
-
-        while(true){
-            productService.getAll().forEach(p-> {
-                    CartItem cartItem= productService.getCart().stream()
-                                         .filter(c->c.product.getId()==p.getId())
-                                         .findFirst()
-                                         .orElse(null);
-                    if(cartItem!=null)
-                        System.out.printf("Kod:{%d} Ad:{%s} Fiyat:{%f} Kalan:{%d} \n", p.getId(),p.getName(),p.getPrice(),(p.getQuantity()-cartItem.quantity));
-                    else
-                        System.out.printf("Kod:{%d} Ad:{%s} Fiyat:{%f} Kalan:{%d} \n", p.getId(),p.getName(),p.getPrice(),p.getQuantity());
-            });
-            System.out.printf("Yeni Tasarlanış \n");
-
-            System.out.println("Ürünlerin Kodlarını Giriniz ve tamam yazın veya iptal yazıp çıkın sat yazın");
-            String productCode =in.nextLine();
-            if(productCode.equals("sat"))
-                break;
-            System.out.println("Ürünlerin Miktarını Giriniz");
-            String productQuantity =in.nextLine();
-
-            Product product=productService.getProductById(Integer.parseInt(productCode));
-            if(product==null){
-                System.out.printf("Uygun bir Id giriniz \n devam etmek için bir tuşa basınız");
-                in.nextLine();
-                return PageName.PRODUCT_SALE;
-            }
-            if(product.getQuantity()>Integer.parseInt(productQuantity)){
+        System.out.printf("Kullanıcı Listeleme\n");
+        userService.getAll().forEach(u->
+                System.out.printf("ID:%d -- Ad Soyad: %s -- Username:%s -- Password:%s\n",u.getId(),u.getNameSurname(),u.getUsername(),u.getPassword()));
 
 
-                productService.insertProductToCart(product,Integer.parseInt(productQuantity));
-                continue;
-            }
-            else
-                System.out.println("Yeterli stok yok");
+        String msj="1-Kullanıcı Düzenleme\n2-KUllanıcı Silme\n0-Anasayfa";
 
+        Input inCommand= new Input(null,msj,"[012]",true);
+        String command=inCommand.render();
+        if(command.equals("1")){
+           renderUpdate();
+        }else if(command.equals("2")){
+            renderDelete();
+        }else if(command.equals("0")){
+            return PageName.HOME;
+        }else{
+            System.out.printf("Yanlış giriş yapmdınız");
+            return PageName.TEST;
         }
 
-        System.out.printf("--eklenene\n");
-        productService.getCart().forEach(c-> System.out.printf("Kod:{%d} Ad:{%s} Fiyat:{%f}  Alınan Miktar:{%d} Tutar:{%f} \n", c.product.getId(),c.product.getName(),c.product.getPrice(),c.quantity,c.product.getPrice()*c.quantity));
-
-        float toplamFiyat =0;
-        for (CartItem item:DB.cart) {
-            toplamFiyat+=item.quantity*item.product.getPrice();
-
-        }
-
-        System.out.printf("Toplam Tutar:{%f}",toplamFiyat);
-        System.out.println("\nÜrünlerin Onaylıyor musunuz? evet için e hayır için h");
-        if(in.nextLine().equals("e")){
-            productService.saleCart();
-            System.out.println("Satış yapıldı\n Devam etmek için d basın veya çıkmak için çık yazın ");
-            productService.getAll().forEach(p-> System.out.printf("Kod:{%d} Ad:{%s} Fiyat:{%f} Kalan:{%d} \n", p.getId(),p.getName(),p.getPrice(),p.getQuantity()));
-            in.nextLine();
-
-        }
-
-        System.out.println("Tekrar için bir tuşa basın ");
-        in.nextLine();
         return PageName.TEST;
     }
+
+    void renderUpdate(){
+
+        Input inID =new Input(null,"Kullanıcı İd giriniz",Constant.ONLY_DIGIT,true);
+        String id = inID.render();
+        int idInt=inID.getInt();
+        User user=userService.getUser(idInt);
+        if(user==null){
+            System.out.printf("İd uygun Ürün Yok\n");
+            return;
+        }
+        String msjName=String.format("Şimdiki İsim: %s\n",user.getNameSurname());
+        Input inName=new Input(null,msjName,"[a-zA-Z]",true);
+        String newName=inName.render();
+
+        String msjUsername=String.format("Şimdiki Kullanıcı Adı: %s\n",user.getUsername());
+        Input inUsername=new Input(null,msjName,Constant.USERNAME,true);
+        String newUsername=inUsername.render();
+
+        String msjPassword=String.format("Şimdiki Şifre:%f\n",user.getPassword());
+        Input inPassword=new Input(null,msjName,Constant.PASSWORD,true);
+        String newPassword=inPassword.render();
+
+        Input inConfirm=new Input(null,"Onaylamak için evet iptal için hayır yazın","(evet|hayır)",true);
+        String confirm=inConfirm.render();
+        if(confirm.equals("evet")){
+            //güncelleme
+            System.out.printf("Güncelendi");
+
+            user.setNameSurname(newName);
+            user.setUsername(newUsername);
+            user.setPassword(newPassword);
+
+            userService.updateUser(user);
+        }else{
+            System.out.printf("İptal Edildi");
+            return;
+        }
+
+    }
+    void renderDelete(){
+
+        Input inID =new Input(null,"Kullanıcı İd giriniz",Constant.ONLY_DIGIT,true);
+        String id = inID.render();
+        int idInt=inID.getInt();
+        User user=userService.getUser(idInt);
+        if(user==null){
+            System.out.printf("İd uygun Ürün Yok\n");
+            return;
+        }
+        System.out.printf("%d %s silinecek\n",user.getId(),user.getNameSurname());
+        Input inConfirm=new Input(null,"Onaylamak için evet iptal için hayır yazın","(evet|hayır)",true);
+        String confirm=inConfirm.render();
+        if(confirm.equals("evet")){
+            //silme işlemi
+            System.out.printf("Silindi");
+            userService.deleteUser(user);
+        }else{
+            System.out.printf("İptal Edildi");
+            return;
+        }
+    }
+
 }

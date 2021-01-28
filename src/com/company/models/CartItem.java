@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CartItem {
-    public Product product=null;
-    public int quantity=0;
+    private Product product=null;
+    private int quantity=0;
 
     public CartItem(Product product, int quantity) {
         this.product = product;

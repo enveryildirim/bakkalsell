@@ -1,0 +1,3 @@
++Dependency injection için dinamik hale getirmek için Map<K,V> gibi bir yapı geçirilip kullanıllması
++Girdilerin standartlaştırılması gerekli  kontrollerin yapılıp veri girdilerinin sağlnaması için tasarım yapılması
++

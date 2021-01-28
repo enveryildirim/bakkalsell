@@ -1,7 +1,9 @@
 package com.company.pages;
 
+import com.company.Constant;
 import com.company.models.PageName;
 import com.company.models.Product;
+import com.company.pages.components.Input;
 import com.company.services.ProductService;
 import com.company.services.UserService;
 
@@ -21,14 +23,15 @@ public class ProductCreatePage extends PageBase{
 
         System.out.println("**Ürün miktarı ve fiyatı eksi  değer olamaz \n Aynı ürün iki defa eklenemez. ");
 
-        System.out.println("Ad girin");
-        String name=in.nextLine();
+        Input inName=new Input(null,"AD giriniz","[a-zA-z]",true);
+        String name=inName.render();
 
-        System.out.println("Fiyat");
-        String price=in.nextLine();
+        Input inPrice=new Input(null,"FİYAT giriniz", Constant.ONLY_DIGIT,true);
+        String price=inPrice.render();
 
-        System.out.println("Stok girin");
-        String quantity = in.nextLine();
+        Input inQuantity=new Input(null,"STOK giriniz",Constant.ONLY_DIGIT,true);
+        String quantity = inQuantity.render();
+
         float deger =0;
         int stok=0;
 

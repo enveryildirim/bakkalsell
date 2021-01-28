@@ -2,14 +2,12 @@ package com.company.services;
 
 import com.company.dal.DB;
 import com.company.dal.IRepository;
+import com.company.dal.UserRepository;
 import com.company.models.User;
 
 import java.util.List;
 import java.util.UUID;
 
-/**
- * Kasiyer ve Admin kullanıcısının yapacağı işlemerin yapıldığı sınıf
- */
 public class UserService {
 
     protected IRepository<User> userRepository;
@@ -35,10 +33,10 @@ public class UserService {
         userRepository.create(user);
 
     }
-    public void createUser(String nameSurname,String username,String password){
+    public void createUser(String nameSurname,String username,String password,String typeUser){
         int size=userRepository.getAll().size();
         int newID=userRepository.getAll().get(size-1).getId()+1;
-        User user = new User(newID,nameSurname,username,password,1);
+        User user = new User(newID,nameSurname,username,password,Integer.parseInt(typeUser));
         userRepository.create(user);
 
     }
@@ -76,6 +74,10 @@ public class UserService {
 
     public List<User> getAll(){
         return userRepository.getAll();
+    }
+
+    public User getLoginedUser(){
+        return new UserRepository().getLoginedUser();
     }
 
 }
