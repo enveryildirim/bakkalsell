@@ -1,112 +1,140 @@
 package com.company.services;
 
 import com.company.dal.IRepository;
-import com.company.dal.ProductRepository;
 import com.company.models.CartItem;
 import com.company.models.Product;
-import com.company.models.User;
 
-import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Kullanıcıdan gelen veriler ve talimatlara göre  Ürün ve Sepet ile alakalı işlemlerin yapıldığı sıınf
+ */
 public class ProductService {
+
+    static String cartListString = "";
+    static String productListString = "";
     private IRepository<Product> productRepository;
     private IRepository<CartItem> cartItemIRepository;
 
-    public ProductService(IRepository productRepository,IRepository cartItemIRepository)
-    {
+    public ProductService(IRepository<Product> productRepository, IRepository<CartItem>  cartItemIRepository) {
         this.productRepository = productRepository;
-        this.cartItemIRepository=cartItemIRepository;
+        this.cartItemIRepository = cartItemIRepository;
     }
 
-    public void createProduct(Product product){
-        int size=productRepository.getAll().size();
-        int newID=productRepository.getAll().get(size-1).getId()+1;
-        product.setId(newID);
+    public void createProduct(Product product) {
         productRepository.create(product);
     }
 
-    public void updateProduct(Product product){
+    public void updateProduct(Product product) {
         productRepository.update(product);
     }
-    public void deleteProduct(Product product){
+
+    public void deleteProduct(Product product) {
         productRepository.delete(product);
     }
-    public Product getProductById(int id){
-        return (Product) productRepository.getById(id);
+
+    public Product getProductById(int id) {
+        return productRepository.getById(id);
 
     }
-    public List<Product> getAll(){
+
+    public List<Product> getAll() {
         return this.productRepository.getAll();
     }
 
-
     /**
-     * Cart ile alakalı kısım
+     * Sepete ürün ekler
+     * @param product sepete eklenecek ürün
+     * @param quantity sepete eklenecek ürün miktarı
      */
-
-    public void insertProductToCart(Product product,int quantity){
-        CartItem cartItem=cartItemIRepository.getById(product.getId());
-        if(cartItem==null)
-            cartItemIRepository.create(new CartItem(product,quantity));
-        else{
-            cartItem.setQuantity(cartItem.getQuantity()+quantity);
+    public void insertProductToCart(Product product, int quantity) {
+        CartItem cartItem = cartItemIRepository.getById(product.getId());
+        if (cartItem == null)
+            cartItemIRepository.create(new CartItem(product, quantity));
+        else {
+            cartItem.setQuantity(cartItem.getQuantity() + quantity);
             cartItemIRepository.update(cartItem);
         }
     }
-    public void clearCart(){
+
+    /**
+     * Sepeti temizler
+     */
+    public void clearCart() {
         cartItemIRepository.getAll().clear();
     }
-    public List<CartItem> getCart(){
+
+    public List<CartItem> getCartAll() {
 
         return cartItemIRepository.getAll();
     }
 
-    static String allCartString="";
-    public String getCartToString(){
-        allCartString="";
-        cartItemIRepository.getAll().forEach(c->{
-           allCartString=allCartString+String.format("Kod:{%d} Ad:{%s} Fiyat:{%f}  Alınan Miktar:{%d} Tutar:{%f} \n", c.getProduct().getId(),c.getProduct().getName(),c.getProduct().getPrice(),c.getQuantity(),c.getProduct().getPrice()*c.getQuantity());
+    /**
+     * Tüm sepeti string döner
+     * @return String sepeti nesnesini string formatında döner
+     */
+    public String getCartListConvertToString() {
+        cartListString = "";
+        cartItemIRepository.getAll().forEach(cartItem -> {
+            cartListString = cartListString + String.format("Kod:{%d} Ad:{%s} Fiyat:{%f}  Alınan Miktar:{%d} Tutar:{%f} \n",
+                    cartItem.getProduct().getId(), cartItem.getProduct().getName(), cartItem.getProduct().getPrice(),
+                    cartItem.getQuantity(), cartItem.getProduct().getPrice() * cartItem.getQuantity());
         });
 
-        return allCartString;
+        return cartListString;
     }
 
-
-    public void deleteProductFromCart(CartItem cartItem){
+    /**
+     * İstenilen ürünü sepetten siler
+     * @param cartItem silenmesi istenen ürün
+     */
+    public void deleteProductFromCart(CartItem cartItem) {
         cartItemIRepository.delete(cartItem);
     }
 
-    static String getAllProductForCartText="";
-    public String getAllProductForCart(){
-        getAllProductForCartText="";
-        productRepository.getAll().stream().forEach(p-> {
-
-            CartItem cartItem= cartItemIRepository.getAll().stream()
-                    .filter(c->c.getProduct().getId()==p.getId())
+    /**
+     * Tüm ürünlerin string formatında döner
+     * @return String ürünleri string formatında döner
+     */
+    public String getAllProductConvertToString() {
+        productListString = "";
+        productRepository.getAll().forEach(product -> {
+            CartItem cartItem = cartItemIRepository.getAll().stream()
+                    .filter(c -> c.getProduct().getId() == product.getId())
                     .findFirst()
                     .orElse(null);
 
-            if(cartItem!=null)
-                getAllProductForCartText =getAllProductForCartText+String.format("Kod:{%d} Ad:{%s} Fiyat:{%f} Kalan:{%d} \n", p.getId(),p.getName(),p.getPrice(),(p.getQuantity()-cartItem.getQuantity()));
+            if (cartItem != null)
+                productListString = productListString + String.format("Kod:{%d} Ad:{%s} Fiyat:{%f} Kalan:{%d} \n", product.getId(), product.getName(), product.getPrice(), (product.getQuantity() - cartItem.getQuantity()));
             else
-                getAllProductForCartText=getAllProductForCartText+String.format("Kod:{%d} Ad:{%s} Fiyat:{%f} Kalan:{%d} \n", p.getId(),p.getName(),p.getPrice(),p.getQuantity());
+                productListString = productListString + String.format("Kod:{%d} Ad:{%s} Fiyat:{%f} Kalan:{%d} \n", product.getId(), product.getName(), product.getPrice(), product.getQuantity());
 
         });
 
-        return getAllProductForCartText;
+        return productListString;
     }
 
-    public void saleCart(){
-        cartItemIRepository.getAll().forEach(c->{
-                Product product=productRepository.getAll().stream().filter(p->p.getId()==c.getProduct().getId())
-                        .findFirst()
-                        .orElse(null);
-                product.setQuantity(product.getQuantity()-c.getQuantity());
+    /**
+     * Sepeti satar
+     */
+    public void saleCart() {
+        cartItemIRepository.getAll().forEach(cartItem -> {
+            Product product = productRepository.getAll().stream().filter(p -> p.getId() == cartItem.getProduct().getId())
+                    .findFirst()
+                    .orElse(null);
+            product.setQuantity(product.getQuantity() - cartItem.getQuantity());
 
         });
 
         cartItemIRepository.getAll().clear();
+    }
+
+    /**
+     * Sepette ürün olup olmadıpıını kontrol eder
+     * @return boolean döner
+     */
+    public boolean isEmptyCart() {
+        return cartItemIRepository.getAll().size() == 0;
     }
 
 }

@@ -2,19 +2,21 @@ package com.company.models;
 
 import java.util.UUID;
 
+/**
+ * Ürünlerin verilerini tutan sınıf
+ */
 public class Product {
+
     private int id;
     private String name;
-    private float  price;
+    private float price;
     private int quantity;
 
-    public Product(int id, String name, float price, int quantity) {
-        this.id = id;
+    public Product(String name, float price, int quantity) {
         this.name = name;
         this.price = price;
         this.quantity = quantity;
     }
-
 
     public int getId() {
         return id;
@@ -47,6 +49,5 @@ public class Product {
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
-
 
 }

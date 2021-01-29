@@ -1,37 +1,48 @@
 package com.company.pages;
 
 import com.company.Constant;
-import com.company.dal.DB;
 import com.company.models.*;
 import com.company.pages.components.Input;
 import com.company.services.ProductService;
 import com.company.services.UserService;
 
-public class OrderPage extends PageBase{
+/**
+ * müşterinin sipariş işlemlerini yapar
+ */
+public class OrderPage extends PageBase {
+
     public OrderPage(UserService userService, ProductService productService) {
         super(userService, productService);
     }
 
     @Override
-    public boolean requiredAuth() {
+    public boolean isRequiredAuth() {
         return true;
     }
 
+    /**
+     * Ürünlerin listelendiği ve şipariş verilir
+     * @return PageName
+     */
     @Override
     public PageName render() {
-        System.out.printf("--------------SİPARİŞ SAYFASI-------------\n");
-        System.out.printf("------------ÜRÜN LİSTESİ----------\n");
-        System.out.println(productService.getAllProductForCart());
-        System.out.println(orderService.listOrder());
+        System.out.println("--------------SİPARİŞ SAYFASI-------------");
+        System.out.println("------------ÜRÜN LİSTESİ----------");
+        System.out.println(productService.getAllProductConvertToString());
+        System.out.println(orderService.getUserOrderListConvertToString());
 
-        Input inCommand = new Input(null, "Sepete Ürün Ekleme=1\nSepete Ürün Silme=2\nGeri Dön=0", "[0123]", true);
-        String command = inCommand.render();
+        String labelCommand = "Sepete Ürün Ekleme=1\\nSepete Ürün Silme=2\\nGeri Dön=0";
+        boolean isRequiredCommand = true;
+        Input inCommand = new Input(labelCommand, Constant.ORDER_PAGE_COMMAND_LIST, isRequiredCommand);
+        String command = inCommand.renderAndGetText();
+
         if (command.equals("1")) {
-            this.renderEkleme();
+            this.renderAddCommandContent();
         } else if (command.equals("2")) {
-            this.renderSilme();
+            this.renderDeleteCommandContent();
         } else {
-            if(userService.getLoginedUser().getUserType()==0)
+            boolean isAdminLoginedUser = userService.getLoginedUser().getUserType() == UserType.ADMIN;
+            if (isAdminLoginedUser)
                 return PageName.HOME;
             else
                 return PageName.LOGIN;
@@ -40,69 +51,89 @@ public class OrderPage extends PageBase{
 
         return PageName.ORDER;
     }
-    void renderEkleme() {
-        String id, quantity = "";
-        Product product;
+
+    /**
+     * Siparişi ürün ekleme ile alakalı kısın,mlarıını ekrana basılır.
+     */
+    void renderAddCommandContent() {
+        String productId;
+        Product updatingProduct;
         while (true) {
-            Input inID = new Input(null, "Ürün ID giriniz veya çıkmak için 0'a basın ", Constant.ONLY_DIGIT, true);
-            id = inID.render();
-            if (id.equals("0"))
+            String labelID = "Ürün ID giriniz veya çıkmak için 0'a basın ";
+            boolean isRequiredID = true;
+            Input inID = new Input(labelID, Constant.ONLY_DIGIT, isRequiredID);
+            productId = inID.renderAndGetText();
+
+            if (productId.equals("0"))
                 return;
-            product = productService.getProductById(inID.getInt());
-            if (product == null) {
-                System.out.printf("ID göre ürün bulunamadı tekrar deneyiniz");
+            //todo sorulacak
+            updatingProduct = productService.getProductById(inID.getTextAfterConvertToInt());
+            if (updatingProduct == null) {
+                System.out.println("ID göre ürün bulunamadı tekrar deneyiniz");
             } else
                 break;
         }
+
+        String quantity;
         while (true) {
-            Input inQuantity = new Input(null, "Ürün miktar giriniz veya çıkmak için 0'a basın", Constant.ONLY_DIGIT, true);
-            quantity = inQuantity.render();
-            int quantityInt = inQuantity.getInt();
+            String labelQuantity = "Ürün miktar giriniz veya çıkmak için 0'a basın";
+            boolean isRequiredQuantity = true;
+            Input inQuantity = new Input(labelQuantity, Constant.ONLY_DIGIT, isRequiredQuantity);
+            quantity = inQuantity.renderAndGetText();
+
+            int quantityInt = inQuantity.getTextAfterConvertToInt();
+
             if (quantity.equals("0"))
                 return;
 
-            if (product.getQuantity() < quantityInt || quantityInt==-1) {
-                System.out.printf("Yeterli stok yok tekrar deneyiniz");
-            } else{
-                orderService.addOrder(product,quantityInt);
+            if (updatingProduct.getQuantity() < quantityInt || quantityInt == -1) {
+                System.out.println("Yeterli stok yok tekrar deneyiniz");
+            } else {
+                orderService.addProductToOrder(updatingProduct, quantityInt);
                 break;
             }
 
-
         }
-
 
     }
-    void renderSilme(){
-        String id = "";
-        User user=userService.getLoginedUser();
-        Order order=orderService.getOrder(user.getId());
-        CartItem  cartItem;
-        if (order==null)
+
+    /**
+     * Siparişten ürün silme ile alakalı işlemlerin ekrana yansıltıldığı fonksiyon
+     */
+    void renderDeleteCommandContent() {
+        String cartItemid;
+        User loginedUser = userService.getLoginedUser();
+        Order order = orderService.getOrder(loginedUser.getId());
+
+        if (order == null)
             return;
 
-        if(order.orders.size()==0){
-            System.out.printf("Sepet Boş Ürün Silinemez \n");
+        boolean isEmptyCart = order.orders.size() == 0;
+        if (isEmptyCart) {
+            System.out.println("Sepet Boş Ürün Silinemez");
             return;
         }
+
+        CartItem cartItem;
         while (true) {
-            Input inID = new Input(null, "Ürün ID giriniz veya çıkmak için 0'a basın ", Constant.ONLY_DIGIT, true);
-            id = inID.render();
+            String labelID = "Ürün ID giriniz veya çıkmak için 0'a basın ";
+            boolean isRequiredLabel = true;
+            Input inID = new Input(labelID, Constant.ONLY_DIGIT, isRequiredLabel);
+            cartItemid = inID.renderAndGetText();
+            int cartItemidInt = inID.getTextAfterConvertToInt();
 
-            int idInt=inID.getInt();
-
-            if (id.equals("0"))
+            if (cartItemid.equals("0"))
                 return;
 
-            cartItem=order
+            cartItem = order
                     .orders
                     .stream()
-                    .filter(c->c.getProduct().getId()==idInt)
+                    .filter(c -> c.getProduct().getId() == cartItemidInt)
                     .findFirst()
                     .orElse(null);
 
-            if(cartItem!=null){
-                orderService.deleteCartItem(user.getId(),cartItem);
+            if (cartItem != null) {
+                orderService.deleteProductFromOrder(loginedUser.getId(), cartItem);
                 break;
             }
 

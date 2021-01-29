@@ -5,9 +5,13 @@ import com.company.models.User;
 
 import java.util.List;
 
-public class CartItemRepository implements IRepository<CartItem>{
+/**
+ *Sepet ile alakalı veritabanı işlemlerinin yapıldığı sınıf
+ */
+public class CartItemRepository implements IRepository<CartItem> {
+
     @Override
-    public void  create(CartItem cartItem) {
+    public void create(CartItem cartItem) {
         DB.cart.add(cartItem);
     }
 
@@ -20,7 +24,7 @@ public class CartItemRepository implements IRepository<CartItem>{
 
     @Override
     public void delete(CartItem cartItem) {
-         DB.cart.remove(cartItem);
+        DB.cart.remove(cartItem);
     }
 
     @Override
@@ -31,7 +35,7 @@ public class CartItemRepository implements IRepository<CartItem>{
     @Override
     public CartItem getById(int id) {
         return DB.cart.stream()
-                .filter(p->p.getProduct().getId()==id)
+                .filter(p -> p.getProduct().getId() == id)
                 .findFirst()
                 .orElse(null);
     }

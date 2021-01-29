@@ -9,13 +9,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * veri tutan sınıf
- * */
-
+ *Uygulama ile alakalı verilerin tutulduğu sınıf
+ */
 public class DB {
+
     public static List<User> users = new ArrayList<>();
     public static List<Product> products = new ArrayList<>();
-    public static User currentLoginedUser =null;
+    public static User currentLoginedUser = null;
     public static List<CartItem> cart = new ArrayList<>();
     public static List<Order> orders = new ArrayList<>();
 

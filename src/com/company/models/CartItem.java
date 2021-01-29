@@ -3,9 +3,12 @@ package com.company.models;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Sepet içinde itemlerin verilerini tutan veri sınıfı
+ */
 public class CartItem {
-    private Product product=null;
-    private int quantity=0;
+    private Product product;
+    private int quantity;
 
     public CartItem(Product product, int quantity) {
         this.product = product;
@@ -27,9 +30,6 @@ public class CartItem {
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
-
-
-
 
 
 }

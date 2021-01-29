@@ -5,7 +5,11 @@ import com.company.models.Product;
 
 import java.util.List;
 
-public class OrderRepository implements IRepository<Order>{
+/**
+ * Siparişler ile alakalı veritabanı işlemlerinin yapıldığı sınıf
+ */
+public class OrderRepository implements IRepository<Order> {
+
     @Override
     public void create(Order order) {
         DB.orders.add(order);
@@ -14,7 +18,7 @@ public class OrderRepository implements IRepository<Order>{
     @Override
     public void update(Order order) {
         Order updatingOrder = this.getById(order.customer.getId());
-        updatingOrder.orders=order.orders;
+        updatingOrder.orders = order.orders;
     }
 
     @Override
@@ -30,7 +34,7 @@ public class OrderRepository implements IRepository<Order>{
     @Override
     public Order getById(int id) {
         return DB.orders.stream()
-                .filter(p-> p.customer.getId() == id)
+                .filter(p -> p.customer.getId() == id)
                 .findFirst()
                 .orElse(null);
     }

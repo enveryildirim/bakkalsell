@@ -3,6 +3,9 @@ package com.company.models;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Sipariş verileri tutan sınıf
+ */
 public class Order {
 
     public User customer;

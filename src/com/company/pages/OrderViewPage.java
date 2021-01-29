@@ -3,19 +3,22 @@ package com.company.pages;
 import com.company.Constant;
 import com.company.models.PageName;
 import com.company.models.User;
+import com.company.models.UserType;
 import com.company.pages.components.Input;
 import com.company.services.ProductService;
 import com.company.services.UserService;
 
-public class OrderViewPage extends PageBase{
+/**
+ * Müşterilerlin siparişlerinin satış işlemi yapar
+ */
+public class OrderViewPage extends PageBase {
+
     public OrderViewPage(UserService userService, ProductService productService) {
         super(userService, productService);
-
-
     }
 
     @Override
-    public boolean requiredAuth() {
+    public boolean isRequiredAuth() {
         return true;
     }
 
@@ -23,15 +26,18 @@ public class OrderViewPage extends PageBase{
     public PageName render() {
 
         System.out.printf("--------------SİPARİŞ SAYFASI-------------\n");
-        System.out.printf(orderService.getAllOrder());
+        System.out.printf(orderService.getAllOrderConvertToString());
 
+        String labelCommand = "Satış=1\nGeri Dön=0";
+        boolean isRequiredCommand = true;
+        Input inCommand = new Input(labelCommand, Constant.ORDER_PAGE_VIEW_COMMAND_LIST, isRequiredCommand);
+        String command = inCommand.renderAndGetText();
 
-        Input inCommand = new Input(null, "Satış=1\nGeri Dön=0", "[01]", true);
-        String command = inCommand.render();
         if (command.equals("1")) {
-            this.renderSale();
-        }  else {
-            if(userService.getLoginedUser().getUserType()==0)
+            this.renderSaleCommandContent();
+        } else {
+            boolean isAdminLoginedUser = userService.getLoginedUser().getUserType() == UserType.ADMIN;
+            if (isAdminLoginedUser)
                 return PageName.HOME;
             else
                 return PageName.LOGIN;
@@ -40,22 +46,33 @@ public class OrderViewPage extends PageBase{
 
         return PageName.ORDER_VIEW;
     }
-    void renderSale(){
-        Input inID = new Input(null,"Kullanıcının ID'sini girin", Constant.ONLY_DIGIT,true);
-        String id = inID.render();
-        User user = userService.getUser(inID.getInt());
-        if(user==null || user.getUserType()!=2){
+
+    /**
+     * Satış komutu ile alakalı işlemler ekrana basar
+     */
+    void renderSaleCommandContent() {
+        String labelUserID = "Kullanıcının ID'sini girin";
+        boolean isRequiredID = true;
+        Input inID = new Input(labelUserID, Constant.ONLY_DIGIT, isRequiredID);
+        String id = inID.renderAndGetText();
+        int customerID = inID.getTextAfterConvertToInt();
+
+        User user = userService.getUser(customerID);
+        if (user == null || user.getUserType() != UserType.CUSTOMER) {
             System.out.println("Uygun kullanıcı bulunamadı !!!");
             return;
         }
-        String msj=String.format("%s ID'li %s İsimli ---- siparişi onaylamak için evet iptal için hayır giriniz",user.getId(),user.getNameSurname());
-        Input inCommand=new Input(null,msj,"(evet|hayır)",true);
-        String cevap=inCommand.render();
-        if(cevap.equals("evet")){
-            System.out.println("Satış yapıldı");
+
+        String msjSale = String.format("%s ID'li %s İsimli ---- siparişi onaylamak için evet iptal için hayır giriniz",
+                user.getId(), user.getNameSurname());
+        boolean isRequiredCommand = true;
+        Input inCommand = new Input(msjSale, Constant.COMMAND_YES_NO, isRequiredCommand);
+        String command = inCommand.renderAndGetText();
+
+        if (command.equals("evet")) {
             orderService.saleOrder();
-        }
-        else{
+            System.out.println("Satış yapıldı");
+        } else {
             System.out.println("Satış iptal");
         }
     }

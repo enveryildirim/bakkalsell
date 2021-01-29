@@ -7,112 +7,124 @@ import com.company.pages.components.Input;
 import com.company.services.ProductService;
 import com.company.services.UserService;
 
-public class UserListPage extends PageBase{
+/**
+ * Kullanıcı işlemleri yapar
+ */
+public class UserListPage extends PageBase {
+
     public UserListPage(UserService userService, ProductService productService) {
         super(userService, productService);
     }
 
     @Override
-    public boolean requiredAuth() {
+    public boolean isRequiredAuth() {
         return true;
     }
-    String typeToString(int durum){
-        if(durum==0)
-            return "Admin";
-        else if(durum==1)
-            return "Kasiyer";
-        else if(durum==2)
-            return "Müşteri";
-        else
-            return "Bilinmiyor";
-    }
+
     @Override
     public PageName render() {
 
         System.out.printf("Kullanıcı Listeleme\n");
-        userService.getAll().forEach(u->
-                System.out.printf("ID:%d -- Ad Soyad: %s -- Username:%s -- Password:%s -- Tipi:%s\n",u.getId(),u.getNameSurname(),u.getUsername(),u.getPassword(),this.typeToString(u.getUserType())));
+        userService.getAll().forEach(u ->
+                System.out.printf("ID:%d -- Ad Soyad: %s -- Username:%s -- Password:%s -- Tipi:%s\n",
+                        u.getId(), u.getNameSurname(), u.getUsername(), u.getPassword(), u.getUserType().toString()));
 
 
-        String msj="1-Kullanıcı Düzenleme\n2-KUllanıcı Silme\n0-Anasayfa";
+        String msj = "1-Kullanıcı Düzenleme\n2-KUllanıcı Silme\n0-Anasayfa";
+        boolean isRequiredCommand = true;
+        Input inCommand = new Input(msj, Constant.USER_LIST_PAGE_COMMAND_LIST, isRequiredCommand);
+        String command = inCommand.renderAndGetText();
 
-        Input inCommand= new Input(null,msj,"[012]",true);
-        String command=inCommand.render();
-
-        if(command.equals("1")){
-            renderUpdate();
-        }else if(command.equals("2")){
-            renderDelete();
-        }else if(command.equals("0")){
+        if (command.equals("1")) {
+            renderUpdateCommandContent();
+        } else if (command.equals("2")) {
+            renderDeleteCommandContent();
+        } else if (command.equals("0")) {
             return PageName.HOME;
-        }else{
+        } else {
             System.out.printf("Yanlış giriş yapmdınız");
-            return PageName.USER_LIST;
         }
 
         return PageName.USER_LIST;
     }
 
-    void renderUpdate(){
+    /**
+     * Kullanıcı güncelleme işlemlerini ekrana basar
+     */
+    void renderUpdateCommandContent() {
+        String labelID = "Kullanıcı İd giriniz";
+        boolean isRequiredID = true;
+        Input inID = new Input(labelID, Constant.ONLY_DIGIT, isRequiredID);
+        String id = inID.renderAndGetText();
+        int idInt = inID.getTextAfterConvertToInt();
 
-        Input inID = new Input(null,"Kullanıcı İd giriniz", Constant.ONLY_DIGIT,true);
-        String id = inID.render();
-        int idInt=inID.getInt();
-        User user=userService.getUser(idInt);
-        if(user==null){
+        User updatingUser = userService.getUser(idInt);
+        if (updatingUser == null) {
             System.out.printf("İd uygun Ürün Yok\n");
             return;
         }
 
-        String msjName=String.format("Şimdiki İsim: %s\n",user.getNameSurname());
-        Input inName=new Input(null,msjName,"[a-zA-Z]",true);
-        String newName=inName.render();
+        String msjName = String.format("Şimdiki İsim: %s\n", updatingUser.getNameSurname());
+        boolean isRequiredName = true;
+        Input inName = new Input(msjName, Constant.NAME_SURNAME_TR, isRequiredName);
+        String newName = inName.renderAndGetText();
 
-        String msjUsername=String.format("Şimdiki Kullanıcı Adı: %s\n",user.getUsername());
-        Input inUsername=new Input(null,msjUsername,Constant.USERNAME,true);
-        String newUsername=inUsername.render();
+        String msjUsername = String.format("Şimdiki Kullanıcı Adı: %s\n", updatingUser.getUsername());
+        boolean isRequiredUsername = true;
+        Input inUsername = new Input(msjUsername, Constant.USERNAME, isRequiredUsername);
+        String newUsername = inUsername.renderAndGetText();
 
-        String msjPassword=String.format("Şimdiki Şifre:%f\n",user.getPassword());
-        Input inPassword=new Input(null,msjPassword,Constant.PASSWORD,true);
-        String newPassword=inPassword.render();
+        String msjPassword = String.format("Şimdiki Şifre:%f\n", updatingUser.getPassword());
+        boolean isRequiredPassword = true;
+        Input inPassword = new Input(msjPassword, Constant.PASSWORD, isRequiredPassword);
+        String newPassword = inPassword.renderAndGetText();
 
-        Input inConfirm=new Input(null,"Onaylamak için evet iptal için hayır yazın","(evet|hayır)",true);
-        String confirm=inConfirm.render();
+        String labelConfirm = "Onaylamak için evet iptal için hayır yazın";
+        boolean isRequiredConfirm = true;
+        Input inConfirm = new Input(labelConfirm, Constant.COMMAND_YES_NO, isRequiredConfirm);
+        String confirm = inConfirm.renderAndGetText();
 
-        if(confirm.equals("evet")){
+        if (confirm.equals("evet")) {
+
+            updatingUser.setNameSurname(newName);
+            updatingUser.setUsername(newUsername);
+            updatingUser.setPassword(newPassword);
+            userService.updateUser(updatingUser);
 
             System.out.printf("Güncelendi");
-
-            user.setNameSurname(newName);
-            user.setUsername(newUsername);
-            user.setPassword(newPassword);
-
-            userService.updateUser(user);
-        }else{
+        } else {
             System.out.printf("İptal Edildi");
             return;
         }
 
     }
-    void renderDelete(){
 
-        Input inID =new Input(null,"Kullanıcı İd giriniz",Constant.ONLY_DIGIT,true);
-        String id = inID.render();
-        int idInt=inID.getInt();
-        User user=userService.getUser(idInt);
-        if(user==null){
+    /**
+     * Kullanıcı silme işlemlerini ekrana basar
+     */
+    void renderDeleteCommandContent() {
+        String labelID = "Kullanıcı İd giriniz";
+        boolean isRequiredID = true;
+        Input inID = new Input(labelID, Constant.ONLY_DIGIT, isRequiredID);
+        String id = inID.renderAndGetText();
+        int idInt = inID.getTextAfterConvertToInt();
+
+        User user = userService.getUser(idInt);
+        if (user == null) {
             System.out.printf("İd uygun Ürün Yok\n");
             return;
         }
-        System.out.printf("%d %s silinecek\n",user.getId(),user.getNameSurname());
+        System.out.printf("%d %s silinecek\n", user.getId(), user.getNameSurname());
 
-        Input inConfirm=new Input(null,"Onaylamak için evet iptal için hayır yazın","(evet|hayır)",true);
-        String confirm=inConfirm.render();
+        String labelConfirm = "Onaylamak için evet iptal için hayır yazın";
+        boolean isRequiredCommand = true;
+        Input inConfirm = new Input(labelConfirm, Constant.COMMAND_YES_NO, isRequiredCommand);
+        String confirm = inConfirm.renderAndGetText();
 
-        if(confirm.equals("evet")){
-            System.out.printf("Silindi");
+        if (confirm.equals("evet")) {
             userService.deleteUser(user);
-        }else{
+            System.out.printf("Silindi");
+        } else {
             System.out.printf("İptal Edildi");
             return;
         }

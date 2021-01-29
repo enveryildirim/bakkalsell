@@ -1,32 +1,30 @@
 package com.company.dal;
+
 import com.company.models.User;
 
 import java.util.List;
-import java.util.UUID;
 
 /**
- * Kullanıcı veritabanı ile olan işleri yapıldığı sınıf
+ * Kullanıcı veritabanı ile olan işlerin yapıldığı sınıf
  */
-public class UserRepository implements IRepository<User>{
+public class UserRepository implements IRepository<User> {
 
-    /**
-     * Kullanıcı oluşturma
-     * @param user
-     * @return
-     */
     @Override
     public void create(User user) {
 
-         //System.out.println("User oluşturuldu = "+user.getNameSurname()+"\n");
-         DB.users.add(user);
+        if (DB.users.isEmpty()) {
+            user.setId(0);
+        }
+        else {
+            int userListSize =DB.users.size();
+            User lastUser=DB.users.get(userListSize-1);
+            int newID =  lastUser.getId() + 1;
+            user.setId(newID);
+        }
+
+        DB.users.add(user);
 
     }
-
-    /**
-     * Kullanıcı güncelleme
-     * @param user
-     * @return
-     */
 
     @Override
     public void update(User user) {
@@ -37,39 +35,25 @@ public class UserRepository implements IRepository<User>{
 
     }
 
-    /**
-     * Kullanıcı Silme
-     * @param user
-     * @return
-     */
     @Override
     public void delete(User user) {
         DB.users.remove(user);
     }
 
-    /**
-     * Tüm Kullancılar
-     * @return
-     */
     @Override
     public List<User> getAll() {
         return DB.users;
     }
 
-    /**
-     * id ile Kullanıcı bilgileri getirir
-     * @param id
-     * @return
-     */
     @Override
     public User getById(int id) {
         return DB.users.stream()
-                .filter(p-> p.getId() == id)
+                .filter(p -> p.getId() == id)
                 .findFirst()
                 .orElse(null);
     }
 
-    public User getLoginedUser(){
+    public User getLoginedUser() {
         return DB.currentLoginedUser;
     }
 }

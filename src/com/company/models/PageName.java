@@ -1,5 +1,8 @@
 package com.company.models;
 
+/**
+ *Sayfa yönlendirilmelrede kullanılan enumm snıfı
+ */
 public enum PageName {
     LOGIN,
     HOME,

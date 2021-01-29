@@ -6,29 +6,42 @@ import com.company.pages.components.Input;
 import com.company.services.ProductService;
 import com.company.services.UserService;
 
-public class LoginPage extends PageBase{
+/**
+ *Kullanıcı login işlemlerini ekrana basar
+ */
+public class LoginPage extends PageBase {
+
     public LoginPage(UserService userService, ProductService productService) {
         super(userService, productService);
     }
 
     @Override
-    public boolean requiredAuth() {
+    public boolean isRequiredAuth() {
         return false;
     }
+
 
     @Override
     public PageName render() {
 
-        Input inUsername=new Input(null,"Kullanıcı Adı", Constant.USERNAME,true);
-        String username=inUsername.render();
+        String labelUsernameInput = "Kullanıcı Adı";
+        boolean isRequiredUsername = true;
+        Input inUsername = new Input(labelUsernameInput, Constant.USERNAME, isRequiredUsername);
+        String username = inUsername.renderAndGetText();
 
-        Input inPassword=new Input(null,"Parola", Constant.PASSWORD,true);
-        String password=inPassword.render();
+        String labelPassword = "Parola";
+        boolean isRequiredPassword = true;
+        Input inPassword = new Input(labelPassword, Constant.PASSWORD, isRequiredPassword);
+        String password = inPassword.renderAndGetText();
 
-        if(this.userService.login(username,password))
+        boolean isSuccessLogin = this.userService.login(username, password);
+        if (isSuccessLogin)
             return PageName.HOME;
-        System.out.println("!!!! Lütfen bilgilerinizi doğru giriniz Bilgilerinizi unuttuysanız Adminle görüşün\n Devam etmek için bir tuşa basın");
+
+        System.out.println("!!!! Lütfen bilgilerinizi doğru giriniz Bilgilerinizi unuttuysanız Adminle görüşün\n " +
+                "Devam etmek için bir tuşa basın");
         in.nextLine();
+
         return PageName.LOGIN;
     }
 }

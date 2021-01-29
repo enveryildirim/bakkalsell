@@ -3,24 +3,32 @@ package com.company.models;
 
 import java.util.UUID;
 
+/**
+ * kullanıcı ile alakalı verileri tutuan sınıf
+ */
 public class User {
 
     private int id;
     private String nameSurname;
     private String username;
     private String password;
-    private int userType;
+    private UserType userType;
 
-    public User(int id, String nameSurname, String username, String password, int userType) {
-        this.id = id;
+    public User(String nameSurname, String username, String password, UserType userType) {
         this.nameSurname = nameSurname;
         this.username = username;
         this.password = password;
         this.userType = userType;
     }
+
     public int getId() {
         return id;
     }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public String getNameSurname() {
         return nameSurname;
     }
@@ -45,15 +53,12 @@ public class User {
         this.password = password;
     }
 
-    public int getUserType() {
+    public UserType getUserType() {
         return userType;
     }
 
-    public void setUserType(int userType) {
+    public void setUserType(UserType userType) {
         this.userType = userType;
     }
-
-
-
 
 }
