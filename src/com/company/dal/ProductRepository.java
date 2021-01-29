@@ -13,7 +13,7 @@ public class ProductRepository implements IRepository<Product> {
     public void create(Product product) {
 
         if (DB.products.isEmpty()) {
-            product.setId(0);
+            product.setId(1);
         } else {
             int productListSize = DB.products.size();
             Product lastProduct = DB.products.get(productListSize - 1);

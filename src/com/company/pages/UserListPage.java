@@ -11,9 +11,9 @@ import com.company.services.UserService;
  * Kullanıcı işlemleri yapar
  */
 public class UserListPage extends PageBase {
-
-    public UserListPage(UserService userService, ProductService productService) {
-        super(userService, productService);
+    private UserService userService;
+    public UserListPage(UserService userService) {
+       this.userService=userService;
     }
 
     @Override
@@ -24,7 +24,7 @@ public class UserListPage extends PageBase {
     @Override
     public PageName render() {
 
-        System.out.printf("Kullanıcı Listeleme\n");
+        System.out.println("Kullanıcı Listeleme\n");
         userService.getAll().forEach(u ->
                 System.out.printf("ID:%d -- Ad Soyad: %s -- Username:%s -- Password:%s -- Tipi:%s\n",
                         u.getId(), u.getNameSurname(), u.getUsername(), u.getPassword(), u.getUserType().toString()));
@@ -42,7 +42,7 @@ public class UserListPage extends PageBase {
         } else if (command.equals("0")) {
             return PageName.HOME;
         } else {
-            System.out.printf("Yanlış giriş yapmdınız");
+            System.out.println("Yanlış giriş yapmdınız");
         }
 
         return PageName.USER_LIST;
@@ -60,7 +60,7 @@ public class UserListPage extends PageBase {
 
         User updatingUser = userService.getUser(idInt);
         if (updatingUser == null) {
-            System.out.printf("İd uygun Ürün Yok\n");
+            System.out.println("İd uygun Ürün Yok\n");
             return;
         }
 
@@ -74,7 +74,7 @@ public class UserListPage extends PageBase {
         Input inUsername = new Input(msjUsername, Constant.USERNAME, isRequiredUsername);
         String newUsername = inUsername.renderAndGetText();
 
-        String msjPassword = String.format("Şimdiki Şifre:%f\n", updatingUser.getPassword());
+        String msjPassword = String.format("Şimdiki Şifre:%s\n", updatingUser.getPassword());
         boolean isRequiredPassword = true;
         Input inPassword = new Input(msjPassword, Constant.PASSWORD, isRequiredPassword);
         String newPassword = inPassword.renderAndGetText();
@@ -91,10 +91,9 @@ public class UserListPage extends PageBase {
             updatingUser.setPassword(newPassword);
             userService.updateUser(updatingUser);
 
-            System.out.printf("Güncelendi");
+            System.out.println("Güncelendi");
         } else {
-            System.out.printf("İptal Edildi");
-            return;
+            System.out.println("İptal Edildi");
         }
 
     }
@@ -111,7 +110,7 @@ public class UserListPage extends PageBase {
 
         User user = userService.getUser(idInt);
         if (user == null) {
-            System.out.printf("İd uygun Ürün Yok\n");
+            System.out.println("İd uygun Ürün Yok\n");
             return;
         }
         System.out.printf("%d %s silinecek\n", user.getId(), user.getNameSurname());
@@ -123,10 +122,9 @@ public class UserListPage extends PageBase {
 
         if (confirm.equals("evet")) {
             userService.deleteUser(user);
-            System.out.printf("Silindi");
+            System.out.println("Silindi");
         } else {
-            System.out.printf("İptal Edildi");
-            return;
+            System.out.println("İptal Edildi");
         }
     }
 }

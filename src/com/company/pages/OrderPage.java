@@ -3,6 +3,7 @@ package com.company.pages;
 import com.company.Constant;
 import com.company.models.*;
 import com.company.pages.components.Input;
+import com.company.services.OrderService;
 import com.company.services.ProductService;
 import com.company.services.UserService;
 
@@ -10,9 +11,13 @@ import com.company.services.UserService;
  * müşterinin sipariş işlemlerini yapar
  */
 public class OrderPage extends PageBase {
-
-    public OrderPage(UserService userService, ProductService productService) {
-        super(userService, productService);
+    private UserService userService;
+    private ProductService productService;
+    private OrderService orderService;
+    public OrderPage(UserService userService, ProductService productService,OrderService orderService) {
+        this.userService=userService;
+        this.productService=productService;
+        this.orderService=orderService;
     }
 
     @Override
@@ -22,16 +27,17 @@ public class OrderPage extends PageBase {
 
     /**
      * Ürünlerin listelendiği ve şipariş verilir
+     *
      * @return PageName
      */
     @Override
     public PageName render() {
         System.out.println("--------------SİPARİŞ SAYFASI-------------");
         System.out.println("------------ÜRÜN LİSTESİ----------");
-        System.out.println(productService.getAllProductConvertToString());
+        System.out.println(orderService.getAllProductString());
         System.out.println(orderService.getUserOrderListConvertToString());
 
-        String labelCommand = "Sepete Ürün Ekleme=1\\nSepete Ürün Silme=2\\nGeri Dön=0";
+        String labelCommand = "Sepete Ürün Ekleme=1\nSepete Ürün Silme=2\nSepette Ürün Güncelleme=3\nGeri Dön=0";
         boolean isRequiredCommand = true;
         Input inCommand = new Input(labelCommand, Constant.ORDER_PAGE_COMMAND_LIST, isRequiredCommand);
         String command = inCommand.renderAndGetText();
@@ -40,6 +46,8 @@ public class OrderPage extends PageBase {
             this.renderAddCommandContent();
         } else if (command.equals("2")) {
             this.renderDeleteCommandContent();
+        } else if (command.equals("3")) {
+            this.renderUpdateCommandContent();
         } else {
             boolean isAdminLoginedUser = userService.getLoginedUser().getUserType() == UserType.ADMIN;
             if (isAdminLoginedUser)
@@ -57,7 +65,7 @@ public class OrderPage extends PageBase {
      */
     void renderAddCommandContent() {
         String productId;
-        Product updatingProduct;
+        Product addingProduct;
         while (true) {
             String labelID = "Ürün ID giriniz veya çıkmak için 0'a basın ";
             boolean isRequiredID = true;
@@ -66,9 +74,8 @@ public class OrderPage extends PageBase {
 
             if (productId.equals("0"))
                 return;
-            //todo sorulacak
-            updatingProduct = productService.getProductById(inID.getTextAfterConvertToInt());
-            if (updatingProduct == null) {
+            addingProduct = productService.getProductById(inID.getTextAfterConvertToInt());
+            if (addingProduct == null) {
                 System.out.println("ID göre ürün bulunamadı tekrar deneyiniz");
             } else
                 break;
@@ -86,10 +93,10 @@ public class OrderPage extends PageBase {
             if (quantity.equals("0"))
                 return;
 
-            if (updatingProduct.getQuantity() < quantityInt || quantityInt == -1) {
+            if (addingProduct.getQuantity() < quantityInt || quantityInt == -1) {
                 System.out.println("Yeterli stok yok tekrar deneyiniz");
             } else {
-                orderService.addProductToOrder(updatingProduct, quantityInt);
+                orderService.addProductToOrder(addingProduct, quantityInt);
                 break;
             }
 
@@ -135,9 +142,51 @@ public class OrderPage extends PageBase {
             if (cartItem != null) {
                 orderService.deleteProductFromOrder(loginedUser.getId(), cartItem);
                 break;
+            }else{
+                System.out.println("Uygun ID giriniz");
             }
 
         }
     }
 
+    void renderUpdateCommandContent() {
+        String productId;
+        Product updatingProduct;
+        while (true) {
+            String labelID = "Ürün ID giriniz veya çıkmak için 0'a basın ";
+            boolean isRequiredID = true;
+            Input inID = new Input(labelID, Constant.ONLY_DIGIT, isRequiredID);
+            productId = inID.renderAndGetText();
+
+            if (productId.equals("0"))
+                return;
+
+            updatingProduct = productService.getProductById(inID.getTextAfterConvertToInt());
+            if (updatingProduct == null) {
+                System.out.println("ID göre ürün bulunamadı tekrar deneyiniz");
+            } else
+                break;
+        }
+
+        String quantity;
+        while (true) {
+            String labelQuantity = "Yeni Ürün miktar giriniz veya çıkmak için 0'a basın";
+            boolean isRequiredQuantity = true;
+            Input inQuantity = new Input(labelQuantity, Constant.ONLY_DIGIT, isRequiredQuantity);
+            quantity = inQuantity.renderAndGetText();
+
+            int quantityInt = inQuantity.getTextAfterConvertToInt();
+
+            if (quantity.equals("0"))
+                return;
+
+            if (updatingProduct.getQuantity() < quantityInt || quantityInt == -1) {
+                System.out.println("Yeterli stok yok tekrar deneyiniz");
+            } else {
+                orderService.updateCartItemInOrder(updatingProduct.getId(), quantityInt);
+                break;
+            }
+
+        }
+    }
 }

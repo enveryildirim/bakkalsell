@@ -14,19 +14,8 @@ import java.util.Scanner;
  */
 public abstract class PageBase {
 
-    protected UserService userService;
-    protected ProductService productService;
-    protected Scanner in = new Scanner(System.in);
-    protected OrderService orderService;
+    protected Scanner inputData = new Scanner(System.in);
 
-    public void setOrderService(OrderService orderService) {
-        this.orderService = orderService;
-    }
-
-    public PageBase(UserService userService, ProductService productService) {
-        this.userService = userService;
-        this.productService = productService;
-    }
 
     /**
      * Sayfa kullanıcının giriş yapması  gerekip gerekmediğini döner

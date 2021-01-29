@@ -12,8 +12,9 @@ import com.company.services.UserService;
  */
 public class ProductListPage extends PageBase {
 
-    public ProductListPage(UserService userService, ProductService productService) {
-        super(userService, productService);
+    private ProductService productService;
+    public ProductListPage(ProductService productService) {
+        this.productService=productService;
     }
 
     @Override
@@ -23,7 +24,7 @@ public class ProductListPage extends PageBase {
 
     @Override
     public PageName render() {
-        System.out.printf("Ürün Listeleme\n");
+        System.out.println("Ürün Listeleme");
         productService.getAll().forEach(p ->
                 System.out.printf("ID:%d -- Ad: %s -- Fiyat:%f -- Stok:%d\n", p.getId(), p.getName(), p.getPrice(), p.getQuantity()));
 
@@ -39,7 +40,7 @@ public class ProductListPage extends PageBase {
         } else if (command.equals("0")) {
             return PageName.HOME;
         } else {
-            System.out.printf("Yanlış giriş yaptınız");
+            System.out.println("Yanlış giriş yaptınız");
             return PageName.TEST;
         }
 
@@ -58,7 +59,7 @@ public class ProductListPage extends PageBase {
         int idInt = inID.getTextAfterConvertToInt();
         Product product = productService.getProductById(idInt);
         if (product == null) {
-            System.out.printf("İd uygun Ürün Yok\n");
+            System.out.println("İd uygun Ürün Yok\n");
             return;
         }
 
@@ -89,11 +90,10 @@ public class ProductListPage extends PageBase {
             product.setPrice(newPrice);
             product.setQuantity(newQuantity);
             productService.updateProduct(product);
-            System.out.printf("Güncelendi");
+            System.out.println("Güncelendi");
 
         } else {
-            System.out.printf("İptal Edildi");
-            return;
+            System.out.println("İptal Edildi");
         }
 
     }
@@ -108,7 +108,7 @@ public class ProductListPage extends PageBase {
         int idInt = inID.getTextAfterConvertToInt();
         Product product = productService.getProductById(idInt);
         if (product == null) {
-            System.out.printf("İd uygun Ürün Yok\n");
+            System.out.println("İd uygun Ürün Yok");
             return;
         }
 
@@ -118,10 +118,9 @@ public class ProductListPage extends PageBase {
 
         if (confirm.equals("evet")) {
             productService.deleteProduct(product);
-            System.out.printf("Silindi");
+            System.out.println("Silindi");
         } else {
-            System.out.printf("İptal Edildi");
-            return;
+            System.out.println("İptal Edildi");
         }
     }
 

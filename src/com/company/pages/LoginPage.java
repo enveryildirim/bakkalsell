@@ -10,9 +10,9 @@ import com.company.services.UserService;
  *Kullanıcı login işlemlerini ekrana basar
  */
 public class LoginPage extends PageBase {
-
-    public LoginPage(UserService userService, ProductService productService) {
-        super(userService, productService);
+    private UserService userService;
+    public LoginPage(UserService userService) {
+    this.userService=userService;
     }
 
     @Override
@@ -40,7 +40,7 @@ public class LoginPage extends PageBase {
 
         System.out.println("!!!! Lütfen bilgilerinizi doğru giriniz Bilgilerinizi unuttuysanız Adminle görüşün\n " +
                 "Devam etmek için bir tuşa basın");
-        in.nextLine();
+        inputData.nextLine();
 
         return PageName.LOGIN;
     }
