@@ -69,7 +69,6 @@ public class OrderPage extends PageBase {
 
             if (productId.equals("0"))
                 return;
-            //todo sorulacak
             addingProduct = productService.getProductById(inID.getTextAfterConvertToInt());
             if (addingProduct == null) {
                 System.out.println("ID göre ürün bulunamadı tekrar deneyiniz");

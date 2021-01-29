@@ -166,8 +166,24 @@ public class OrderService {
     /**
      * Siparişleri satar
      */
-    public void saleOrder() {
-        orderIRepository.getAll().clear();
+    public void saleOrder(int userID) {
+        Order deletingOrder=this.getOrder(userID);
+        deletingOrder.orders
+                .forEach(orderItem->{
+
+                    Product updatingItem=productRepository.getAll()
+                            .stream()
+                            .filter(product -> product.getId()==orderItem.getProduct().getId())
+                            .findFirst()
+                            .orElse(null);
+
+                    if(updatingItem!=null){
+                        int lastQuantity=updatingItem.getQuantity();
+                        updatingItem.setQuantity(lastQuantity-orderItem.getQuantity());
+                    }
+
+                });
+        orderIRepository.getAll().remove(deletingOrder);
     }
 
     public void updateCartItemInOrder(int productId, int newQuantity) {
@@ -193,8 +209,9 @@ public class OrderService {
         allProductListString = "";
         User user = ((UserRepository) userIRepository).getLoginedUser();
         Order order = orderIRepository.getById(user.getId());
+
         productRepository.getAll().forEach(product -> {
-            if (order.orders.isEmpty()) {
+            if (order == null || order.orders.isEmpty()) {
                 allProductListString += String.format("Kod:{%d} Ad:{%s} Fiyat:{%f} Kalan:{%d} \n",
                         product.getId(), product.getName(), product.getPrice(), product.getQuantity());
             } else {

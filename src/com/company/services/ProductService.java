@@ -130,7 +130,9 @@ public class ProductService {
      */
     public void saleCart() {
         cartItemIRepository.getAll().forEach(cartItem -> {
-            Product product = productRepository.getAll().stream().filter(p -> p.getId() == cartItem.getProduct().getId())
+            Product product = productRepository.getAll()
+                    .stream()
+                    .filter(p -> p.getId() == cartItem.getProduct().getId())
                     .findFirst()
                     .orElse(null);
             product.setQuantity(product.getQuantity() - cartItem.getQuantity());

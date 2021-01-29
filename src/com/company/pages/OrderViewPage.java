@@ -70,7 +70,7 @@ public class OrderViewPage extends PageBase {
         String command = inCommand.renderAndGetText();
 
         if (command.equals("evet")) {
-            orderService.saleOrder();
+            orderService.saleOrder(user.getId());
             System.out.println("Satış yapıldı");
         } else {
             System.out.println("Satış iptal");

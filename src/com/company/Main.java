@@ -23,7 +23,7 @@ public class Main {
         IRepository<User> userRepository = new UserRepository();
         UserService userService = new UserService(userRepository);
 
-        PageName currentPage = PageName.ORDER;
+        PageName currentPage = PageName.LOGIN;
         while (true) {
 
             //Eğer kullanıcı giriş yapmadıysa Login Sayfasına Gönder
@@ -112,7 +112,7 @@ public class Main {
         User user = new User("user user", "useruser", "useruser", UserType.EMPLOYEE);
         User userCustomer = new User("customer customer", "custom", "custom", UserType.CUSTOMER);
         //todo en son kaldırılcaska teset amaçlı
-        DB.currentLoginedUser=userCustomer;
+        //DB.currentLoginedUser=userCustomer;
         userService.createUser(userAdmin);
         userService.createUser(user);
         userService.createUser(userCustomer);
