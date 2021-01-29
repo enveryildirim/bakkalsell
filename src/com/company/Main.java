@@ -23,7 +23,7 @@ public class Main {
         IRepository<User> userRepository = new UserRepository();
         UserService userService = new UserService(userRepository);
 
-        PageName currentPage = PageName.LOGIN;
+        PageName currentPage = PageName.ORDER;
         while (true) {
 
             //Eğer kullanıcı giriş yapmadıysa Login Sayfasına Gönder
@@ -111,7 +111,8 @@ public class Main {
         User userAdmin = new User("admin admin", "admin", "adminadmin", UserType.ADMIN);
         User user = new User("user user", "useruser", "useruser", UserType.EMPLOYEE);
         User userCustomer = new User("customer customer", "custom", "custom", UserType.CUSTOMER);
-
+        //todo en son kaldırılcaska teset amaçlı
+        DB.currentLoginedUser=userCustomer;
         userService.createUser(userAdmin);
         userService.createUser(user);
         userService.createUser(userCustomer);
@@ -119,9 +120,15 @@ public class Main {
         /**
          * müşteri şiparişleri test için oluşturuluyor testen sonra kaldırılacak
          */
+        //todo test bittikten sonra silinecek
         List<CartItem> cartItemList = new ArrayList<>();
-        cartItemList.add(new CartItem(new Product("gofret", 2, 50), 10));
-        cartItemList.add(new CartItem(new Product("gazoz", 1, 50), 15));
+        Product p1=new Product("gofret", 2, 50);
+        p1.setId(1);
+        Product p2=new Product("gazoz", 1, 50);
+        p2.setId(2);
+        cartItemList.add(new CartItem(p1, 10));
+        cartItemList.add(new CartItem(p2, 15));
+
         DB.orders.add(new Order(userCustomer, cartItemList));
 
     }

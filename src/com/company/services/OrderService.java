@@ -11,12 +11,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *Kullanıcıdan gelen veriler ve talimatlara göre Siparişle ile alakalı işlerin yapıldığı sınıf
+ * Kullanıcıdan gelen veriler ve talimatlara göre Siparişle ile alakalı işlerin yapıldığı sınıf
  */
 public class OrderService {
 
     static String listOrderString = "";
     static String allOrderString = "";
+    static String allProductListString = "";
     private IRepository<Product> productRepository;
     private IRepository<CartItem> cartItemIRepository;
     private IRepository<Order> orderIRepository;
@@ -31,7 +32,8 @@ public class OrderService {
 
     /**
      * Kullanıcının siparişine ürün eklediği fonksiyon
-     * @param product siparişi verilen ürün
+     *
+     * @param product  siparişi verilen ürün
      * @param quantity şipariş miktarı
      */
     public void addProductToOrder(Product product, int quantity) {
@@ -50,14 +52,26 @@ public class OrderService {
             orderIRepository.create(newOrder);
             return;
         }
-        CartItem newCartItem = new CartItem(product, quantity);
-        order.orders.add(newCartItem);
+
+        CartItem cartItem = order.orders
+                .stream()
+                .filter(orderItem -> orderItem.getProduct().getId() == product.getId())
+                .findFirst()
+                .orElse(null);
+        if (cartItem == null) {
+            CartItem newCartItem = new CartItem(product, quantity);
+            order.orders.add(newCartItem);
+        } else {
+            cartItem.setQuantity(cartItem.getQuantity() + quantity);
+        }
+
 
     }
 
     /**
      * Kullanıcının siparişinden istenilen ürünü siler
-     * @param id ürününü silineceği şiparişin id'si
+     *
+     * @param id       ürününü silineceği şiparişin id'si
      * @param cartItem silinecek ürün item'ı
      */
     public void deleteProductFromOrder(int id, CartItem cartItem) {
@@ -75,6 +89,7 @@ public class OrderService {
 
     /**
      * Kullanıcının id'si verilen şiparişini siler
+     *
      * @param id silinecek siparişin id'si
      */
     public void deleteOrder(int id) {
@@ -90,6 +105,7 @@ public class OrderService {
 
     /**
      * Giriş yapan kullanıcının siparişlerini String olarak döner
+     *
      * @return String oalrak siparişleri formatlanmış bir şekilde döner
      */
     public String getUserOrderListConvertToString() {
@@ -99,13 +115,25 @@ public class OrderService {
         if (order == null)
             return "Sepetiniz boş";
 
-        listOrderString = listOrderString + String.format("%s isimli kullanıcının şiparişleri \n", order.customer.getNameSurname());
-        order.orders.forEach(orderItem -> listOrderString = listOrderString + String.format("Kod:{%d} Ad:{%s} Fiyat:{%f} Kalan:{%d} \n", orderItem.getProduct().getId(), orderItem.getProduct().getName(), orderItem.getProduct().getPrice(), orderItem.getQuantity()));
+        listOrderString = listOrderString + String.format("%s isimli kullanıcının şiparişleri \n",
+                order.customer.getNameSurname());
+        order.orders.forEach(orderItem -> listOrderString = listOrderString +
+                String.format("Kod:{%d} Ad:{%s} Fiyat:{%f} Alınan Miktar:{%d} \n",
+                        orderItem.getProduct().getId(), orderItem.getProduct().getName(),
+                        orderItem.getProduct().getPrice(), orderItem.getQuantity()));
+        int cartSize = order.orders.size();
+        float sumPrice = (float) order.orders
+                .stream()
+                .mapToDouble(orderItem -> orderItem.getProduct().getPrice() * orderItem.getQuantity())
+                .sum();
+        String summaryCartString = String.format("\nSepetteki Ürün Sayısı: %d\nToplam tutar: %f\n", cartSize, sumPrice);
+        listOrderString += summaryCartString;
         return listOrderString;
     }
 
     /**
      * veritabanındaki tüm siparişleri string e cevirip döner
+     *
      * @return String siparişleri  döner
      */
     public String getAllOrderConvertToString() {
@@ -123,6 +151,7 @@ public class OrderService {
 
     /**
      * ID si verilen Siparişi getirir
+     *
      * @param id istenen siparişin id'si
      * @return Order nesnesi döner
      */
@@ -141,4 +170,48 @@ public class OrderService {
         orderIRepository.getAll().clear();
     }
 
+    public void updateCartItemInOrder(int productId, int newQuantity) {
+        User loginedUser = ((UserRepository) userIRepository).getLoginedUser();
+        Order order = orderIRepository.getAll().stream()
+                .filter(orderItem -> orderItem.customer.getId() == loginedUser.getId())
+                .findFirst()
+                .orElse(null);
+        if (order != null) {
+            CartItem updatingCartItem = order.orders
+                    .stream()
+                    .filter(cartItem -> cartItem.getProduct().getId() == productId)
+                    .findFirst()
+                    .orElse(null);
+
+            if (updatingCartItem != null) {
+                updatingCartItem.setQuantity(newQuantity);
+            }
+        }
+    }
+
+    public String getAllProductString() {
+        allProductListString = "";
+        User user = ((UserRepository) userIRepository).getLoginedUser();
+        Order order = orderIRepository.getById(user.getId());
+        productRepository.getAll().forEach(product -> {
+            if (order.orders.isEmpty()) {
+                allProductListString += String.format("Kod:{%d} Ad:{%s} Fiyat:{%f} Kalan:{%d} \n",
+                        product.getId(), product.getName(), product.getPrice(), product.getQuantity());
+            } else {
+                CartItem addedCartItem = order.orders
+                        .stream()
+                        .filter(cartItem -> cartItem.getProduct().getId() == product.getId())
+                        .findFirst()
+                        .orElse(null);
+                if (addedCartItem == null) {
+                    allProductListString += String.format("Kod:{%d} Ad:{%s} Fiyat:{%f} Kalan:{%d} \n",
+                            product.getId(), product.getName(), product.getPrice(), product.getQuantity());
+                } else {
+                    allProductListString += String.format("Kod:{%d} Ad:{%s} Fiyat:{%f} Kalan:{%d} \n",
+                            product.getId(), product.getName(), product.getPrice(), (product.getQuantity() - addedCartItem.getQuantity()));
+                }
+            }
+        });
+        return allProductListString;
+    }
 }

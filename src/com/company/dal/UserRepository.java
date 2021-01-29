@@ -13,7 +13,7 @@ public class UserRepository implements IRepository<User> {
     public void create(User user) {
 
         if (DB.users.isEmpty()) {
-            user.setId(0);
+            user.setId(1);
         }
         else {
             int userListSize =DB.users.size();

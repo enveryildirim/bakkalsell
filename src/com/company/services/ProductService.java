@@ -75,12 +75,21 @@ public class ProductService {
      */
     public String getCartListConvertToString() {
         cartListString = "";
+        if(cartItemIRepository.getAll().isEmpty())
+            return cartListString;
+
         cartItemIRepository.getAll().forEach(cartItem -> {
             cartListString = cartListString + String.format("Kod:{%d} Ad:{%s} Fiyat:{%f}  Alınan Miktar:{%d} Tutar:{%f} \n",
                     cartItem.getProduct().getId(), cartItem.getProduct().getName(), cartItem.getProduct().getPrice(),
                     cartItem.getQuantity(), cartItem.getProduct().getPrice() * cartItem.getQuantity());
         });
-
+        int cartSize=cartItemIRepository.getAll().size();
+        float sumPrice= (float) cartItemIRepository.getAll()
+                .stream()
+                .mapToDouble(cartItem ->cartItem.getProduct().getPrice()*cartItem.getQuantity())
+                .sum();
+        String summaryCartString=String.format("\nSepetteki Ürün Sayısı: %d\nToplam tutar: %f\n",cartSize,sumPrice);
+        cartListString+=summaryCartString;
         return cartListString;
     }
 
@@ -105,9 +114,11 @@ public class ProductService {
                     .orElse(null);
 
             if (cartItem != null)
-                productListString = productListString + String.format("Kod:{%d} Ad:{%s} Fiyat:{%f} Kalan:{%d} \n", product.getId(), product.getName(), product.getPrice(), (product.getQuantity() - cartItem.getQuantity()));
+                productListString = productListString + String.format("Kod:{%d} Ad:{%s} Fiyat:{%f} Kalan:{%d} \n",
+                        product.getId(), product.getName(), product.getPrice(), (product.getQuantity() - cartItem.getQuantity()));
             else
-                productListString = productListString + String.format("Kod:{%d} Ad:{%s} Fiyat:{%f} Kalan:{%d} \n", product.getId(), product.getName(), product.getPrice(), product.getQuantity());
+                productListString = productListString + String.format("Kod:{%d} Ad:{%s} Fiyat:{%f} Kalan:{%d} \n",
+                        product.getId(), product.getName(), product.getPrice(), product.getQuantity());
 
         });
 

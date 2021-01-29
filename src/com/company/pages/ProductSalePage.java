@@ -33,11 +33,11 @@ public class ProductSalePage extends PageBase {
         String command = inCommand.renderAndGetText();
 
         if (command.equals("1")) {
-            this.renderEkleme();
+            this.renderAddCommandContent();
         } else if (command.equals("2")) {
-            this.renderSilme();
+            this.renderDeleteCommandContent();
         } else if (command.equals("3")) {
-            this.renderSale();
+            this.renderSaleContent();
         } else {
             boolean isAdminLoginedUser = userService.getLoginedUser().getUserType() == UserType.ADMIN;
             if (isAdminLoginedUser)
@@ -49,7 +49,7 @@ public class ProductSalePage extends PageBase {
         return PageName.PRODUCT_SALE;
     }
 
-    void renderEkleme() {
+    void renderAddCommandContent() {
         String productId="";
         Product product;
         while (true) {
@@ -90,7 +90,7 @@ public class ProductSalePage extends PageBase {
 
     }
 
-    void renderSilme() {
+    void renderDeleteCommandContent() {
         String productId = "";
         CartItem cartItem;
         if (productService.isEmptyCart()) {
@@ -123,7 +123,7 @@ public class ProductSalePage extends PageBase {
         }
     }
 
-    void renderSale() {
+    void renderSaleContent() {
 
         if (productService.isEmptyCart()) {
             System.out.printf("Sepette ürün yok satmak için ürün ekleyiniz!!!\n");
