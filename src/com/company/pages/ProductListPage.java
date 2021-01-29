@@ -65,7 +65,7 @@ public class ProductListPage extends PageBase {
 
         String msjName = String.format("Şimdiki İsim:%s\n", product.getName());
         boolean isRequiredName = true;
-        Input inName = new Input(msjName, "[a-zA-Z]", isRequiredName);
+        Input inName = new Input(msjName, Constant.NAME_SURNAME_TR, isRequiredName);
         String newName = inName.renderAndGetText();
 
         String msjPrice = String.format("Şimdiki Fiyat:%f\n", product.getPrice());
@@ -73,7 +73,7 @@ public class ProductListPage extends PageBase {
         Input inPrice = new Input(msjPrice, Constant.ONLY_DIGIT, isRequiredPrice);
         float newPrice = Float.parseFloat(inPrice.renderAndGetText());
 
-        String msjQuantity = String.format("Şimdiki Miktar:%f\n", product.getQuantity());
+        String msjQuantity = String.format("Şimdiki Miktar:%s\n", product.getQuantity());
         boolean isRequiredQuantity = true;
         Input inQuantity = new Input(msjQuantity, Constant.ONLY_DIGIT, isRequiredQuantity);
         String strQuantity = inQuantity.renderAndGetText();

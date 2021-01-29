@@ -5,15 +5,15 @@ import com.company.models.PageName;
 import com.company.models.Product;
 import com.company.pages.components.Input;
 import com.company.services.ProductService;
-import com.company.services.UserService;
 
 /**
  * Ürüün oluşturma işlemleri ekranı
  */
 public class ProductCreatePage extends PageBase {
     private ProductService productService;
-    public ProductCreatePage(ProductService productService) {
 
+    public ProductCreatePage(ProductService productService) {
+        this.productService = productService;
     }
 
     @Override
@@ -50,7 +50,7 @@ public class ProductCreatePage extends PageBase {
         }
 
         float price = inPrice.getTextAfterConvertToFloat();
-        int quantity = inPrice.getTextAfterConvertToInt();
+        int quantity = inQuantity.getTextAfterConvertToInt();
         if (price <= 0 || quantity <= 0) {
             System.out.println("Lütfen değerleri 0 veya eksi değer girmeyiniz \n devam etmek için bir tuşa basınız.");
             inputData.nextLine();

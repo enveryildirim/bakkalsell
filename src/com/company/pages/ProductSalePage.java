@@ -1,7 +1,6 @@
 package com.company.pages;
 
 import com.company.Constant;
-import com.company.dal.CartItemRepository;
 import com.company.models.CartItem;
 import com.company.models.PageName;
 import com.company.models.Product;
@@ -83,8 +82,10 @@ public class ProductSalePage extends PageBase {
 
             if (productQuantity.equals("0"))
                 return;
+            CartItem cartItem=cartService.getCartItemByProductID(product.getId());
 
-            if (product.getQuantity() < quantityInt || quantityInt == -1) {
+            boolean stateOverlaod=(cartItem!=null) && (product.getQuantity()-quantityInt-cartItem.getQuantity())<0;
+            if (product.getQuantity() < quantityInt||stateOverlaod ||quantityInt == -1 ) {
                 System.out.println("Yeterli stok yok tekrar deneyiniz");
             } else {
                 cartService.insertProductToCart(product, quantityInt);

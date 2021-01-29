@@ -110,7 +110,7 @@ public class Main {
         User userAdmin = new User("admin admin", "admin", "adminadmin", UserType.ADMIN);
         User user = new User("user user", "useruser", "useruser", UserType.EMPLOYEE);
         User userCustomer = new User("customer customer", "custom", "custom", UserType.CUSTOMER);
-        //todo en son kaldırılcaska teset amaçlı
+
         //DB.currentLoginedUser=userCustomer;
         userService.createUser(userAdmin);
         userService.createUser(user);
@@ -119,7 +119,8 @@ public class Main {
         /**
          * müşteri şiparişleri test için oluşturuluyor testen sonra kaldırılacak
          */
-        //todo test bittikten sonra silinecek
+
+        /*
         List<CartItem> cartItemList = new ArrayList<>();
         Product p1=new Product("gofret", 2, 50);
         p1.setId(1);
@@ -129,7 +130,7 @@ public class Main {
         cartItemList.add(new CartItem(p2, 15));
 
         DB.orders.add(new Order(userCustomer, cartItemList));
-
+*/
     }
 
 

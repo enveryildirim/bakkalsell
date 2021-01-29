@@ -67,7 +67,7 @@ public class OrderPage extends PageBase {
         String productId;
         Product addingProduct;
         while (true) {
-            String labelID = "Ürün ID giriniz veya çıkmak için 0'a basın ";
+            String labelID = "Ürün ID giriniz veya çıkmak için 0'a basın\n ";
             boolean isRequiredID = true;
             Input inID = new Input(labelID, Constant.ONLY_DIGIT, isRequiredID);
             productId = inID.renderAndGetText();
@@ -115,7 +115,7 @@ public class OrderPage extends PageBase {
         if (order == null)
             return;
 
-        boolean isEmptyCart = order.orders.size() == 0;
+        boolean isEmptyCart = order==null || order.orders.size() == 0;
         if (isEmptyCart) {
             System.out.println("Sepet Boş Ürün Silinemez");
             return;
@@ -152,6 +152,15 @@ public class OrderPage extends PageBase {
     void renderUpdateCommandContent() {
         String productId;
         Product updatingProduct;
+
+        User loginedUser = userService.getLoginedUser();
+        Order order = orderService.getOrder(loginedUser.getId());
+        boolean isEmptyCart = order==null || order.orders.size() == 0;
+        if (isEmptyCart) {
+            System.out.println("Sepet Boş Ürün Silinemez");
+            return;
+        }
+
         while (true) {
             String labelID = "Ürün ID giriniz veya çıkmak için 0'a basın ";
             boolean isRequiredID = true;

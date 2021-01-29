@@ -1,6 +1,7 @@
 package com.company.pages;
 
 import com.company.Constant;
+import com.company.models.Order;
 import com.company.models.PageName;
 import com.company.models.User;
 import com.company.models.UserType;
@@ -54,6 +55,13 @@ public class OrderViewPage extends PageBase {
      * Satış komutu ile alakalı işlemler ekrana basar
      */
     void renderSaleCommandContent() {
+        User loggedUser=userService.getLoginedUser();
+        boolean isEmptyOrder = orderService.getOrder(loggedUser.getId())==null;
+        if(isEmptyOrder){
+            System.out.println("Sepet boş satış yapılamaz");
+            return;
+        }
+
         String labelUserID = "Kullanıcının ID'sini girin";
         boolean isRequiredID = true;
         Input inID = new Input(labelUserID, Constant.ONLY_DIGIT, isRequiredID);
