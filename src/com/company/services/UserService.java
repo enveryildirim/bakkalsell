@@ -11,9 +11,9 @@ import java.util.List;
 
 public class UserService {
 
-    protected IRepository<User> userRepository;
+    protected UserRepository userRepository;
 
-    public UserService(IRepository<User> userRepository) {
+    public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
@@ -67,7 +67,7 @@ public class UserService {
      * @return User login olmuş kullanıcı
      */
     public User getLoginedUser() {
-        return ((UserRepository) userRepository).getLoginedUser();
+        return userRepository.getLoginedUser();
     }
 
 }

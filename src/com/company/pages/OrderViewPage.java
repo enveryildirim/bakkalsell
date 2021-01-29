@@ -5,6 +5,7 @@ import com.company.models.PageName;
 import com.company.models.User;
 import com.company.models.UserType;
 import com.company.pages.components.Input;
+import com.company.services.OrderService;
 import com.company.services.ProductService;
 import com.company.services.UserService;
 
@@ -12,9 +13,11 @@ import com.company.services.UserService;
  * Müşterilerlin siparişlerinin satış işlemi yapar
  */
 public class OrderViewPage extends PageBase {
-
-    public OrderViewPage(UserService userService, ProductService productService) {
-        super(userService, productService);
+    private UserService userService;
+    private OrderService orderService;
+    public OrderViewPage(UserService userService, OrderService orderService) {
+       this.userService=userService;
+       this.orderService=orderService;
     }
 
     @Override
@@ -25,8 +28,8 @@ public class OrderViewPage extends PageBase {
     @Override
     public PageName render() {
 
-        System.out.printf("--------------SİPARİŞ SAYFASI-------------\n");
-        System.out.printf(orderService.getAllOrderConvertToString());
+        System.out.println("--------------SİPARİŞ SAYFASI-------------");
+        System.out.println(orderService.getAllOrderConvertToString());
 
         String labelCommand = "Satış=1\nGeri Dön=0";
         boolean isRequiredCommand = true;

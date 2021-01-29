@@ -1,7 +1,6 @@
 package com.company.services;
 
-import com.company.dal.IRepository;
-import com.company.dal.UserRepository;
+import com.company.dal.*;
 import com.company.models.CartItem;
 import com.company.models.Order;
 import com.company.models.Product;
@@ -18,16 +17,17 @@ public class OrderService {
     static String listOrderString = "";
     static String allOrderString = "";
     static String allProductListString = "";
-    private IRepository<Product> productRepository;
-    private IRepository<CartItem> cartItemIRepository;
-    private IRepository<Order> orderIRepository;
-    private IRepository<User> userIRepository;
+    private ProductRepository productRepository;
+    private CartItemRepository cartItemIRepository;
+    private OrderRepository orderRepository;
+    private UserRepository userRepository;
 
-    public OrderService(IRepository<User> userIRepository, IRepository<Product> productRepository, IRepository<CartItem> cartItemIRepository, IRepository<Order> orderIRepository) {
+    public OrderService(UserRepository userRepository, ProductRepository productRepository,
+                        CartItemRepository cartItemIRepository, OrderRepository orderRepository) {
         this.productRepository = productRepository;
         this.cartItemIRepository = cartItemIRepository;
-        this.orderIRepository = orderIRepository;
-        this.userIRepository = userIRepository;
+        this.orderRepository = orderRepository;
+        this.userRepository = userRepository;
     }
 
     /**
@@ -37,9 +37,9 @@ public class OrderService {
      * @param quantity şipariş miktarı
      */
     public void addProductToOrder(Product product, int quantity) {
-        User user = ((UserRepository) userIRepository).getLoginedUser();
+        User user = userRepository.getLoginedUser();
 
-        Order order = orderIRepository.getAll()
+        Order order = orderRepository.getAll()
                 .stream()
                 .filter(o -> o.customer.getId() == user.getId())
                 .findFirst()
@@ -49,7 +49,7 @@ public class OrderService {
             List<CartItem> cartItemList = new ArrayList<>();
             cartItemList.add(new CartItem(product, quantity));
             Order newOrder = new Order(user, cartItemList);
-            orderIRepository.create(newOrder);
+            orderRepository.create(newOrder);
             return;
         }
 
@@ -80,7 +80,7 @@ public class OrderService {
             return;
 
         if (order.orders.size() == 0) {
-            orderIRepository.getAll().remove(order);
+            orderRepository.getAll().remove(order);
             return;
         }
         order.orders.remove(cartItem);
@@ -93,14 +93,12 @@ public class OrderService {
      * @param id silinecek siparişin id'si
      */
     public void deleteOrder(int id) {
-        Order order = orderIRepository.getAll()
+        orderRepository.getAll()
                 .stream()
                 .filter(o -> o.customer.getId() == id)
                 .findFirst()
-                .orElse(null);
+                .ifPresent(order -> orderRepository.getAll().remove(order));
 
-        if (order != null)
-            orderIRepository.getAll().remove(order);
     }
 
     /**
@@ -110,8 +108,8 @@ public class OrderService {
      */
     public String getUserOrderListConvertToString() {
         listOrderString = "";
-        User user = ((UserRepository) userIRepository).getLoginedUser();
-        Order order = orderIRepository.getById(user.getId());
+        User user = userRepository.getLoginedUser();
+        Order order = orderRepository.getById(user.getId());
         if (order == null)
             return "Sepetiniz boş";
 
@@ -138,12 +136,13 @@ public class OrderService {
      */
     public String getAllOrderConvertToString() {
         allOrderString = "";
-        orderIRepository.getAll()
+        orderRepository.getAll()
                 .forEach(order -> {
                     allOrderString = allOrderString + String.format("%d ID'ye sahip %s isimli kullanıcının şiparişleri \n", order.customer.getId(), order.customer.getNameSurname());
-                    order.orders.forEach(c -> {
-                        allOrderString = allOrderString + String.format("Kod:{%d} Ad:{%s} Fiyat:{%f} Kalan:{%d} \n", c.getProduct().getId(), c.getProduct().getName(), c.getProduct().getPrice(), c.getQuantity());
-                    });
+                    order.orders.forEach(c -> allOrderString = allOrderString +
+                            String.format("Kod:{%d} Ad:{%s} Fiyat:{%f} Kalan:{%d} \n",
+                                    c.getProduct().getId(), c.getProduct().getName(),
+                                    c.getProduct().getPrice(), c.getQuantity()));
                 });
 
         return allOrderString;
@@ -156,7 +155,7 @@ public class OrderService {
      * @return Order nesnesi döner
      */
     public Order getOrder(int id) {
-        return orderIRepository.getAll()
+        return orderRepository.getAll()
                 .stream()
                 .filter(order -> order.customer.getId() == id)
                 .findFirst()
@@ -183,32 +182,23 @@ public class OrderService {
                     }
 
                 });
-        orderIRepository.getAll().remove(deletingOrder);
+        orderRepository.getAll().remove(deletingOrder);
     }
 
     public void updateCartItemInOrder(int productId, int newQuantity) {
-        User loginedUser = ((UserRepository) userIRepository).getLoginedUser();
-        Order order = orderIRepository.getAll().stream()
+        User loginedUser = userRepository.getLoginedUser();
+        orderRepository.getAll().stream()
                 .filter(orderItem -> orderItem.customer.getId() == loginedUser.getId())
-                .findFirst()
-                .orElse(null);
-        if (order != null) {
-            CartItem updatingCartItem = order.orders
-                    .stream()
-                    .filter(cartItem -> cartItem.getProduct().getId() == productId)
-                    .findFirst()
-                    .orElse(null);
-
-            if (updatingCartItem != null) {
-                updatingCartItem.setQuantity(newQuantity);
-            }
-        }
+                .findFirst().flatMap(order -> order.orders
+                .stream()
+                .filter(cartItem -> cartItem.getProduct().getId() == productId)
+                .findFirst()).ifPresent(updatingCartItem -> updatingCartItem.setQuantity(newQuantity));
     }
 
     public String getAllProductString() {
         allProductListString = "";
-        User user = ((UserRepository) userIRepository).getLoginedUser();
-        Order order = orderIRepository.getById(user.getId());
+        User user = userRepository.getLoginedUser();
+        Order order = orderRepository.getById(user.getId());
 
         productRepository.getAll().forEach(product -> {
             if (order == null || order.orders.isEmpty()) {

@@ -3,6 +3,7 @@ package com.company.pages;
 import com.company.Constant;
 import com.company.models.*;
 import com.company.pages.components.Input;
+import com.company.services.OrderService;
 import com.company.services.ProductService;
 import com.company.services.UserService;
 
@@ -10,9 +11,13 @@ import com.company.services.UserService;
  * müşterinin sipariş işlemlerini yapar
  */
 public class OrderPage extends PageBase {
-
-    public OrderPage(UserService userService, ProductService productService) {
-        super(userService, productService);
+    private UserService userService;
+    private ProductService productService;
+    private OrderService orderService;
+    public OrderPage(UserService userService, ProductService productService,OrderService orderService) {
+        this.userService=userService;
+        this.productService=productService;
+        this.orderService=orderService;
     }
 
     @Override

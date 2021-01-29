@@ -12,9 +12,9 @@ import com.company.services.UserService;
  * Kullanıcı oluşturma ekranı
  */
 public class UserCreatePage extends PageBase {
-
-    public UserCreatePage(UserService userService, ProductService productService) {
-        super(userService, productService);
+    private UserService userService;
+    public UserCreatePage(UserService userService) {
+        this.userService=userService;
     }
 
 
@@ -51,7 +51,7 @@ public class UserCreatePage extends PageBase {
         int typeUserIndex=inType.getTextAfterConvertToInt();
 
         System.out.println("Ad Soyad:" + nameSurname + " Username: " + username + " Password: " + password);
-        System.out.printf("Onay için evet iptal için hayır yazın ");
+        System.out.println("Onay için evet iptal için hayır yazın ");
 
         Input inConfirm = new Input("Onay için evet iptal için hayır yazın", Constant.COMMAND_YES_NO, true);
         String confirm = inConfirm.renderAndGetText();
@@ -59,9 +59,9 @@ public class UserCreatePage extends PageBase {
         if (confirm.equals("evet")) {
             User newUser= new User(nameSurname,username,password,UserType.values()[typeUserIndex]);
             userService.createUser(newUser);
-            System.out.printf("Eklendi");
+            System.out.println("Eklendi");
         } else
-            System.out.printf("İptal edildi");
+            System.out.println("İptal edildi");
 
         return PageName.HOME;
     }

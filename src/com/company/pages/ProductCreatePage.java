@@ -11,9 +11,9 @@ import com.company.services.UserService;
  * Ürüün oluşturma işlemleri ekranı
  */
 public class ProductCreatePage extends PageBase {
+    private ProductService productService;
+    public ProductCreatePage(ProductService productService) {
 
-    public ProductCreatePage(UserService userService, ProductService productService) {
-        super(userService, productService);
     }
 
     @Override
@@ -45,7 +45,7 @@ public class ProductCreatePage extends PageBase {
 
         if (name.length() == 0 || priceString.length() == 0 || quantityString.length() == 0) {
             System.out.println("Lütfen boş alan bırakmayınız \n devam etmek için bir tuşa basınız");
-            in.nextLine();
+            inputData.nextLine();
             return PageName.PRODUCT_CREATE;
         }
 
@@ -53,7 +53,7 @@ public class ProductCreatePage extends PageBase {
         int quantity = inPrice.getTextAfterConvertToInt();
         if (price <= 0 || quantity <= 0) {
             System.out.println("Lütfen değerleri 0 veya eksi değer girmeyiniz \n devam etmek için bir tuşa basınız.");
-            in.nextLine();
+            inputData.nextLine();
             return PageName.PRODUCT_CREATE;
         }
 

@@ -11,9 +11,10 @@ import com.company.services.UserService;
  * Sadece Admin kullanıcısının kullanacağı işlemlerin gösterilip yönlendiriliği sınıf
  */
 public class HomePage extends PageBase {
+    private UserService userService;
+    public HomePage(UserService userService) {
+       this.userService=userService;
 
-    public HomePage(UserService userService, ProductService productService) {
-        super(userService, productService);
     }
 
     @Override
