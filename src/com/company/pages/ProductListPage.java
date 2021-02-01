@@ -25,7 +25,7 @@ public class ProductListPage extends PageBase {
     public PageName render() {
         System.out.println("Ürün Listeleme");
         productService.getAll().forEach(p ->
-                System.out.printf("ID:%d -- Ad: %s -- Fiyat:%f -- Stok:%d\n", p.getId(), p.getName(), p.getPrice(), p.getQuantity()));
+                System.out.printf("ID:%d -- Ad: %s -- Fiyat:%.02f -- Stok:%d\n", p.getId(), p.getName(), p.getPrice(), p.getQuantity()));
 
         String msjCommand = "1-Ürün Düzenleme\n2-Ürün Silme\n0-Anasayfa";
         boolean isRequiredCommand = true;

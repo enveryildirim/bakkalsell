@@ -50,7 +50,6 @@ public class UserCreatePage extends PageBase {
         int typeUserIndex= inputType.getTextAfterConvertToInt();
 
         System.out.println("Ad Soyad:" + nameSurname + " Username: " + username + " Password: " + password);
-        System.out.println("Onay için evet iptal için hayır yazın ");
 
         Input inputConfirm = new Input("Onay için evet iptal için hayır yazın", RegexConstant.COMMAND_YES_NO, true);
         String confirm = inputConfirm.renderAndGetText();
