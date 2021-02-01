@@ -56,7 +56,7 @@ public class OrderViewPage extends PageBase {
      */
     void renderSaleCommandContent() {
         User loggedUser=userService.getLoginedUser();
-        boolean isEmptyOrder = orderService.getOrder(loggedUser.getId())==null;
+        boolean isEmptyOrder = orderService.getAllOrder().isEmpty();
         if(isEmptyOrder){
             System.out.println("Sepet boş satış yapılamaz");
             return;

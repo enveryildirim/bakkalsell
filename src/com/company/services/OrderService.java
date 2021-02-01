@@ -124,7 +124,11 @@ public class OrderService {
                 .stream()
                 .mapToDouble(orderItem -> orderItem.getProduct().getPrice() * orderItem.getQuantity())
                 .sum();
-        String summaryCartString = String.format("\nSepetteki Ürün Sayısı: %d\nToplam tutar: %f\n", cartSize, sumPrice);
+        int sumQuantity=(int) order.orders
+                .stream()
+                .mapToDouble(CartItem::getQuantity)
+                .sum();
+        String summaryCartString = String.format("\nSepetteki Ürün Sayısı: %d  Miktarı: %d \nToplam tutar: %.02f tl\n", cartSize,sumQuantity, sumPrice);
         listOrderString += summaryCartString;
         return listOrderString;
     }
@@ -220,5 +224,8 @@ public class OrderService {
             }
         });
         return allProductListString;
+    }
+    public List<Order> getAllOrder(){
+        return orderRepository.getAll();
     }
 }
