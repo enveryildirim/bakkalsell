@@ -1,6 +1,6 @@
 package com.company.pages;
 
-import com.company.Constant;
+import com.company.RegexConstant;
 import com.company.models.CartItem;
 import com.company.models.PageName;
 import com.company.models.Product;
@@ -34,8 +34,8 @@ public class ProductSalePage extends PageBase {
         System.out.println(cartService.getCartListConvertToString());
         String labelCommand = "Sepete Ürün Ekleme=1\nSepete Ürün Silme=2\nSepeti Satış=3\nGeri Dön=0";
         boolean isRequiredCommand = true;
-        Input inCommand = new Input(labelCommand, Constant.PRODUCT_SALE_PAGE_COMMAND_LIST, isRequiredCommand);
-        String command = inCommand.renderAndGetText();
+        Input inputCommand = new Input(labelCommand, RegexConstant.PRODUCT_SALE_PAGE_COMMAND_LIST, isRequiredCommand);
+        String command = inputCommand.renderAndGetText();
 
         if (command.equals("1")) {
             this.renderAddCommandContent();
@@ -44,8 +44,8 @@ public class ProductSalePage extends PageBase {
         } else if (command.equals("3")) {
             this.renderSaleContent();
         } else {
-            boolean isAdminLoginedUser = userService.getLoginedUser().getUserType() == UserType.ADMIN;
-            if (isAdminLoginedUser)
+            boolean isAdminLoggedUser = userService.getLoggedUser().getUserType() == UserType.ADMIN;
+            if (isAdminLoggedUser)
                 return PageName.HOME;
             else
                 return PageName.LOGIN;
@@ -60,12 +60,12 @@ public class ProductSalePage extends PageBase {
         while (true) {
             String labelID = "Ürün ID giriniz veya çıkmak için 0'a basın ";
             boolean isRequiredID = true;
-            Input inID = new Input(labelID, Constant.ONLY_DIGIT, isRequiredID);
-            productId = inID.renderAndGetText();
+            Input inputID = new Input(labelID, RegexConstant.ONLY_DIGIT, isRequiredID);
+            productId = inputID.renderAndGetText();
 
             if (productId.equals("0"))
                 return;
-            product = productService.getProductById(inID.getTextAfterConvertToInt());
+            product = productService.getProductById(inputID.getTextAfterConvertToInt());
             if (product == null) {
                 System.out.println("ID göre ürün bulunamadı tekrar deneyiniz");
             } else
@@ -76,16 +76,16 @@ public class ProductSalePage extends PageBase {
         while (true) {
             String labelQuantity = "Ürün miktar giriniz veya çıkmak için 0'a basın";
             boolean isRequiredQuantity = true;
-            Input inQuantity = new Input(labelQuantity, Constant.ONLY_DIGIT, isRequiredQuantity);
-            productQuantity = inQuantity.renderAndGetText();
-            int quantityInt = inQuantity.getTextAfterConvertToInt();
+            Input inputQuantity = new Input(labelQuantity, RegexConstant.ONLY_DIGIT, isRequiredQuantity);
+            productQuantity = inputQuantity.renderAndGetText();
+            int quantityInt = inputQuantity.getTextAfterConvertToInt();
 
             if (productQuantity.equals("0"))
                 return;
             CartItem cartItem=cartService.getCartItemByProductID(product.getId());
 
-            boolean stateOverlaod=(cartItem!=null) && (product.getQuantity()-quantityInt-cartItem.getQuantity())<0;
-            if (product.getQuantity() < quantityInt||stateOverlaod ||quantityInt == -1 ) {
+            boolean stateOverload =(cartItem!=null) && (product.getQuantity()-quantityInt-cartItem.getQuantity())<0;
+            if (product.getQuantity() < quantityInt|| stateOverload ||quantityInt == -1 ) {
                 System.out.println("Yeterli stok yok tekrar deneyiniz");
             } else {
                 cartService.insertProductToCart(product, quantityInt);
@@ -108,10 +108,10 @@ public class ProductSalePage extends PageBase {
         while (true) {
             String labelID="Ürün ID giriniz veya çıkmak için 0'a basın ";
             boolean isRequiredID=true;
-            Input inID = new Input(labelID, Constant.ONLY_DIGIT, isRequiredID);
-            productId = inID.renderAndGetText();
+            Input inputID = new Input(labelID, RegexConstant.ONLY_DIGIT, isRequiredID);
+            productId = inputID.renderAndGetText();
 
-            int idInt = inID.getTextAfterConvertToInt();
+            int idInt = inputID.getTextAfterConvertToInt();
 
             if (productId.equals("0"))
                 return;
@@ -144,8 +144,8 @@ public class ProductSalePage extends PageBase {
 
         String labelConfirm="Satışı onaylıyor musunuz evet yoksa hayır";
         boolean isRequiredConfirm=true;
-        Input inConfirm = new Input(labelConfirm, Constant.COMMAND_YES_NO, isRequiredConfirm);
-        String confirm = inConfirm.renderAndGetText();
+        Input inputConfirm = new Input(labelConfirm, RegexConstant.COMMAND_YES_NO, isRequiredConfirm);
+        String confirm = inputConfirm.renderAndGetText();
 
         if (confirm.equals("evet")) {
             cartService.saleCart();

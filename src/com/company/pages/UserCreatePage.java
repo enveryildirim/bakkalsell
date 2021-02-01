@@ -1,11 +1,10 @@
 package com.company.pages;
 
-import com.company.Constant;
+import com.company.RegexConstant;
 import com.company.models.PageName;
 import com.company.models.User;
 import com.company.models.UserType;
 import com.company.pages.components.Input;
-import com.company.services.ProductService;
 import com.company.services.UserService;
 
 /**
@@ -31,30 +30,30 @@ public class UserCreatePage extends PageBase {
 
         String labelName="Ad Soyad: ";
         boolean isRequiredName=true;
-        Input inName = new Input(labelName, Constant.NAME_SURNAME_TR, isRequiredName);
-        String nameSurname = inName.renderAndGetText();
+        Input inputName = new Input(labelName, RegexConstant.NAME_SURNAME_TR, isRequiredName);
+        String nameSurname = inputName.renderAndGetText();
 
         String labelUsername="Kullanıcı Adı";
         boolean isRequiredUsername=true;
-        Input inUsername = new Input(labelUsername, Constant.USERNAME, isRequiredUsername);
-        String username = inUsername.renderAndGetText();
+        Input inputUsername = new Input(labelUsername, RegexConstant.USERNAME, isRequiredUsername);
+        String username = inputUsername.renderAndGetText();
 
         String labelPassword="Parola";
         boolean isRequiredPassword=true;
-        Input inPassword = new Input(labelPassword, Constant.PASSWORD, isRequiredPassword);
-        String password = inPassword.renderAndGetText();
+        Input inputPassword = new Input(labelPassword, RegexConstant.PASSWORD, isRequiredPassword);
+        String password = inputPassword.renderAndGetText();
 
         String labelUserType="Kullanıcının Türünü giriniz 1 == Kasiyer 2 == Müşteri";
         boolean isRequiredUserType=true;
-        Input inType = new Input(labelUserType, Constant.USER_CREATE_PAGE_USER_TYPE, isRequiredUserType);
-        String typeUser = inType.renderAndGetText();
-        int typeUserIndex=inType.getTextAfterConvertToInt();
+        Input inputType = new Input(labelUserType, RegexConstant.USER_CREATE_PAGE_USER_TYPE, isRequiredUserType);
+        inputType.renderAndGetText();
+        int typeUserIndex= inputType.getTextAfterConvertToInt();
 
         System.out.println("Ad Soyad:" + nameSurname + " Username: " + username + " Password: " + password);
         System.out.println("Onay için evet iptal için hayır yazın ");
 
-        Input inConfirm = new Input("Onay için evet iptal için hayır yazın", Constant.COMMAND_YES_NO, true);
-        String confirm = inConfirm.renderAndGetText();
+        Input inputConfirm = new Input("Onay için evet iptal için hayır yazın", RegexConstant.COMMAND_YES_NO, true);
+        String confirm = inputConfirm.renderAndGetText();
 
         if (confirm.equals("evet")) {
             User newUser= new User(nameSurname,username,password,UserType.values()[typeUserIndex]);

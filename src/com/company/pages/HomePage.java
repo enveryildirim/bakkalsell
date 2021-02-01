@@ -1,10 +1,9 @@
 package com.company.pages;
 
-import com.company.Constant;
+import com.company.RegexConstant;
 import com.company.models.PageName;
 import com.company.models.UserType;
 import com.company.pages.components.Input;
-import com.company.services.ProductService;
 import com.company.services.UserService;
 
 /**
@@ -26,8 +25,7 @@ public class HomePage extends PageBase {
     public PageName render() {
         System.out.println("Anasayfa");
 
-
-        UserType isEmployeeOrCustomer = userService.getLoginedUser().getUserType();
+        UserType isEmployeeOrCustomer = userService.getLoggedUser().getUserType();
         if (isEmployeeOrCustomer == UserType.EMPLOYEE)
             return PageName.PRODUCT_SALE;
 
@@ -45,8 +43,8 @@ public class HomePage extends PageBase {
 
         String labelCommand = "İşleminizi Seçiniz";
         boolean isRequiredCommand = true;
-        Input inCommand = new Input(labelCommand, Constant.HOME_PAGE_COMMAND_LIST, isRequiredCommand);
-        String command = inCommand.renderAndGetText();
+        Input inputCommand = new Input(labelCommand, RegexConstant.HOME_PAGE_COMMAND_LIST, isRequiredCommand);
+        String command = inputCommand.renderAndGetText();
 
         if (command.equals("0")) {
             userService.logout();

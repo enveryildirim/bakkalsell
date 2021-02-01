@@ -37,7 +37,7 @@ public class OrderService {
      * @param quantity şipariş miktarı
      */
     public void addProductToOrder(Product product, int quantity) {
-        User user = userRepository.getLoginedUser();
+        User user = userRepository.getLoggedUser();
 
         Order order = orderRepository.getAll()
                 .stream()
@@ -108,7 +108,7 @@ public class OrderService {
      */
     public String getUserOrderListConvertToString() {
         listOrderString = "";
-        User user = userRepository.getLoginedUser();
+        User user = userRepository.getLoggedUser();
         Order order = orderRepository.getById(user.getId());
         if (order == null)
             return "Sepetiniz boş";
@@ -124,7 +124,11 @@ public class OrderService {
                 .stream()
                 .mapToDouble(orderItem -> orderItem.getProduct().getPrice() * orderItem.getQuantity())
                 .sum();
-        String summaryCartString = String.format("\nSepetteki Ürün Sayısı: %d\nToplam tutar: %f\n", cartSize, sumPrice);
+        int sumQuantity=(int) order.orders
+                .stream()
+                .mapToDouble(CartItem::getQuantity)
+                .sum();
+        String summaryCartString = String.format("\nSepetteki Ürün Sayısı: %d  Miktarı: %d \nToplam tutar: %.02f tl\n", cartSize,sumQuantity, sumPrice);
         listOrderString += summaryCartString;
         return listOrderString;
     }
@@ -186,7 +190,7 @@ public class OrderService {
     }
 
     public void updateCartItemInOrder(int productId, int newQuantity) {
-        User loginedUser = userRepository.getLoginedUser();
+        User loginedUser = userRepository.getLoggedUser();
         orderRepository.getAll().stream()
                 .filter(orderItem -> orderItem.customer.getId() == loginedUser.getId())
                 .findFirst().flatMap(order -> order.orders
@@ -197,7 +201,7 @@ public class OrderService {
 
     public String getAllProductString() {
         allProductListString = "";
-        User user = userRepository.getLoginedUser();
+        User user = userRepository.getLoggedUser();
         Order order = orderRepository.getById(user.getId());
 
         productRepository.getAll().forEach(product -> {
@@ -220,5 +224,8 @@ public class OrderService {
             }
         });
         return allProductListString;
+    }
+    public List<Order> getAllOrder(){
+        return orderRepository.getAll();
     }
 }

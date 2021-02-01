@@ -1,13 +1,11 @@
 package com.company.pages;
 
-import com.company.Constant;
-import com.company.models.Order;
+import com.company.RegexConstant;
 import com.company.models.PageName;
 import com.company.models.User;
 import com.company.models.UserType;
 import com.company.pages.components.Input;
 import com.company.services.OrderService;
-import com.company.services.ProductService;
 import com.company.services.UserService;
 
 /**
@@ -34,13 +32,13 @@ public class OrderViewPage extends PageBase {
 
         String labelCommand = "Satış=1\nGeri Dön=0";
         boolean isRequiredCommand = true;
-        Input inCommand = new Input(labelCommand, Constant.ORDER_PAGE_VIEW_COMMAND_LIST, isRequiredCommand);
+        Input inCommand = new Input(labelCommand, RegexConstant.ORDER_PAGE_VIEW_COMMAND_LIST, isRequiredCommand);
         String command = inCommand.renderAndGetText();
 
         if (command.equals("1")) {
             this.renderSaleCommandContent();
         } else {
-            boolean isAdminLoginedUser = userService.getLoginedUser().getUserType() == UserType.ADMIN;
+            boolean isAdminLoginedUser = userService.getLoggedUser().getUserType() == UserType.ADMIN;
             if (isAdminLoginedUser)
                 return PageName.HOME;
             else
@@ -55,8 +53,7 @@ public class OrderViewPage extends PageBase {
      * Satış komutu ile alakalı işlemler ekrana basar
      */
     void renderSaleCommandContent() {
-        User loggedUser=userService.getLoginedUser();
-        boolean isEmptyOrder = orderService.getOrder(loggedUser.getId())==null;
+        boolean isEmptyOrder = orderService.getAllOrder().isEmpty();
         if(isEmptyOrder){
             System.out.println("Sepet boş satış yapılamaz");
             return;
@@ -64,9 +61,9 @@ public class OrderViewPage extends PageBase {
 
         String labelUserID = "Kullanıcının ID'sini girin";
         boolean isRequiredID = true;
-        Input inID = new Input(labelUserID, Constant.ONLY_DIGIT, isRequiredID);
-        String id = inID.renderAndGetText();
-        int customerID = inID.getTextAfterConvertToInt();
+        Input inputID = new Input(labelUserID, RegexConstant.ONLY_DIGIT, isRequiredID);
+        inputID.renderAndGetText();
+        int customerID = inputID.getTextAfterConvertToInt();
 
         User user = userService.getUser(customerID);
         if (user == null || user.getUserType() != UserType.CUSTOMER) {
@@ -77,8 +74,8 @@ public class OrderViewPage extends PageBase {
         String msjSale = String.format("%s ID'li %s İsimli ---- siparişi onaylamak için evet iptal için hayır giriniz",
                 user.getId(), user.getNameSurname());
         boolean isRequiredCommand = true;
-        Input inCommand = new Input(msjSale, Constant.COMMAND_YES_NO, isRequiredCommand);
-        String command = inCommand.renderAndGetText();
+        Input inputCommand = new Input(msjSale, RegexConstant.COMMAND_YES_NO, isRequiredCommand);
+        String command = inputCommand.renderAndGetText();
 
         if (command.equals("evet")) {
             orderService.saleOrder(user.getId());

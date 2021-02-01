@@ -1,8 +1,5 @@
 package com.company.models;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Sepet içinde itemlerin verilerini tutan veri sınıfı
  */

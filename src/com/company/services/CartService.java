@@ -24,8 +24,6 @@ public class CartService {
      * @param quantity sepete eklenecek ürün miktarı
      */
 
-    //todo gelen verilerin servis tarafında kontrol edilmesi eksi büyül küçük gibi
-
     public void insertProductToCart(Product product, int quantity) {
         CartItem cartItem = this.getCartItemByProductID(product.getId());
         if (cartItem == null)
@@ -61,6 +59,7 @@ public class CartService {
                 cartListString + String.format("Kod:{%d} Ad:{%s} Fiyat:{%f}  Alınan Miktar:{%d} Tutar:{%f} \n",
                 cartItem.getProduct().getId(), cartItem.getProduct().getName(), cartItem.getProduct().getPrice(),
                 cartItem.getQuantity(), cartItem.getProduct().getPrice() * cartItem.getQuantity()));
+
         int cartSize=cartItemRepository.getAll().size();
         float sumPrice= (float) cartItemRepository.getAll()
                 .stream()
@@ -68,6 +67,7 @@ public class CartService {
                 .sum();
         String summaryCartString=String.format("\nSepetteki Ürün Sayısı: %d\nToplam tutar: %f\n",cartSize,sumPrice);
         cartListString+=summaryCartString;
+
         return cartListString;
     }
 

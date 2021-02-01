@@ -1,6 +1,6 @@
 package com.company.pages;
 
-import com.company.Constant;
+import com.company.RegexConstant;
 import com.company.models.PageName;
 import com.company.models.Product;
 import com.company.pages.components.Input;
@@ -29,18 +29,18 @@ public class ProductCreatePage extends PageBase {
 
         String labelName = "AD giriniz";
         boolean isRequiredName = true;
-        Input inName = new Input(labelName, Constant.CUMLE_TR, isRequiredName);
-        String name = inName.renderAndGetText();
+        Input inputName = new Input(labelName, RegexConstant.CUMLE_TR, isRequiredName);
+        String name = inputName.renderAndGetText();
 
         String labelPrice = "FİYAT giriniz";
         boolean isRequiredPrice = true;
-        Input inPrice = new Input(labelPrice, Constant.ONLY_DIGIT, isRequiredPrice);
-        String priceString = inPrice.renderAndGetText();
+        Input inputPrice = new Input(labelPrice, RegexConstant.ONLY_DIGIT, isRequiredPrice);
+        String priceString = inputPrice.renderAndGetText();
 
         String labelQuantity = "STOK giriniz";
         boolean isRequiredQuantity = true;
-        Input inQuantity = new Input(labelQuantity, Constant.ONLY_DIGIT, isRequiredQuantity);
-        String quantityString = inQuantity.renderAndGetText();
+        Input inputQuantity = new Input(labelQuantity, RegexConstant.ONLY_DIGIT, isRequiredQuantity);
+        String quantityString = inputQuantity.renderAndGetText();
 
 
         if (name.length() == 0 || priceString.length() == 0 || quantityString.length() == 0) {
@@ -49,8 +49,8 @@ public class ProductCreatePage extends PageBase {
             return PageName.PRODUCT_CREATE;
         }
 
-        float price = inPrice.getTextAfterConvertToFloat();
-        int quantity = inQuantity.getTextAfterConvertToInt();
+        float price = inputPrice.getTextAfterConvertToFloat();
+        int quantity = inputQuantity.getTextAfterConvertToInt();
         if (price <= 0 || quantity <= 0) {
             System.out.println("Lütfen değerleri 0 veya eksi değer girmeyiniz \n devam etmek için bir tuşa basınız.");
             inputData.nextLine();

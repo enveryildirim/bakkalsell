@@ -1,9 +1,7 @@
 package com.company.services;
 
 import com.company.dal.CartItemRepository;
-import com.company.dal.IRepository;
 import com.company.dal.ProductRepository;
-import com.company.models.CartItem;
 import com.company.models.Product;
 
 import java.util.List;
@@ -13,12 +11,10 @@ import java.util.List;
  */
 public class ProductService {
 
-    static String cartListString = "";
-    static String productListString = "";
     private ProductRepository productRepository;
     private CartItemRepository cartItemIRepository;
 
-    public ProductService(ProductRepository productRepository, CartItemRepository  cartItemIRepository) {
+    public ProductService(ProductRepository productRepository, CartItemRepository cartItemIRepository) {
         this.productRepository = productRepository;
         this.cartItemIRepository = cartItemIRepository;
     }

@@ -1,9 +1,7 @@
 package com.company.pages;
 
 
-import com.company.Constant;
 import com.company.models.*;
-import com.company.pages.components.Input;
 import com.company.services.CartService;
 import com.company.services.OrderService;
 import com.company.services.ProductService;

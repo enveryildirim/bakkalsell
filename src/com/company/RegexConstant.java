@@ -1,12 +1,10 @@
 package com.company;
 
-import java.security.PublicKey;
-
 /**
  * Uygulama geneli sabitlerin tanımlandığı sınıf
  */
-public class Constant {
-    //REGEX FORMATLARI
+public class RegexConstant {
+
     public static String ONLY_DIGIT = "^[0-9]+$";
     public static String PASSWORD = "[A-Za-z0-9]{6,}$";
     public static String USERNAME = "[A-Za-z0-9]{5,}$";
@@ -21,7 +19,4 @@ public class Constant {
     public static String USER_CREATE_PAGE_USER_TYPE="[12]";
     public static String USER_LIST_PAGE_COMMAND_LIST="[012]";
 
-
-
-    //
 }

@@ -14,11 +14,10 @@ public class UserRepository implements IRepository<User> {
 
         if (DB.users.isEmpty()) {
             user.setId(1);
-        }
-        else {
-            int userListSize =DB.users.size();
-            User lastUser=DB.users.get(userListSize-1);
-            int newID =  lastUser.getId() + 1;
+        } else {
+            int userListSize = DB.users.size();
+            User lastUser = DB.users.get(userListSize - 1);
+            int newID = lastUser.getId() + 1;
             user.setId(newID);
         }
 
@@ -28,10 +27,11 @@ public class UserRepository implements IRepository<User> {
 
     @Override
     public void update(User user) {
-        User u = this.getById(user.getId());
-        u.setNameSurname(user.getNameSurname());
-        u.setUsername(user.getUsername());
-        u.setPassword(user.getPassword());
+
+        User updatingUser = this.getById(user.getId());
+        updatingUser.setNameSurname(user.getNameSurname());
+        updatingUser.setUsername(user.getUsername());
+        updatingUser.setPassword(user.getPassword());
 
     }
 
@@ -53,7 +53,7 @@ public class UserRepository implements IRepository<User> {
                 .orElse(null);
     }
 
-    public User getLoginedUser() {
+    public User getLoggedUser() {
         return DB.currentLoginedUser;
     }
 }

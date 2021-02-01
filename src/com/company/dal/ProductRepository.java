@@ -27,10 +27,10 @@ public class ProductRepository implements IRepository<Product> {
     @Override
     public void update(Product product) {
 
-        Product p = this.getById(product.getId());
-        p.setName(product.getName());
-        p.setPrice(product.getPrice());
-        p.setQuantity(product.getQuantity());
+        Product updatingProduct = this.getById(product.getId());
+        updatingProduct.setName(product.getName());
+        updatingProduct.setPrice(product.getPrice());
+        updatingProduct.setQuantity(product.getQuantity());
 
     }
 
