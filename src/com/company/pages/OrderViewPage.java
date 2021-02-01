@@ -14,9 +14,10 @@ import com.company.services.UserService;
 public class OrderViewPage extends PageBase {
     private UserService userService;
     private OrderService orderService;
+
     public OrderViewPage(UserService userService, OrderService orderService) {
-       this.userService=userService;
-       this.orderService=orderService;
+        this.userService = userService;
+        this.orderService = orderService;
     }
 
     @Override
@@ -54,7 +55,7 @@ public class OrderViewPage extends PageBase {
      */
     void renderSaleCommandContent() {
         boolean isEmptyOrder = orderService.getAllOrder().isEmpty();
-        if(isEmptyOrder){
+        if (isEmptyOrder) {
             System.out.println("Sepet boş satış yapılamaz");
             return;
         }

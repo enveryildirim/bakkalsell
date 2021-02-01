@@ -3,6 +3,7 @@ package com.company.pages;
 import com.company.RegexConstant;
 import com.company.models.*;
 import com.company.pages.components.Input;
+import com.company.services.CartService;
 import com.company.services.OrderService;
 import com.company.services.ProductService;
 import com.company.services.UserService;
@@ -14,10 +15,14 @@ public class OrderPage extends PageBase {
     private UserService userService;
     private ProductService productService;
     private OrderService orderService;
-    public OrderPage(UserService userService, ProductService productService,OrderService orderService) {
-        this.userService=userService;
-        this.productService=productService;
-        this.orderService=orderService;
+    private CartService cartService;
+
+    public OrderPage(UserService userService, ProductService productService, OrderService orderService,
+                     CartService cartService) {
+        this.userService = userService;
+        this.productService = productService;
+        this.orderService = orderService;
+        this.cartService = cartService;
     }
 
     @Override
@@ -92,8 +97,9 @@ public class OrderPage extends PageBase {
 
             if (quantity.equals("0"))
                 return;
-
-            if (addingProduct.getQuantity() < quantityInt || quantityInt == -1) {
+            CartItem cartItem = orderService.getCartItemByProductID(addingProduct.getId());
+            boolean stateOverload = (cartItem != null) && (addingProduct.getQuantity() - quantityInt - cartItem.getQuantity()) < 0;
+            if (addingProduct.getQuantity() < quantityInt || stateOverload || quantityInt == -1) {
                 System.out.println("Yeterli stok yok tekrar deneyiniz");
             } else {
                 orderService.addProductToOrder(addingProduct, quantityInt);
@@ -112,7 +118,7 @@ public class OrderPage extends PageBase {
         User loggedUser = userService.getLoggedUser();
         Order order = orderService.getOrder(loggedUser.getId());
 
-        boolean isEmptyCart = order==null || order.orders.size() == 0;
+        boolean isEmptyCart = order == null || order.orders.size() == 0;
         if (isEmptyCart) {
             System.out.println("Sepet Boş Ürün Silinemez");
             return;
@@ -139,7 +145,7 @@ public class OrderPage extends PageBase {
             if (cartItem != null) {
                 orderService.deleteProductFromOrder(loggedUser.getId(), cartItem);
                 break;
-            }else{
+            } else {
                 System.out.println("Uygun ID giriniz");
             }
 
@@ -152,7 +158,7 @@ public class OrderPage extends PageBase {
 
         User loggedUser = userService.getLoggedUser();
         Order order = orderService.getOrder(loggedUser.getId());
-        boolean isEmptyCart = order==null || order.orders.size() == 0;
+        boolean isEmptyCart = order == null || order.orders.size() == 0;
         if (isEmptyCart) {
             System.out.println("Sepet Boş Ürün Silinemez");
             return;

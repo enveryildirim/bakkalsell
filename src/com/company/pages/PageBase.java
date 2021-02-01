@@ -1,9 +1,6 @@
 package com.company.pages;
 
 import com.company.models.PageName;
-import com.company.services.OrderService;
-import com.company.services.ProductService;
-import com.company.services.UserService;
 
 import java.util.Scanner;
 
@@ -19,12 +16,14 @@ public abstract class PageBase {
 
     /**
      * Sayfa kullanıcının giriş yapması  gerekip gerekmediğini döner
+     *
      * @return boolean giriş gerekiyorsa true gerekmiyorsa false
      */
     public abstract boolean isRequiredAuth();
 
     /**
      * Kullanıcıdan veri almak, veri göstermek ve Sayfa yönlendirmeleri yapar
+     *
      * @return PageName gidilecek sayfasıyı döner
      */
     public abstract PageName render();

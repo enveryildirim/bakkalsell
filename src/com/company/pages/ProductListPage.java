@@ -12,8 +12,9 @@ import com.company.services.ProductService;
 public class ProductListPage extends PageBase {
 
     private ProductService productService;
+
     public ProductListPage(ProductService productService) {
-        this.productService=productService;
+        this.productService = productService;
     }
 
     @Override

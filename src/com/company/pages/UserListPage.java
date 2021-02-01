@@ -11,8 +11,9 @@ import com.company.services.UserService;
  */
 public class UserListPage extends PageBase {
     private UserService userService;
+
     public UserListPage(UserService userService) {
-       this.userService=userService;
+        this.userService = userService;
     }
 
     @Override

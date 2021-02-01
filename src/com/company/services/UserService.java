@@ -4,10 +4,11 @@ import com.company.dal.DB;
 import com.company.dal.UserRepository;
 import com.company.models.User;
 
-
 import java.util.List;
 
-
+/**
+ * Kullanıcılar ile alakalı işlemlerin yapıldığı sınıf
+ */
 public class UserService {
 
     protected UserRepository userRepository;
@@ -18,6 +19,7 @@ public class UserService {
 
     /**
      * Kullanıcın sisteme giriş yapmasını sağlar. Eğer başarılı ise true değlse false değer döner
+     *
      * @param username kullanıcı adı
      * @param password şifre
      * @return boolean işlem başarı durumunu döner.
@@ -63,6 +65,7 @@ public class UserService {
 
     /**
      * Sisteme giriş yapan kullanıcının bilgilerini getirir. Eğer giriş yapan kullanınıcı yoksa null değer döner
+     *
      * @return User login olmuş kullanıcı
      */
     public User getLoggedUser() {

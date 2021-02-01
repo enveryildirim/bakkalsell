@@ -81,7 +81,7 @@ public class Main {
         pages.put(PageName.USER_LIST, new UserListPage(userService));
         pages.put(PageName.PRODUCT_LIST, new ProductListPage(productService));
         pages.put(PageName.TEST, new TestPage(userService, productService, cartService, orderService));
-        pages.put(PageName.ORDER, new OrderPage(userService, productService, orderService));
+        pages.put(PageName.ORDER, new OrderPage(userService, productService, orderService,cartService));
         pages.put(PageName.ORDER_VIEW, new OrderViewPage(userService, orderService));
 
         /**
