@@ -1,7 +1,6 @@
 package com.company.dal;
 
 import com.company.models.Order;
-import com.company.models.Product;
 
 import java.util.List;
 

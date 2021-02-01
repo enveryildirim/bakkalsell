@@ -12,7 +12,6 @@ public class Input {
     private String regex;
     private boolean isRequired;
 
-
     public Input(String label, String regex, boolean required) {
         this.text = "";
         this.label = label;
@@ -54,8 +53,9 @@ public class Input {
 
     /**
      * Kullanıcıdan akınan string ifadeyi int türüne dönüşütürüp döndürür.
-     * @exception Integer dönüştürmede hata olursa işlem başarısız olduğuna alamet -1 döner
+     *
      * @return int değer döner
+     * @throws Integer dönüştürmede hata olursa işlem başarısız olduğuna alamet -1 döner
      */
     public int getTextAfterConvertToInt() {
         try {
@@ -67,8 +67,9 @@ public class Input {
 
     /**
      * Kullanıcıdan akınan string ifadeyi float türüne dönüşütürüp döndürür.
-     * @exception Float dönüştürmede hata olursa işlem başarısız olduğuna alamet -1 döner
+     *
      * @return int değer döner
+     * @throws Float dönüştürmede hata olursa işlem başarısız olduğuna alamet -1 döner
      */
     public float getTextAfterConvertToFloat() {
         try {
@@ -80,6 +81,7 @@ public class Input {
 
     /**
      * Kullanıcının veri girişi yapmasını,girielne veriyi belirtilen değerlere uygun mu kontrolu yapar.
+     *
      * @return Kullanıcıının girdiği veriyi döner
      */
     public String renderAndGetText() {

@@ -37,7 +37,7 @@ public class OrderService {
      * @param quantity şipariş miktarı
      */
     public void addProductToOrder(Product product, int quantity) {
-        User user = userRepository.getLoginedUser();
+        User user = userRepository.getLoggedUser();
 
         Order order = orderRepository.getAll()
                 .stream()
@@ -108,7 +108,7 @@ public class OrderService {
      */
     public String getUserOrderListConvertToString() {
         listOrderString = "";
-        User user = userRepository.getLoginedUser();
+        User user = userRepository.getLoggedUser();
         Order order = orderRepository.getById(user.getId());
         if (order == null)
             return "Sepetiniz boş";
@@ -190,7 +190,7 @@ public class OrderService {
     }
 
     public void updateCartItemInOrder(int productId, int newQuantity) {
-        User loginedUser = userRepository.getLoginedUser();
+        User loginedUser = userRepository.getLoggedUser();
         orderRepository.getAll().stream()
                 .filter(orderItem -> orderItem.customer.getId() == loginedUser.getId())
                 .findFirst().flatMap(order -> order.orders
@@ -201,7 +201,7 @@ public class OrderService {
 
     public String getAllProductString() {
         allProductListString = "";
-        User user = userRepository.getLoginedUser();
+        User user = userRepository.getLoggedUser();
         Order order = orderRepository.getById(user.getId());
 
         productRepository.getAll().forEach(product -> {

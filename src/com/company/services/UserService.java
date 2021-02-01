@@ -1,7 +1,6 @@
 package com.company.services;
 
 import com.company.dal.DB;
-import com.company.dal.IRepository;
 import com.company.dal.UserRepository;
 import com.company.models.User;
 
@@ -66,8 +65,8 @@ public class UserService {
      * Sisteme giriş yapan kullanıcının bilgilerini getirir. Eğer giriş yapan kullanınıcı yoksa null değer döner
      * @return User login olmuş kullanıcı
      */
-    public User getLoginedUser() {
-        return userRepository.getLoginedUser();
+    public User getLoggedUser() {
+        return userRepository.getLoggedUser();
     }
 
 }

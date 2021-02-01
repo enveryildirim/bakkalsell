@@ -1,9 +1,8 @@
 package com.company.pages;
 
-import com.company.Constant;
+import com.company.RegexConstant;
 import com.company.models.PageName;
 import com.company.pages.components.Input;
-import com.company.services.ProductService;
 import com.company.services.UserService;
 
 /**
@@ -20,19 +19,18 @@ public class LoginPage extends PageBase {
         return false;
     }
 
-
     @Override
     public PageName render() {
 
         String labelUsernameInput = "Kullanıcı Adı";
         boolean isRequiredUsername = true;
-        Input inUsername = new Input(labelUsernameInput, Constant.USERNAME, isRequiredUsername);
-        String username = inUsername.renderAndGetText();
+        Input inputUsername = new Input(labelUsernameInput, RegexConstant.USERNAME, isRequiredUsername);
+        String username = inputUsername.renderAndGetText();
 
         String labelPassword = "Parola";
         boolean isRequiredPassword = true;
-        Input inPassword = new Input(labelPassword, Constant.PASSWORD, isRequiredPassword);
-        String password = inPassword.renderAndGetText();
+        Input inputPassword = new Input(labelPassword, RegexConstant.PASSWORD, isRequiredPassword);
+        String password = inputPassword.renderAndGetText();
 
         boolean isSuccessLogin = this.userService.login(username, password);
         if (isSuccessLogin)

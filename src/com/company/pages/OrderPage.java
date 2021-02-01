@@ -1,6 +1,6 @@
 package com.company.pages;
 
-import com.company.Constant;
+import com.company.RegexConstant;
 import com.company.models.*;
 import com.company.pages.components.Input;
 import com.company.services.OrderService;
@@ -39,18 +39,18 @@ public class OrderPage extends PageBase {
 
         String labelCommand = "Sepete Ürün Ekleme=1\nSepete Ürün Silme=2\nSepette Ürün Güncelleme=3\nGeri Dön=0";
         boolean isRequiredCommand = true;
-        Input inCommand = new Input(labelCommand, Constant.ORDER_PAGE_COMMAND_LIST, isRequiredCommand);
-        String command = inCommand.renderAndGetText();
+        Input inputCommand = new Input(labelCommand, RegexConstant.ORDER_PAGE_COMMAND_LIST, isRequiredCommand);
+        String command = inputCommand.renderAndGetText();
 
         if (command.equals("1")) {
-            this.renderAddCommandContent();
+            this.renderContentOfAddCommand();
         } else if (command.equals("2")) {
-            this.renderDeleteCommandContent();
+            this.renderContentOfDeleteCommand();
         } else if (command.equals("3")) {
-            this.renderUpdateCommandContent();
+            this.renderContentOfUpdateCommand();
         } else {
-            boolean isAdminLoginedUser = userService.getLoginedUser().getUserType() == UserType.ADMIN;
-            if (isAdminLoginedUser)
+            boolean isAdminLoggedUser = userService.getLoggedUser().getUserType() == UserType.ADMIN;
+            if (isAdminLoggedUser)
                 return PageName.HOME;
             else
                 return PageName.LOGIN;
@@ -63,18 +63,18 @@ public class OrderPage extends PageBase {
     /**
      * Siparişi ürün ekleme ile alakalı kısın,mlarıını ekrana basılır.
      */
-    void renderAddCommandContent() {
+    void renderContentOfAddCommand() {
         String productId;
         Product addingProduct;
         while (true) {
             String labelID = "Ürün ID giriniz veya çıkmak için 0'a basın\n ";
             boolean isRequiredID = true;
-            Input inID = new Input(labelID, Constant.ONLY_DIGIT, isRequiredID);
-            productId = inID.renderAndGetText();
+            Input inputID = new Input(labelID, RegexConstant.ONLY_DIGIT, isRequiredID);
+            productId = inputID.renderAndGetText();
 
             if (productId.equals("0"))
                 return;
-            addingProduct = productService.getProductById(inID.getTextAfterConvertToInt());
+            addingProduct = productService.getProductById(inputID.getTextAfterConvertToInt());
             if (addingProduct == null) {
                 System.out.println("ID göre ürün bulunamadı tekrar deneyiniz");
             } else
@@ -85,10 +85,10 @@ public class OrderPage extends PageBase {
         while (true) {
             String labelQuantity = "Ürün miktar giriniz veya çıkmak için 0'a basın";
             boolean isRequiredQuantity = true;
-            Input inQuantity = new Input(labelQuantity, Constant.ONLY_DIGIT, isRequiredQuantity);
-            quantity = inQuantity.renderAndGetText();
+            Input inputQuantity = new Input(labelQuantity, RegexConstant.ONLY_DIGIT, isRequiredQuantity);
+            quantity = inputQuantity.renderAndGetText();
 
-            int quantityInt = inQuantity.getTextAfterConvertToInt();
+            int quantityInt = inputQuantity.getTextAfterConvertToInt();
 
             if (quantity.equals("0"))
                 return;
@@ -107,13 +107,10 @@ public class OrderPage extends PageBase {
     /**
      * Siparişten ürün silme ile alakalı işlemlerin ekrana yansıltıldığı fonksiyon
      */
-    void renderDeleteCommandContent() {
+    void renderContentOfDeleteCommand() {
         String cartItemid;
-        User loginedUser = userService.getLoginedUser();
-        Order order = orderService.getOrder(loginedUser.getId());
-
-        if (order == null)
-            return;
+        User loggedUser = userService.getLoggedUser();
+        Order order = orderService.getOrder(loggedUser.getId());
 
         boolean isEmptyCart = order==null || order.orders.size() == 0;
         if (isEmptyCart) {
@@ -125,9 +122,9 @@ public class OrderPage extends PageBase {
         while (true) {
             String labelID = "Ürün ID giriniz veya çıkmak için 0'a basın ";
             boolean isRequiredLabel = true;
-            Input inID = new Input(labelID, Constant.ONLY_DIGIT, isRequiredLabel);
-            cartItemid = inID.renderAndGetText();
-            int cartItemidInt = inID.getTextAfterConvertToInt();
+            Input inputID = new Input(labelID, RegexConstant.ONLY_DIGIT, isRequiredLabel);
+            cartItemid = inputID.renderAndGetText();
+            int cartItemidInt = inputID.getTextAfterConvertToInt();
 
             if (cartItemid.equals("0"))
                 return;
@@ -140,7 +137,7 @@ public class OrderPage extends PageBase {
                     .orElse(null);
 
             if (cartItem != null) {
-                orderService.deleteProductFromOrder(loginedUser.getId(), cartItem);
+                orderService.deleteProductFromOrder(loggedUser.getId(), cartItem);
                 break;
             }else{
                 System.out.println("Uygun ID giriniz");
@@ -149,12 +146,12 @@ public class OrderPage extends PageBase {
         }
     }
 
-    void renderUpdateCommandContent() {
+    void renderContentOfUpdateCommand() {
         String productId;
         Product updatingProduct;
 
-        User loginedUser = userService.getLoginedUser();
-        Order order = orderService.getOrder(loginedUser.getId());
+        User loggedUser = userService.getLoggedUser();
+        Order order = orderService.getOrder(loggedUser.getId());
         boolean isEmptyCart = order==null || order.orders.size() == 0;
         if (isEmptyCart) {
             System.out.println("Sepet Boş Ürün Silinemez");
@@ -164,13 +161,13 @@ public class OrderPage extends PageBase {
         while (true) {
             String labelID = "Ürün ID giriniz veya çıkmak için 0'a basın ";
             boolean isRequiredID = true;
-            Input inID = new Input(labelID, Constant.ONLY_DIGIT, isRequiredID);
-            productId = inID.renderAndGetText();
+            Input inputID = new Input(labelID, RegexConstant.ONLY_DIGIT, isRequiredID);
+            productId = inputID.renderAndGetText();
 
             if (productId.equals("0"))
                 return;
 
-            updatingProduct = productService.getProductById(inID.getTextAfterConvertToInt());
+            updatingProduct = productService.getProductById(inputID.getTextAfterConvertToInt());
             if (updatingProduct == null) {
                 System.out.println("ID göre ürün bulunamadı tekrar deneyiniz");
             } else
@@ -181,10 +178,10 @@ public class OrderPage extends PageBase {
         while (true) {
             String labelQuantity = "Yeni Ürün miktar giriniz veya çıkmak için 0'a basın";
             boolean isRequiredQuantity = true;
-            Input inQuantity = new Input(labelQuantity, Constant.ONLY_DIGIT, isRequiredQuantity);
-            quantity = inQuantity.renderAndGetText();
+            Input inputQuantity = new Input(labelQuantity, RegexConstant.ONLY_DIGIT, isRequiredQuantity);
+            quantity = inputQuantity.renderAndGetText();
 
-            int quantityInt = inQuantity.getTextAfterConvertToInt();
+            int quantityInt = inputQuantity.getTextAfterConvertToInt();
 
             if (quantity.equals("0"))
                 return;

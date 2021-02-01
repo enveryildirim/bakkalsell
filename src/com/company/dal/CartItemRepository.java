@@ -1,12 +1,11 @@
 package com.company.dal;
 
 import com.company.models.CartItem;
-import com.company.models.User;
 
 import java.util.List;
 
 /**
- *Sepet ile alakalı veritabanı işlemlerinin yapıldığı sınıf
+ * Sepet ile alakalı veritabanı işlemlerinin yapıldığı sınıf
  */
 public class CartItemRepository implements IRepository<CartItem> {
 

@@ -1,10 +1,9 @@
 package com.company.pages;
 
-import com.company.Constant;
+import com.company.RegexConstant;
 import com.company.models.PageName;
 import com.company.models.User;
 import com.company.pages.components.Input;
-import com.company.services.ProductService;
 import com.company.services.UserService;
 
 /**
@@ -32,7 +31,7 @@ public class UserListPage extends PageBase {
 
         String msj = "1-Kullanıcı Düzenleme\n2-KUllanıcı Silme\n0-Anasayfa";
         boolean isRequiredCommand = true;
-        Input inCommand = new Input(msj, Constant.USER_LIST_PAGE_COMMAND_LIST, isRequiredCommand);
+        Input inCommand = new Input(msj, RegexConstant.USER_LIST_PAGE_COMMAND_LIST, isRequiredCommand);
         String command = inCommand.renderAndGetText();
 
         if (command.equals("1")) {
@@ -54,7 +53,7 @@ public class UserListPage extends PageBase {
     void renderUpdateCommandContent() {
         String labelID = "Kullanıcı İd giriniz";
         boolean isRequiredID = true;
-        Input inID = new Input(labelID, Constant.ONLY_DIGIT, isRequiredID);
+        Input inID = new Input(labelID, RegexConstant.ONLY_DIGIT, isRequiredID);
         String id = inID.renderAndGetText();
         int idInt = inID.getTextAfterConvertToInt();
 
@@ -66,22 +65,22 @@ public class UserListPage extends PageBase {
 
         String msjName = String.format("Şimdiki İsim: %s\n", updatingUser.getNameSurname());
         boolean isRequiredName = true;
-        Input inName = new Input(msjName, Constant.NAME_SURNAME_TR, isRequiredName);
+        Input inName = new Input(msjName, RegexConstant.NAME_SURNAME_TR, isRequiredName);
         String newName = inName.renderAndGetText();
 
         String msjUsername = String.format("Şimdiki Kullanıcı Adı: %s\n", updatingUser.getUsername());
         boolean isRequiredUsername = true;
-        Input inUsername = new Input(msjUsername, Constant.USERNAME, isRequiredUsername);
+        Input inUsername = new Input(msjUsername, RegexConstant.USERNAME, isRequiredUsername);
         String newUsername = inUsername.renderAndGetText();
 
         String msjPassword = String.format("Şimdiki Şifre:%s\n", updatingUser.getPassword());
         boolean isRequiredPassword = true;
-        Input inPassword = new Input(msjPassword, Constant.PASSWORD, isRequiredPassword);
+        Input inPassword = new Input(msjPassword, RegexConstant.PASSWORD, isRequiredPassword);
         String newPassword = inPassword.renderAndGetText();
 
         String labelConfirm = "Onaylamak için evet iptal için hayır yazın";
         boolean isRequiredConfirm = true;
-        Input inConfirm = new Input(labelConfirm, Constant.COMMAND_YES_NO, isRequiredConfirm);
+        Input inConfirm = new Input(labelConfirm, RegexConstant.COMMAND_YES_NO, isRequiredConfirm);
         String confirm = inConfirm.renderAndGetText();
 
         if (confirm.equals("evet")) {
@@ -104,9 +103,9 @@ public class UserListPage extends PageBase {
     void renderDeleteCommandContent() {
         String labelID = "Kullanıcı İd giriniz";
         boolean isRequiredID = true;
-        Input inID = new Input(labelID, Constant.ONLY_DIGIT, isRequiredID);
-        String id = inID.renderAndGetText();
-        int idInt = inID.getTextAfterConvertToInt();
+        Input inputID = new Input(labelID, RegexConstant.ONLY_DIGIT, isRequiredID);
+        inputID.renderAndGetText();
+        int idInt = inputID.getTextAfterConvertToInt();
 
         User user = userService.getUser(idInt);
         if (user == null) {
@@ -117,8 +116,8 @@ public class UserListPage extends PageBase {
 
         String labelConfirm = "Onaylamak için evet iptal için hayır yazın";
         boolean isRequiredCommand = true;
-        Input inConfirm = new Input(labelConfirm, Constant.COMMAND_YES_NO, isRequiredCommand);
-        String confirm = inConfirm.renderAndGetText();
+        Input inputConfirm = new Input(labelConfirm, RegexConstant.COMMAND_YES_NO, isRequiredCommand);
+        String confirm = inputConfirm.renderAndGetText();
 
         if (confirm.equals("evet")) {
             userService.deleteUser(user);
