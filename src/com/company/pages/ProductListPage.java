@@ -5,6 +5,7 @@ import com.company.models.PageName;
 import com.company.models.Product;
 import com.company.pages.components.Input;
 import com.company.services.ProductService;
+import com.company.models.Result;
 
 /**
  * ürün işlemleirnin yapıldığı sınıf
@@ -89,8 +90,9 @@ public class ProductListPage extends PageBase {
             product.setName(newName);
             product.setPrice(newPrice);
             product.setQuantity(newQuantity);
-            productService.updateProduct(product);
-            System.out.println("Güncelendi");
+            Result<Product> result = productService.updateProductResult(product);
+            //productService.updateProduct(product);
+            System.out.println(result.getMessage());
 
         } else {
             System.out.println("İptal Edildi");
@@ -117,8 +119,9 @@ public class ProductListPage extends PageBase {
         String confirm = inConfirm.renderAndGetText();
 
         if (confirm.equals("evet")) {
-            productService.deleteProduct(product);
-            System.out.println("Silindi");
+            //productService.deleteProduct(product);
+            Result<Product> result = productService.deleteProductResult(product);
+            System.out.println(result.getMessage());
         } else {
             System.out.println("İptal Edildi");
         }
