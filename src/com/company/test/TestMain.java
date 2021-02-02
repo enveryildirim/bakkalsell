@@ -10,7 +10,7 @@ interface IResult<T> {
 public class TestMain {
     public static void main(String[] args) {
         IResult<User> checkUsername = (model) -> {
-            if (model.getUsername().isEmpty()) {
+            if (model==null) {
                 return new Result<>(false, "Kullanıcı Adı Boş", null);
             } else
                 return new Result<>(true, "Kullanıcı Adı Doğru", null);

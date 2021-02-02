@@ -90,8 +90,8 @@ public class ProductListPage extends PageBase {
             product.setName(newName);
             product.setPrice(newPrice);
             product.setQuantity(newQuantity);
-            Result<Product> result = productService.updateProductResult(product);
-            System.out.println(result.getMessage());
+            Result<Product> resultUpdateAction = productService.updateProduct(product);
+            System.out.println(resultUpdateAction.getMessage());
 
         } else {
             System.out.println("İptal Edildi");
@@ -118,8 +118,8 @@ public class ProductListPage extends PageBase {
         String confirm = inConfirm.renderAndGetText();
 
         if (confirm.equals("evet")) {
-            Result<Product> result = productService.deleteProductResult(product);
-            System.out.println(result.getMessage());
+            Result<Product> resultDeleteAction = productService.deleteProduct(product);
+            System.out.println(resultDeleteAction.getMessage());
         } else {
             System.out.println("İptal Edildi");
         }

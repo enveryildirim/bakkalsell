@@ -37,7 +37,7 @@ public class TestPage extends PageBase {
         User user=new User("dgdfgdfg","12lşilşi36","1234", UserType.EMPLOYEE);
         Product product=new Product("elma",1,10);
 
-        Result<Product> result=productService.createProductResult(product);
+        Result<Product> result=productService.createProduct(product);
 
         List<Product> products= DB.products;
         System.out.println(result.getMessage());

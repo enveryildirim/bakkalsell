@@ -24,53 +24,31 @@ public class ProductService {
         this.cartItemIRepository = cartItemIRepository;
     }
 
-    public boolean createProduct(Product product) {
-        if (this.isValidProduct(product)) {
-            productRepository.create(product);
-            return true;
-        } else {
-            return false;
+    public Result<Product> createProduct(Product product) {
+        Result<Product> validationResult = this.isValidProductResult(product);
+        if (validationResult.isSuccess()) {
+            boolean isSuccessful = productRepository.create(product);
+            Result<Product> creationResult = new Result<>(isSuccessful, "Ürün Başarıyla Kayıt Edildi", product);
+            return creationResult;
         }
+        return validationResult;
 
     }
-    //todo isimlendirme revize refoctor yapılacak yeni eklenen özeliklere
-    public Result<Product> createProductResult(Product product) {
+
+    public Result<Product> updateProduct(Product product) {
         Result<Product> result = this.isValidProductResult(product);
         if (result.isSuccess()) {
-            productRepository.create(product);
-            result.setMessage("Ürün Başarıyla Kayıt Edildi");
-            result.setSuccess(true);
-        }
-        return result;
-
-    }
-
-    public boolean updateProduct(Product product) {
-        if (this.isValidProduct(product)) {
-            productRepository.update(product);
-            return true;
-        } else {
-            return false;
-        }
-    }
-    public Result<Product> updateProductResult(Product product) {
-        Result<Product> result = this.isValidProductResult(product);
-        if (result.isSuccess()) {
-            productRepository.update(product);
-            result.setMessage("Ürün Başarıyla Güncellendi");
-            result.setSuccess(true);
+            boolean isSuccessful = productRepository.update(product);
+            Result<Product> updatingResult = new Result<>(isSuccessful, "Ürün Başarıyla Güncellendi", product);
+            return updatingResult;
         }
         return result;
     }
 
-    public void deleteProduct(Product product) {
-        productRepository.delete(product);
-    }
-
-    public Result<Product> deleteProductResult(Product product) {
-        productRepository.delete(product);
-        Result<Product> result = new Result<>(true, "Ürün başarılı şekilde silindi", product);
-        return result;
+    public Result<Product> deleteProduct(Product product) {
+        boolean isSuccessful = productRepository.delete(product);
+        Result<Product> deletingResult = new Result<>(isSuccessful, "Ürün başarılı şekilde silindi", product);
+        return deletingResult;
     }
 
     public Product getProductById(int id) {
@@ -119,7 +97,7 @@ public class ProductService {
 
         IResult<Product> checkPrice = (model) -> {
             Result<Product> productEmptyResult = new Result<>(true, "Fiyat Uygun", model);
-            float max=1000;
+            float max = 1000;
             if (model.getPrice() <= 0 || model.getPrice() > 1000) {
                 productEmptyResult.setSuccess(false);
                 productEmptyResult.setMessage("Ürün fiyatı 0-1000 tl arasında olabilir.");

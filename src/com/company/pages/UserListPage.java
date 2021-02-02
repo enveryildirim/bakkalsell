@@ -91,8 +91,8 @@ public class UserListPage extends PageBase {
             updatingUser.setUsername(newUsername);
             updatingUser.setPassword(newPassword);
             userService.updateUser(updatingUser);
-            Result<User> result = userService.updateUserResult(updatingUser);
-            System.out.println(result.getMessage());
+            Result<User> resultUpdateAction = userService.updateUser(updatingUser);
+            System.out.println(resultUpdateAction.getMessage());
         } else {
             System.out.println("İptal Edildi");
         }
@@ -122,8 +122,8 @@ public class UserListPage extends PageBase {
         String confirm = inputConfirm.renderAndGetText();
 
         if (confirm.equals("evet")) {
-            Result<User> result = userService.deleteUserResult(user);
-            System.out.println(result);
+            Result<User> resultDeleteAction = userService.deleteUser(user);
+            System.out.println(resultDeleteAction.getMessage());
         } else {
             System.out.println("İptal Edildi");
         }

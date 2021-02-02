@@ -9,11 +9,11 @@ import java.util.List;
  */
 public interface IRepository<T> {
 
-    void create(T t);
+    boolean create(T t);
 
-    void update(T t);
+    boolean update(T t);
 
-    void delete(T t);
+    boolean delete(T t);
 
     List<T> getAll();
 

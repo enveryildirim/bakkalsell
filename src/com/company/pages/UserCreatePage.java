@@ -58,8 +58,8 @@ public class UserCreatePage extends PageBase {
 
         if (confirm.equals("evet")) {
             User newUser = new User(nameSurname, username, password, UserType.values()[typeUserIndex]);
-            Result<User> resultAction = userService.createUserResult(newUser);
-            System.out.println(resultAction.getMessage());
+            Result<User> resultCreateAction = userService.createUser(newUser);
+            System.out.println(resultCreateAction.getMessage());
         } else
             System.out.println("İptal edildi");
 

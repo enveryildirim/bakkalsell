@@ -10,7 +10,7 @@ import java.util.List;
 public class ProductRepository implements IRepository<Product> {
 
     @Override
-    public void create(Product product) {
+    public boolean create(Product product) {
 
         if (DB.products.isEmpty()) {
             product.setId(1);
@@ -21,22 +21,23 @@ public class ProductRepository implements IRepository<Product> {
             product.setId(newID);
         }
 
-        DB.products.add(product);
+        return DB.products.add(product);
     }
 
     @Override
-    public void update(Product product) {
+    public boolean update(Product product) {
 
         Product updatingProduct = this.getById(product.getId());
         updatingProduct.setName(product.getName());
         updatingProduct.setPrice(product.getPrice());
         updatingProduct.setQuantity(product.getQuantity());
+        return true;
 
     }
 
     @Override
-    public void delete(Product product) {
-        DB.products.remove(product);
+    public boolean delete(Product product) {
+        return DB.products.remove(product);
     }
 
     @Override

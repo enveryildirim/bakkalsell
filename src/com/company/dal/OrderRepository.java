@@ -10,19 +10,20 @@ import java.util.List;
 public class OrderRepository implements IRepository<Order> {
 
     @Override
-    public void create(Order order) {
-        DB.orders.add(order);
+    public boolean create(Order order) {
+        return DB.orders.add(order);
     }
 
     @Override
-    public void update(Order order) {
+    public boolean update(Order order) {
         Order updatingOrder = this.getById(order.customer.getId());
         updatingOrder.orders = order.orders;
+        return true;
     }
 
     @Override
-    public void delete(Order order) {
-        DB.orders.remove(order);
+    public boolean delete(Order order) {
+        return DB.orders.remove(order);
     }
 
     @Override

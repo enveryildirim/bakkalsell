@@ -5,8 +5,8 @@ import com.company.dal.DB;
 import com.company.dal.UserRepository;
 import com.company.models.ICheckable;
 import com.company.models.IResult;
-import com.company.models.User;
 import com.company.models.Result;
+import com.company.models.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,46 +51,30 @@ public class UserService {
         DB.currentLoginedUser = null;
     }
 
-    public boolean createUser(User user) {
-        if (this.isValidUser(user)) {
-            userRepository.create(user);
-            return true;
-        } else
-            return false;
-    }
-
-    public Result<User> createUserResult(User user) {
-        Result<User> result = this.isValidUserResult(user);
-        if (result.isSuccess()) {
-            userRepository.create(user);
-            result.setMessage("Kullanıcı Başarıyla Kayıt Edildi");
-            result.setSuccess(true);
+    public Result<User> createUser(User user) {
+        Result<User> validationResult = this.isValidUserResult(user);
+        if (validationResult.isSuccess()) {
+            boolean isSuccessful = userRepository.create(user);
+            Result<User> creationResult = new Result<>(isSuccessful, "Kullanıcı Başarıyla Kayıt Edildi", user);
+            return creationResult;
         }
-        return result;
+        return validationResult;
     }
 
-    public void updateUser(User user) {
-        this.userRepository.update(user);
-    }
-
-    public Result<User> updateUserResult(User user) {
-        Result<User> result = this.isValidUserResult(user);
-        if (result.isSuccess()) {
-            userRepository.update(user);
-            result.setMessage("Kullanıcı Başarıyla Güncellendi");
-            result.setSuccess(true);
+    public Result<User> updateUser(User user) {
+        Result<User> validationResult = this.isValidUserResult(user);
+        if (validationResult.isSuccess()) {
+            boolean isSuccessful = userRepository.update(user);
+            Result<User> updatingResult = new Result<>(isSuccessful, "Kullanıcı Başarıyla Güncellendi", user);
+            return updatingResult;
         }
-        return result;
+        return validationResult;
     }
 
-    public void deleteUser(User user) {
-        userRepository.delete(user);
-    }
-
-    public Result<User> deleteUserResult(User user) {
-        userRepository.delete(user);
-        Result<User> result = new Result<>(true, "Kullanıcı başarılı şekilde silindi", user);
-        return result;
+    public Result<User> deleteUser(User user) {
+        boolean isSuccessful = userRepository.delete(user);
+        Result<User> deletingResult = new Result<>(isSuccessful, "Kullanıcı başarılı şekilde silindi", user);
+        return deletingResult;
     }
 
     public User getUser(int id) {
