@@ -58,7 +58,6 @@ public class UserCreatePage extends PageBase {
 
         if (confirm.equals("evet")) {
             User newUser = new User(nameSurname, username, password, UserType.values()[typeUserIndex]);
-            //userService.createUser(newUser);
             Result<User> resultAction = userService.createUserResult(newUser);
             System.out.println(resultAction.getMessage());
         } else

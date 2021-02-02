@@ -91,7 +91,6 @@ public class ProductListPage extends PageBase {
             product.setPrice(newPrice);
             product.setQuantity(newQuantity);
             Result<Product> result = productService.updateProductResult(product);
-            //productService.updateProduct(product);
             System.out.println(result.getMessage());
 
         } else {
@@ -119,7 +118,6 @@ public class ProductListPage extends PageBase {
         String confirm = inConfirm.renderAndGetText();
 
         if (confirm.equals("evet")) {
-            //productService.deleteProduct(product);
             Result<Product> result = productService.deleteProductResult(product);
             System.out.println(result.getMessage());
         } else {

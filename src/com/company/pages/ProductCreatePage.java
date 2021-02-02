@@ -58,7 +58,6 @@ public class ProductCreatePage extends PageBase {
         }
 
         Product newProduct = new Product(name, price, quantity);
-        //productService.createProduct(newProduct);
         Result<Product> result = productService.createProductResult(newProduct);
         System.out.println(result.getMessage());
 

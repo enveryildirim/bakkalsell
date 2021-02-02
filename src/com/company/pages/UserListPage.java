@@ -122,7 +122,6 @@ public class UserListPage extends PageBase {
         String confirm = inputConfirm.renderAndGetText();
 
         if (confirm.equals("evet")) {
-            //userService.deleteUser(user);
             Result<User> result = userService.deleteUserResult(user);
             System.out.println(result);
         } else {
