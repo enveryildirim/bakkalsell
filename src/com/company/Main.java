@@ -24,13 +24,13 @@ public class Main {
         UserRepository userRepository = new UserRepository();
         UserService userService = new UserService(userRepository);
 
-        PageName currentPage = PageName.TEST;
+        PageName currentPage = PageName.LOGIN;
         while (true) {
 
             //Eğer kullanıcı giriş yapmadıysa Login Sayfasına Gönder
-        /*    if (DB.currentLoginedUser == null) {
+            if (DB.currentLoginedUser == null) {
                 currentPage = PageName.LOGIN;
-            }*/
+            }
 
             //Yüklenecek sayfanın gösterilmesi
             PageBase page = pages.get(currentPage);
