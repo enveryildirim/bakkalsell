@@ -42,7 +42,6 @@ public class ProductCreatePage extends PageBase {
         Input inputQuantity = new Input(labelQuantity, RegexConstant.ONLY_DIGIT, isRequiredQuantity);
         String quantityString = inputQuantity.renderAndGetText();
 
-
         if (name.length() == 0 || priceString.length() == 0 || quantityString.length() == 0) {
             System.out.println("Lütfen boş alan bırakmayınız \n devam etmek için bir tuşa basınız");
             inputData.nextLine();
@@ -56,7 +55,7 @@ public class ProductCreatePage extends PageBase {
             inputData.nextLine();
             return PageName.PRODUCT_CREATE;
         }
-
+        
         Product newProduct = new Product(name, price, quantity);
         productService.createProduct(newProduct);
         System.out.println("Eklendi Ürün Başarılı");

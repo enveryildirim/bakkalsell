@@ -84,7 +84,7 @@ public class ProductSalePage extends PageBase {
                 return;
             CartItem cartItem=cartService.getCartItemByProductID(product.getId());
 
-            boolean stateOverload =(cartItem!=null) && (product.getQuantity()-quantityInt-cartItem.getQuantity())<0;
+            boolean stateOverload = (cartItem != null) && (product.getQuantity() - quantityInt - cartItem.getQuantity()) < 0;
             if (product.getQuantity() < quantityInt|| stateOverload ||quantityInt == -1 ) {
                 System.out.println("Yeterli stok yok tekrar deneyiniz");
             } else {

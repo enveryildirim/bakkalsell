@@ -6,12 +6,13 @@ import com.company.pages.components.Input;
 import com.company.services.UserService;
 
 /**
- *Kullanıcı login işlemlerini ekrana basar
+ * Kullanıcı login işlemlerini ekrana basar
  */
 public class LoginPage extends PageBase {
     private UserService userService;
+
     public LoginPage(UserService userService) {
-    this.userService=userService;
+        this.userService = userService;
     }
 
     @Override

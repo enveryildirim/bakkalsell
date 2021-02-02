@@ -1,6 +1,9 @@
 package com.company.services;
 
-import com.company.dal.*;
+import com.company.dal.CartItemRepository;
+import com.company.dal.OrderRepository;
+import com.company.dal.ProductRepository;
+import com.company.dal.UserRepository;
 import com.company.models.CartItem;
 import com.company.models.Order;
 import com.company.models.Product;
@@ -10,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Kullanıcıdan gelen veriler ve talimatlara göre Siparişle ile alakalı işlerin yapıldığı sınıf
+ * Siparişler ile alakalı işlerin yapıldığı sınıf
  */
 public class OrderService {
 
@@ -124,11 +127,12 @@ public class OrderService {
                 .stream()
                 .mapToDouble(orderItem -> orderItem.getProduct().getPrice() * orderItem.getQuantity())
                 .sum();
-        int sumQuantity=(int) order.orders
+        int sumQuantity = (int) order.orders
                 .stream()
                 .mapToDouble(CartItem::getQuantity)
                 .sum();
-        String summaryCartString = String.format("\nSepetteki Ürün Sayısı: %d  Miktarı: %d \nToplam tutar: %.02f tl\n", cartSize,sumQuantity, sumPrice);
+        String summaryCartString = String.format("\nSepetteki Ürün Sayısı: %d  Miktarı: %d \nToplam tutar: %.02f tl\n",
+                cartSize, sumQuantity, sumPrice);
         listOrderString += summaryCartString;
         return listOrderString;
     }
@@ -170,19 +174,19 @@ public class OrderService {
      * Siparişleri satar
      */
     public void saleOrder(int userID) {
-        Order deletingOrder=this.getOrder(userID);
+        Order deletingOrder = this.getOrder(userID);
         deletingOrder.orders
-                .forEach(orderItem->{
+                .forEach(orderItem -> {
 
-                    Product updatingItem=productRepository.getAll()
+                    Product updatingItem = productRepository.getAll()
                             .stream()
-                            .filter(product -> product.getId()==orderItem.getProduct().getId())
+                            .filter(product -> product.getId() == orderItem.getProduct().getId())
                             .findFirst()
                             .orElse(null);
 
-                    if(updatingItem!=null){
-                        int lastQuantity=updatingItem.getQuantity();
-                        updatingItem.setQuantity(lastQuantity-orderItem.getQuantity());
+                    if (updatingItem != null) {
+                        int lastQuantity = updatingItem.getQuantity();
+                        updatingItem.setQuantity(lastQuantity - orderItem.getQuantity());
                     }
 
                 });
@@ -225,7 +229,27 @@ public class OrderService {
         });
         return allProductListString;
     }
-    public List<Order> getAllOrder(){
+
+    public List<Order> getAllOrder() {
         return orderRepository.getAll();
+    }
+
+    public CartItem getCartItemByProductID(int productID) {
+        User loggedUser = userRepository.getLoggedUser();
+        Order order = orderRepository.getAll()
+                .stream()
+                .filter(orderItem -> orderItem.customer.getId() == loggedUser.getId())
+                .findFirst()
+                .orElse(null);
+        if (order == null) {
+            return null;
+        } else {
+            return order.orders
+                    .stream()
+                    .filter(cartItem -> cartItem.getProduct().getId() == productID)
+                    .findFirst()
+                    .orElse(null);
+        }
+
     }
 }

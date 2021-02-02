@@ -7,7 +7,7 @@ import com.company.models.Product;
 import java.util.List;
 
 /**
- * Kullanıcıdan gelen veriler ve talimatlara göre  Ürün ve Sepet ile alakalı işlemlerin yapıldığı sıınf
+ * Ürün ile alakalı işlemlerin yapıldığı sıınf
  */
 public class ProductService {
 

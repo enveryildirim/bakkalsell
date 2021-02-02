@@ -11,8 +11,9 @@ import com.company.services.UserService;
  */
 public class HomePage extends PageBase {
     private UserService userService;
+
     public HomePage(UserService userService) {
-       this.userService=userService;
+        this.userService = userService;
 
     }
 

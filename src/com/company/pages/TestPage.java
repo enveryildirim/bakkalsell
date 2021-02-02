@@ -1,7 +1,7 @@
 package com.company.pages;
 
 
-import com.company.models.*;
+import com.company.models.PageName;
 import com.company.services.CartService;
 import com.company.services.OrderService;
 import com.company.services.ProductService;
@@ -12,11 +12,12 @@ public class TestPage extends PageBase {
     private ProductService productService;
     private CartService cartService;
     private OrderService orderService;
+
     public TestPage(UserService userService, ProductService productService, CartService cartService, OrderService orderService) {
-        this.userService=userService;
-        this.productService=productService;
-        this.cartService=cartService;
-        this.orderService=orderService;
+        this.userService = userService;
+        this.productService = productService;
+        this.cartService = cartService;
+        this.orderService = orderService;
     }
 
     @Override
@@ -29,7 +30,6 @@ public class TestPage extends PageBase {
 
         return PageName.TEST;
     }
-
 
 
 }
