@@ -47,7 +47,7 @@ public class ProductCreatePage extends PageBase {
             inputData.nextLine();
             return PageName.PRODUCT_CREATE;
         }
-
+        //todo stok max kontrolü
         float price = inputPrice.getTextAfterConvertToFloat();
         int quantity = inputQuantity.getTextAfterConvertToInt();
         if (price <= 0 || quantity <= 0) {

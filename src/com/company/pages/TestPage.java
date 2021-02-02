@@ -2,6 +2,8 @@ package com.company.pages;
 
 
 import com.company.models.PageName;
+import com.company.models.User;
+import com.company.models.UserType;
 import com.company.services.CartService;
 import com.company.services.OrderService;
 import com.company.services.ProductService;
@@ -27,7 +29,9 @@ public class TestPage extends PageBase {
 
     @Override
     public PageName render() {
-
+        User user=new User("po","1234556","123456", UserType.EMPLOYEE);
+        System.out.println(userService.isValidUser(user));
+        inputData.nextLine();
         return PageName.TEST;
     }
 
