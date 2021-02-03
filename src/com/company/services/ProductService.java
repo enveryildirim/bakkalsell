@@ -2,14 +2,12 @@ package com.company.services;
 
 import com.company.dal.CartItemRepository;
 import com.company.dal.ProductRepository;
-import com.company.models.ICheckable;
 import com.company.models.IResult;
 import com.company.models.Product;
 import com.company.models.Result;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Ürün ile alakalı işlemlerin yapıldığı sıınf
@@ -25,7 +23,7 @@ public class ProductService {
     }
 
     public Result<Product> createProduct(Product product) {
-        Result<Product> validationResult = this.isValidProductResult(product);
+        Result<Product> validationResult = this.isValidProduct(product);
         if (validationResult.isSuccess()) {
             boolean isSuccessful = productRepository.create(product);
             Result<Product> creationResult = new Result<>(isSuccessful, "Ürün Başarıyla Kayıt Edildi", product);
@@ -36,7 +34,7 @@ public class ProductService {
     }
 
     public Result<Product> updateProduct(Product product) {
-        Result<Product> result = this.isValidProductResult(product);
+        Result<Product> result = this.isValidProduct(product);
         if (result.isSuccess()) {
             boolean isSuccessful = productRepository.update(product);
             Result<Product> updatingResult = new Result<>(isSuccessful, "Ürün Başarıyla Güncellendi", product);
@@ -60,29 +58,12 @@ public class ProductService {
         return this.productRepository.getAll();
     }
 
-    public boolean isValidProduct(Product product) {
-        List<ICheckable<Product>> checkList = new ArrayList<>();
-        ICheckable<Product> checkNameEmpty = (model) -> !model.getName().isEmpty();
-        ICheckable<Product> checkPrice = (model) -> model.getPrice() > 0 && model.getPrice() < 1000;
-        ICheckable<Product> checkQuantity = (model) -> model.getQuantity() > 0 && model.getQuantity() < 1000;
-
-        checkList.add(checkNameEmpty);
-        checkList.add(checkPrice);
-        checkList.add(checkQuantity);
-
-        AtomicBoolean isChecked = new AtomicBoolean(false);
-        for (ICheckable<Product> checker : checkList) {
-            if (checker.chech(product))
-                isChecked.set(true);
-            else {
-                isChecked.set(false);
-                break;
-            }
-        }
-        return isChecked.get();
-    }
-
-    public Result<Product> isValidProductResult(Product product) {
+    /**
+     * Ürün verilerinin önceden yazılan kurallara uygun olup olmadığı komtrol eder.
+     * @param product  Product tipinde kontrol edilecek nesneyi alır
+     * @return Result<Product> işlem ile alakalı bilgileri döner(Başarılı mı,Mesaj,Model ) bilgilerini
+     */
+    public Result<Product> isValidProduct(Product product) {
 
         List<IResult<Product>> checkList = new ArrayList<>();
 

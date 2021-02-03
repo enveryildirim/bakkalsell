@@ -1,16 +1,13 @@
 package com.company.services;
 
-import com.company.RegexConstant;
 import com.company.dal.DB;
 import com.company.dal.UserRepository;
-import com.company.models.ICheckable;
 import com.company.models.IResult;
 import com.company.models.Result;
 import com.company.models.User;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Kullanıcılar ile alakalı işlemlerin yapıldığı sınıf
@@ -52,7 +49,7 @@ public class UserService {
     }
 
     public Result<User> createUser(User user) {
-        Result<User> validationResult = this.isValidUserResult(user);
+        Result<User> validationResult = this.isValidUser(user);
         if (validationResult.isSuccess()) {
             boolean isSuccessful = userRepository.create(user);
             Result<User> creationResult = new Result<>(isSuccessful, "Kullanıcı Başarıyla Kayıt Edildi", user);
@@ -62,7 +59,7 @@ public class UserService {
     }
 
     public Result<User> updateUser(User user) {
-        Result<User> validationResult = this.isValidUserResult(user);
+        Result<User> validationResult = this.isValidUser(user);
         if (validationResult.isSuccess()) {
             boolean isSuccessful = userRepository.update(user);
             Result<User> updatingResult = new Result<>(isSuccessful, "Kullanıcı Başarıyla Güncellendi", user);
@@ -70,6 +67,7 @@ public class UserService {
         }
         return validationResult;
     }
+
 
     public Result<User> deleteUser(User user) {
         boolean isSuccessful = userRepository.delete(user);
@@ -94,33 +92,12 @@ public class UserService {
         return userRepository.getLoggedUser();
     }
 
-    public boolean isValidUser(User user) {
-        List<ICheckable<User>> checkList = new ArrayList<>();
-        ICheckable<User> checkEmpty = (model) -> !model.getNameSurname().isEmpty() && !model.getUsername().isEmpty()
-                && !model.getPassword().isEmpty();
-
-        ICheckable<User> checkUsername = (model) -> model.getUsername().length() >= 5;
-        ICheckable<User> checkPassword = (model) -> model.getPassword().length() >= 6;
-        ICheckable<User> checkPasswordRegex = (model) -> model.getPassword().matches(RegexConstant.PASSWORD);
-
-        checkList.add(checkEmpty);
-        checkList.add(checkUsername);
-        checkList.add(checkPassword);
-        checkList.add(checkPasswordRegex);
-
-        AtomicBoolean isChecked = new AtomicBoolean(false);
-        for (ICheckable<User> checker : checkList) {
-            if (checker.chech(user))
-                isChecked.set(true);
-            else {
-                isChecked.set(false);
-                break;
-            }
-        }
-        return isChecked.get();
-    }
-
-    public Result<User> isValidUserResult(User user) {
+    /**
+     * Kullanıcı verilerinin önceden yazılan kurallara uygun olup olmadığı komtrol eder.
+     * @param user  User tipinde kontrol edilecek nesneyi alır
+     * @return Result<User> işlem ile alakalı bilgileri döner(Başarılı mı,Mesaj,Model ) bilgilerini
+     */
+    public Result<User> isValidUser(User user) {
         List<IResult<User>> checkList = new ArrayList<>();
 
         IResult<User> checkEmpty = (model) -> {
