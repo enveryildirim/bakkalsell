@@ -5,6 +5,7 @@ import com.company.models.PageName;
 import com.company.models.Product;
 import com.company.pages.components.Input;
 import com.company.services.ProductService;
+import com.company.models.Result;
 
 /**
  * Ürüün oluşturma işlemleri ekranı
@@ -55,10 +56,10 @@ public class ProductCreatePage extends PageBase {
             inputData.nextLine();
             return PageName.PRODUCT_CREATE;
         }
-        
+
         Product newProduct = new Product(name, price, quantity);
-        productService.createProduct(newProduct);
-        System.out.println("Eklendi Ürün Başarılı");
+        Result<Product> resultCreateAction = productService.createProduct(newProduct);
+        System.out.println(resultCreateAction.getMessage());
 
         return PageName.HOME;
     }

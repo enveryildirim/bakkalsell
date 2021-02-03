@@ -10,7 +10,7 @@ import java.util.List;
 public class UserRepository implements IRepository<User> {
 
     @Override
-    public void create(User user) {
+    public boolean create(User user) {
 
         if (DB.users.isEmpty()) {
             user.setId(1);
@@ -21,23 +21,23 @@ public class UserRepository implements IRepository<User> {
             user.setId(newID);
         }
 
-        DB.users.add(user);
+        return DB.users.add(user);
 
     }
 
     @Override
-    public void update(User user) {
-
+    public boolean update(User user) {
         User updatingUser = this.getById(user.getId());
         updatingUser.setNameSurname(user.getNameSurname());
         updatingUser.setUsername(user.getUsername());
         updatingUser.setPassword(user.getPassword());
+        return true;
 
     }
 
     @Override
-    public void delete(User user) {
-        DB.users.remove(user);
+    public boolean delete(User user) {
+        return DB.users.remove(user);
     }
 
     @Override

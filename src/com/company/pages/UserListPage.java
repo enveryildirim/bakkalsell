@@ -5,6 +5,7 @@ import com.company.models.PageName;
 import com.company.models.User;
 import com.company.pages.components.Input;
 import com.company.services.UserService;
+import com.company.models.Result;
 
 /**
  * Kullanıcı işlemleri yapar
@@ -90,8 +91,8 @@ public class UserListPage extends PageBase {
             updatingUser.setUsername(newUsername);
             updatingUser.setPassword(newPassword);
             userService.updateUser(updatingUser);
-
-            System.out.println("Güncelendi");
+            Result<User> resultUpdateAction = userService.updateUser(updatingUser);
+            System.out.println(resultUpdateAction.getMessage());
         } else {
             System.out.println("İptal Edildi");
         }
@@ -121,8 +122,8 @@ public class UserListPage extends PageBase {
         String confirm = inputConfirm.renderAndGetText();
 
         if (confirm.equals("evet")) {
-            userService.deleteUser(user);
-            System.out.println("Silindi");
+            Result<User> resultDeleteAction = userService.deleteUser(user);
+            System.out.println(resultDeleteAction.getMessage());
         } else {
             System.out.println("İptal Edildi");
         }

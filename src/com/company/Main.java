@@ -28,8 +28,9 @@ public class Main {
         while (true) {
 
             //Eğer kullanıcı giriş yapmadıysa Login Sayfasına Gönder
-            if (DB.currentLoginedUser == null)
+            if (DB.currentLoginedUser == null) {
                 currentPage = PageName.LOGIN;
+            }
 
             //Yüklenecek sayfanın gösterilmesi
             PageBase page = pages.get(currentPage);
@@ -67,7 +68,7 @@ public class Main {
          * ProductService productServicee katmanı sadece servis katmanı ile haberleşiyor. Veritabını katmanı ile haberleşmiyor.
          * */
         UserService userService = new UserService(userRepository);
-        ProductService productService = new ProductService(productRepository, cartItemRepository);
+        ProductService productService = new ProductService(productRepository,cartItemRepository);
         OrderService orderService = new OrderService(userRepository, productRepository, cartItemRepository, orderIRepository);
         CartService cartService = new CartService(productRepository, cartItemRepository);
         /**

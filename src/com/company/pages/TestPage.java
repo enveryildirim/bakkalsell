@@ -1,11 +1,18 @@
 package com.company.pages;
 
 
+import com.company.dal.DB;
 import com.company.models.PageName;
+import com.company.models.Product;
+import com.company.models.User;
+import com.company.models.UserType;
 import com.company.services.CartService;
 import com.company.services.OrderService;
 import com.company.services.ProductService;
 import com.company.services.UserService;
+import com.company.models.Result;
+
+import java.util.List;
 
 public class TestPage extends PageBase {
     private UserService userService;
@@ -27,7 +34,14 @@ public class TestPage extends PageBase {
 
     @Override
     public PageName render() {
+        User user=new User("dgdfgdfg","12lşilşi36","1234", UserType.EMPLOYEE);
+        Product product=new Product("elma",1,10);
 
+        Result<Product> result=productService.createProduct(product);
+
+        List<Product> products= DB.products;
+        System.out.println(result.getMessage());
+        inputData.nextLine();
         return PageName.TEST;
     }
 

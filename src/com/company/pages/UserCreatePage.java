@@ -6,6 +6,7 @@ import com.company.models.User;
 import com.company.models.UserType;
 import com.company.pages.components.Input;
 import com.company.services.UserService;
+import com.company.models.Result;
 
 /**
  * Kullanıcı oluşturma ekranı
@@ -57,8 +58,8 @@ public class UserCreatePage extends PageBase {
 
         if (confirm.equals("evet")) {
             User newUser = new User(nameSurname, username, password, UserType.values()[typeUserIndex]);
-            userService.createUser(newUser);
-            System.out.println("Eklendi");
+            Result<User> resultCreateAction = userService.createUser(newUser);
+            System.out.println(resultCreateAction.getMessage());
         } else
             System.out.println("İptal edildi");
 
